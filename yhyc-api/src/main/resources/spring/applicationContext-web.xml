@@ -19,7 +19,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<jaxrs:server id="service" address="/">
+	<jaxrs:server id="service" address="/services/">
 		<jaxrs:serviceBeans>
 			<ref bean="userService" />
 		</jaxrs:serviceBeans>
