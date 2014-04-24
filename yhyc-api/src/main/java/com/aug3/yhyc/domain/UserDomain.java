@@ -2,7 +2,7 @@ package com.aug3.yhyc.domain;
 
 import java.util.List;
 
-import com.aug3.yhyc.valueobj.Contact;
+import com.aug3.yhyc.valueobj.DeliveryContact;
 import com.aug3.yhyc.valueobj.Item;
 import com.aug3.yhyc.valueobj.User;
 
@@ -11,7 +11,7 @@ public class UserDomain {
 	private User user;
 
 	// 用户联系方式
-	private List<Contact> contacts;
+	private List<DeliveryContact> contacts;
 
 	// 用户收藏
 	private List<Item> fav;
@@ -31,7 +31,7 @@ public class UserDomain {
 		return false;
 	}
 
-	public List<Contact> fetchContacts(String uid) {
+	public List<DeliveryContact> fetchContacts(String uid) {
 		return null;
 	}
 

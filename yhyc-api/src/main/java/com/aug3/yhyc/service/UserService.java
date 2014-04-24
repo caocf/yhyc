@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.aug3.sys.rs.WebServiceResponseHandler;
 import com.aug3.sys.rs.response.RespType;
 import com.aug3.yhyc.domain.UserDomain;
-import com.aug3.yhyc.valueobj.Contact;
+import com.aug3.yhyc.valueobj.DeliveryContact;
 import com.aug3.yhyc.valueobj.Item;
 
 @Path("/user/")
@@ -39,7 +39,7 @@ public class UserService extends WebServiceResponseHandler {
 	public String fetchContactsList(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("uid") String uid) {
 
-		List<Contact> contacts = userDomain.fetchContacts(uid);
+		List<DeliveryContact> contacts = userDomain.fetchContacts(uid);
 		return this.buidResponseResult(contacts, RespType.SUCCESS);
 	}
 

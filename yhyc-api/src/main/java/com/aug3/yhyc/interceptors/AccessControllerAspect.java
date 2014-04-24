@@ -18,8 +18,6 @@ public class AccessControllerAspect {
 
 	private static final Logger logger = Logger.getLogger(AccessControllerAspect.class);
 
-//	private static final String url = new ConfigProperties("/yhyc.properties").getProperty("ccas.checktoken");
-
 	@Around("within(com.aug3.yhyc.services..*) && @annotation(traceAnnotation) && args(request,..)")
 	public Object accessLog(final ProceedingJoinPoint pjp, final AccessTrace traceAnnotation, HttpServletRequest request)
 			throws Throwable {

@@ -23,7 +23,7 @@ public class ShequService {
 	@Produces("application/json")
 	@GET
 	@Path("/query")
-	public String queryCommunity(@Context HttpServletRequest request, @QueryParam("token") String token,
+	public String queryShequ(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("q") String q) {
 
 		// return this.buidResponseResult(dtos, RespType.SUCCESS);
@@ -40,7 +40,7 @@ public class ShequService {
 	 */
 	@Produces("application/json")
 	@GET
-	@Path("/favorite")
+	@Path("/workshop")
 	public String getServiceWorkshops(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("shequ") String shequ) {
 

@@ -27,7 +27,7 @@ public class CommentService {
 
 	@GET
 	@Path("/list")
-	public String listOrders(@Context HttpServletRequest request, @QueryParam("token") String token,
+	public String listComments(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("item") String item) {
 
 		// return this.buidResponseResult(dtos, RespType.SUCCESS);

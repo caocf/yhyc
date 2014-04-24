@@ -11,6 +11,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.aug3.yhyc.dto.Order;
+
 @Path("/order/")
 @XmlRootElement()
 @Produces("application/json")
@@ -21,7 +23,7 @@ public class OrderService {
 	// @AccessTrace
 	// @AccessToken
 	public boolean newOrder(@Context HttpServletRequest request, @FormParam("token") String token,
-			@FormParam("uid") String uid, @FormParam("order") String orderObj) {
+			@FormParam("uid") String uid, @FormParam("") Order order) {
 		// TODO: change to order object
 		return false;
 	}
@@ -41,13 +43,21 @@ public class OrderService {
 	 * @param request
 	 * @param token
 	 * @param workshop
-	 * @param status
 	 * @return
 	 */
 	@GET
-	@Path("/sales")
-	public String listSalesOrders(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("workshop") String workshop, @QueryParam("status") String status) {
+	@Path("/sales/todo")
+	public String listSalesTodoOrders(@Context HttpServletRequest request, @QueryParam("token") String token,
+			@QueryParam("workshop") String workshop) {
+
+		// return this.buidResponseResult(dtos, RespType.SUCCESS);
+		return null;
+	}
+
+	@GET
+	@Path("/sales/finished")
+	public String listSalesFinishedOrders(@Context HttpServletRequest request, @QueryParam("token") String token,
+			@QueryParam("workshop") String workshop) {
 
 		// return this.buidResponseResult(dtos, RespType.SUCCESS);
 		return null;
