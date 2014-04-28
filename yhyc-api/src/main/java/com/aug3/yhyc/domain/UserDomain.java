@@ -2,6 +2,8 @@ package com.aug3.yhyc.domain;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.aug3.yhyc.valueobj.DeliveryContact;
 import com.aug3.yhyc.valueobj.Item;
 import com.aug3.yhyc.valueobj.User;
@@ -27,7 +29,15 @@ public class UserDomain {
 
 	public boolean isValidUser(String uid, String passwd) {
 
-		// TODO MD5 validate
+		if(StringUtils.isBlank(passwd)){
+			return false;
+		}
+		
+		String userpass = "";
+		
+		if(passwd.equalsIgnoreCase(userpass)){
+			return true;
+		}
 		return false;
 	}
 
