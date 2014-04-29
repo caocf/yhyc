@@ -1,9 +1,14 @@
-package com.aug3.yhyc.valueobj;
+package com.aug3.yhyc.dto;
 
-public class CartItem {
+import java.io.Serializable;
 
-	// item id
+public class OrderItem implements Serializable {
+
+	// item id : workshopid + 分类号+流水号
 	private long id;
+
+	// 商品名
+	private String name;
 
 	// num
 	private long num;
@@ -17,6 +22,14 @@ public class CartItem {
 
 	public long getId() {
 		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void setId(long id) {

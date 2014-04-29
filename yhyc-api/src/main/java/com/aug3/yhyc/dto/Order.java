@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import com.aug3.yhyc.valueobj.CartItem;
 import com.aug3.yhyc.valueobj.DeliveryContact;
 
 @SuppressWarnings("serial")
@@ -16,7 +15,7 @@ public class Order implements Serializable {
 	private long uid;
 
 	// 商品
-	private List<CartItem> items;
+	private List<OrderItem> items;
 
 	// 订单总价
 	private double total;
@@ -55,11 +54,11 @@ public class Order implements Serializable {
 		this.uid = uid;
 	}
 
-	public List<CartItem> getItems() {
+	public List<OrderItem> getItems() {
 		return items;
 	}
 
-	public void setItems(List<CartItem> items) {
+	public void setItems(List<OrderItem> items) {
 		this.items = items;
 	}
 

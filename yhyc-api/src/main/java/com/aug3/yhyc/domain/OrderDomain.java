@@ -3,7 +3,7 @@ package com.aug3.yhyc.domain;
 import java.util.Date;
 import java.util.List;
 
-import com.aug3.yhyc.valueobj.CartItem;
+import com.aug3.yhyc.dto.OrderItem;
 import com.aug3.yhyc.valueobj.DeliveryContact;
 
 public class OrderDomain {
@@ -14,7 +14,7 @@ public class OrderDomain {
 	private long uid;
 
 	// 商品
-	private List<CartItem> items;
+	private List<OrderItem> items;
 
 	// 订单总价
 	private double total;

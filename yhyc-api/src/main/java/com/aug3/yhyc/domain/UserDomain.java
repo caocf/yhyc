@@ -4,38 +4,42 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.aug3.yhyc.dao.ItemDao;
+import com.aug3.yhyc.dao.UserDao;
+import com.aug3.yhyc.dto.OrderItem;
 import com.aug3.yhyc.valueobj.DeliveryContact;
-import com.aug3.yhyc.valueobj.Item;
-import com.aug3.yhyc.valueobj.User;
 
 public class UserDomain {
 
-	private User user;
+	private UserDao userDao;
 
-	// 用户联系方式
-	private List<DeliveryContact> contacts;
+	private ItemDao itemDao;
 
-	// 用户收藏
-	private List<Item> fav;
+	public UserDao getUserDao() {
+		return userDao;
+	}
 
-	// 购物车
-	private List<Item> cart;
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
 
-	// 积分
-	private long ac;
+	public ItemDao getItemDao() {
+		return itemDao;
+	}
 
-	// 抵用券
-	// private List<Ticker>
+	public void setItemDao(ItemDao itemDao) {
+		this.itemDao = itemDao;
+	}
 
 	public boolean isValidUser(String uid, String passwd) {
 
-		if(StringUtils.isBlank(passwd)){
+		if (StringUtils.isBlank(passwd)) {
 			return false;
 		}
-		
+
 		String userpass = "";
-		
-		if(passwd.equalsIgnoreCase(userpass)){
+
+		if (passwd.equalsIgnoreCase(userpass)) {
 			return true;
 		}
 		return false;
@@ -45,12 +49,14 @@ public class UserDomain {
 		return null;
 	}
 
-	public List<Item> fetchFavorite(String uid) {
-		return null;
+	public List<OrderItem> fetchFavorite(String uid) {
+		List<Long> items = userDao.findFavorite(uid);
+		return itemDao.findItems(items);
 	}
 
-	public List<Item> fetchShoppingCart(String uid) {
-		return null;
+	public List<OrderItem> fetchShoppingCart(String uid) {
+		List<Long> items = userDao.findShoppingCart(uid);
+		return itemDao.findItems(items);
 	}
 
 }

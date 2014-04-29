@@ -41,7 +41,7 @@ public class ShequService {
 	@Produces("application/json")
 	@GET
 	@Path("/workshop")
-	public String getServiceWorkshops(@Context HttpServletRequest request, @QueryParam("token") String token,
+	public String getWorkshops(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("shequ") String shequ) {
 
 		// return this.buidResponseResult(dtos, RespType.SUCCESS);

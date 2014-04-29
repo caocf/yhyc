@@ -15,8 +15,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.aug3.sys.rs.WebServiceResponseHandler;
 import com.aug3.sys.rs.response.RespType;
 import com.aug3.yhyc.domain.UserDomain;
+import com.aug3.yhyc.dto.OrderItem;
 import com.aug3.yhyc.valueobj.DeliveryContact;
-import com.aug3.yhyc.valueobj.Item;
 
 @Path("/user/")
 @XmlRootElement()
@@ -34,6 +34,7 @@ public class UserService extends WebServiceResponseHandler {
 		return userDomain.isValidUser(uid, p);
 	}
 
+	// TODO
 	@GET
 	@Path("/contacts")
 	public String fetchContactsList(@Context HttpServletRequest request, @QueryParam("token") String token,
@@ -48,7 +49,7 @@ public class UserService extends WebServiceResponseHandler {
 	public String fetchFavorite(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("uid") String uid) {
 
-		List<Item> fav = userDomain.fetchFavorite(uid);
+		List<OrderItem> fav = userDomain.fetchFavorite(uid);
 		return this.buidResponseResult(fav, RespType.SUCCESS);
 	}
 
@@ -57,7 +58,7 @@ public class UserService extends WebServiceResponseHandler {
 	public String fetchShoppingCart(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("uid") String uid) {
 
-		List<Item> cart = userDomain.fetchShoppingCart(uid);
+		List<OrderItem> cart = userDomain.fetchShoppingCart(uid);
 		return this.buidResponseResult(cart, RespType.SUCCESS);
 	}
 

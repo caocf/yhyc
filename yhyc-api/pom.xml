@@ -29,12 +29,19 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/sys-1.1.21.jar</systemPath>
 		</dependency>
+
 		<dependency>
 			<groupId>com.aug3.storage</groupId>
 			<artifactId>mongoclient</artifactId>
 			<version>2.11.4.2</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/mongoclient-2.11.4.2.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>2.11.4</version>
 		</dependency>
 
 		<dependency>

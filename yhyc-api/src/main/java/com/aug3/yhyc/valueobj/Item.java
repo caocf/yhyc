@@ -28,11 +28,11 @@ public class Item {
 	// 卖出数
 	private long sales;
 
-	// 零售价
-	private double rp;
-
 	// 促销价
 	private double pp;
+
+	// 市场价
+	private double mp;
 
 	// 积分
 	private int ac;
@@ -124,12 +124,12 @@ public class Item {
 		this.sales = sales;
 	}
 
-	public double getRp() {
-		return rp;
+	public double getMp() {
+		return mp;
 	}
 
-	public void setRp(double rp) {
-		this.rp = rp;
+	public void setMp(double mp) {
+		this.mp = mp;
 	}
 
 	public double getPp() {

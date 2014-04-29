@@ -36,6 +36,14 @@ public class ItemService {
 		return null;
 	}
 
+	/**
+	 * show items, multiple items separated by comma
+	 * 
+	 * @param request
+	 * @param token
+	 * @param item
+	 * @return
+	 */
 	@GET
 	@Path("/show")
 	public String showItem(@Context HttpServletRequest request, @QueryParam("token") String token,
