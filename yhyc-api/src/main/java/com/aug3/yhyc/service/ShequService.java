@@ -1,5 +1,7 @@
 package com.aug3.yhyc.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -8,9 +10,24 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.aug3.sys.rs.response.RespType;
+import com.aug3.yhyc.domain.ShequDomain;
+import com.aug3.yhyc.dto.WorkshopDTO;
+import com.aug3.yhyc.valueobj.Shequ;
+
 @Path("/shequ/")
 @XmlRootElement()
-public class ShequService {
+public class ShequService extends BaseService {
+
+	private ShequDomain shequDomain;
+
+	public ShequDomain getShequDomain() {
+		return shequDomain;
+	}
+
+	public void setShequDomain(ShequDomain shequDomain) {
+		this.shequDomain = shequDomain;
+	}
 
 	/**
 	 * 查询社区
@@ -24,10 +41,10 @@ public class ShequService {
 	@GET
 	@Path("/query")
 	public String queryShequ(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("q") String q) {
+			@QueryParam("city") String city, @QueryParam("q") String q) {
 
-		// return this.buidResponseResult(dtos, RespType.SUCCESS);
-		return null;
+		List<Shequ> result = shequDomain.queryShequ(city, q);
+		return buidResponseResult(result, RespType.SUCCESS);
 	}
 
 	/**
@@ -40,12 +57,12 @@ public class ShequService {
 	 */
 	@Produces("application/json")
 	@GET
-	@Path("/workshop")
+	@Path("/workshops")
 	public String getWorkshops(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("shequ") String shequ) {
 
-		// return this.buidResponseResult(dtos, RespType.SUCCESS);
-		return null;
+		List<WorkshopDTO> workshops = shequDomain.queryWorkshops(shequ);
+		return buidResponseResult(workshops, RespType.SUCCESS);
 	}
 
 }

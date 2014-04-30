@@ -15,12 +15,25 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	<bean id="userDao" class="com.aug3.yhyc.dao.UserDao" />
 
 	<bean id="itemDao" class="com.aug3.yhyc.dao.ItemDao" />
-	
+
 	<bean id="shequDao" class="com.aug3.yhyc.dao.ShequDao" />
 
+	<!-- domain -->
 	<bean id="userDomain" class="com.aug3.yhyc.domain.UserDomain">
 		<property name="userDao" ref="userDao" />
 	</bean>
 
+	<bean id="shequDomain" class="com.aug3.yhyc.domain.ShequDomain">
+		<property name="shequDao" ref="shequDao" />
+	</bean>
+
+	<!-- service -->
+	<bean id="userService" class="com.aug3.yhyc.service.UserService">
+		<property name="userDomain" ref="userDomain" />
+	</bean>
+
+	<bean id="shequService" class="com.aug3.yhyc.service.ShequService">
+		<property name="shequDomain" ref="shequDomain" />
+	</bean>
 </beans>
 

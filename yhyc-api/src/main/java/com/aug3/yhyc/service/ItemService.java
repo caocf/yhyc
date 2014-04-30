@@ -15,7 +15,7 @@ import com.aug3.yhyc.valueobj.Item;
 @Path("/item/")
 @XmlRootElement()
 @Produces("application/json")
-public class ItemService {
+public class ItemService extends BaseService {
 
 	@POST
 	@Path("/new")

@@ -12,7 +12,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.aug3.sys.rs.WebServiceResponseHandler;
 import com.aug3.sys.rs.response.RespType;
 import com.aug3.yhyc.domain.UserDomain;
 import com.aug3.yhyc.dto.OrderItem;
@@ -21,7 +20,7 @@ import com.aug3.yhyc.valueobj.DeliveryContact;
 @Path("/user/")
 @XmlRootElement()
 @Produces("application/json")
-public class UserService extends WebServiceResponseHandler {
+public class UserService extends BaseService {
 
 	private UserDomain userDomain;
 
@@ -50,7 +49,7 @@ public class UserService extends WebServiceResponseHandler {
 			@QueryParam("uid") String uid) {
 
 		List<OrderItem> fav = userDomain.fetchFavorite(uid);
-		return this.buidResponseResult(fav, RespType.SUCCESS);
+		return buidResponseResult(fav, RespType.SUCCESS);
 	}
 
 	@GET
@@ -59,7 +58,7 @@ public class UserService extends WebServiceResponseHandler {
 			@QueryParam("uid") String uid) {
 
 		List<OrderItem> cart = userDomain.fetchShoppingCart(uid);
-		return this.buidResponseResult(cart, RespType.SUCCESS);
+		return buidResponseResult(cart, RespType.SUCCESS);
 	}
 
 	public UserDomain getUserDomain() {

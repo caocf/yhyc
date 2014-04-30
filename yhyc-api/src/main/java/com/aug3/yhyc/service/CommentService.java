@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Path("/comment/")
 @XmlRootElement()
 @Produces("application/json")
-public class CommentService {
+public class CommentService extends BaseService {
 
 	@POST
 	@Path("/new")

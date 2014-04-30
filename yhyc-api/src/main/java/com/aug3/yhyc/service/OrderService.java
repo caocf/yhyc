@@ -16,7 +16,7 @@ import com.aug3.yhyc.dto.Order;
 @Path("/order/")
 @XmlRootElement()
 @Produces("application/json")
-public class OrderService {
+public class OrderService extends BaseService {
 
 	@POST
 	@Path("/new")
