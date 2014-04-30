@@ -5,8 +5,10 @@ public class Comment {
 	// 用户 id -- 用户号, 匿名用户为-1
 	private long uid;
 
-	// 手机号
-	private long mobi;
+	// 名字
+	private String name;
+
+	private String tel;
 
 	// 打分
 	private int score;
@@ -27,12 +29,20 @@ public class Comment {
 		this.uid = uid;
 	}
 
-	public long getMobi() {
-		return mobi;
+	public String getName() {
+		return name;
 	}
 
-	public void setMobi(long mobi) {
-		this.mobi = mobi;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 
 	public int getScore() {

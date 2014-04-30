@@ -5,7 +5,10 @@ import java.util.List;
 
 import com.aug3.storage.mongoclient.MongoAdaptor;
 import com.aug3.yhyc.base.CollectionConstants;
+import com.aug3.yhyc.dto.CommentDTO;
 import com.aug3.yhyc.dto.OrderItem;
+import com.aug3.yhyc.valueobj.Comment;
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 
@@ -37,6 +40,39 @@ public class ItemDao {
 		}
 
 		return list;
+
+	}
+
+	public CommentDTO findComments(long itemId) {
+
+		BasicDBObject qObj = new BasicDBObject("_id", itemId);
+
+		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_COMMENTS).find(qObj);
+
+		CommentDTO comments = new CommentDTO();
+		Comment comment;
+
+		comments.setId(itemId);
+
+		while (dbCur.hasNext()) {
+			BasicDBObject dbObj = (BasicDBObject) dbCur.next();
+
+			comments.setCount(dbObj.getInt("count"));
+			comments.setScore(dbObj.getInt("sc"));
+			comments.setGood(dbObj.getInt("good"));
+			comments.setNorm(dbObj.getInt("norm"));
+			comments.setBad(dbObj.getInt("bad"));
+
+			BasicDBList commentlist = (BasicDBList) dbObj.get("comment");
+			for (Object obj : commentlist) {
+				comment = new Comment();
+
+				comments.getComments().add(comment);
+			}
+
+		}
+
+		return comments;
 
 	}
 
