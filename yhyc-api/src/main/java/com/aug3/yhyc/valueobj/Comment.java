@@ -8,8 +8,6 @@ public class Comment {
 	// 名字
 	private String name;
 
-	private String tel;
-
 	// 打分
 	private int score;
 
@@ -35,14 +33,6 @@ public class Comment {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getTel() {
-		return tel;
-	}
-
-	public void setTel(String tel) {
-		this.tel = tel;
 	}
 
 	public int getScore() {

@@ -10,9 +10,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.aug3.sys.rs.response.RespType;
 import com.aug3.yhyc.domain.ItemDomain;
 import com.aug3.yhyc.dto.CommentDTO;
+import com.aug3.yhyc.dto.CommentReq;
 import com.aug3.yhyc.valueobj.Item;
 
 @Path("/item/")
@@ -69,18 +72,21 @@ public class ItemService extends BaseService {
 	@GET
 	@Path("/comments")
 	public String listComments(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("item") String item) {
+			@QueryParam("item") String item, String pn) {
 
-		CommentDTO comments = itemDomain.getComments(Long.parseLong(item));
+		if (StringUtils.isBlank(pn)) {
+			pn = "1";
+		}
+		CommentDTO comments = itemDomain.getComments(Long.parseLong(item), Integer.parseInt(pn));
 		return buidResponseResult(comments, RespType.SUCCESS);
 	}
 
 	@POST
 	@Path("/comment/new")
-	public boolean newComment(@Context HttpServletRequest request, @FormParam("token") String token,
-			@FormParam("uid") String uid, @FormParam("comment") String commentObj) {
-		// TODO: change to order object
-		return false;
+	public void newComment(@Context HttpServletRequest request, @FormParam("token") String token,
+			@FormParam("") CommentReq commentReq) {
+
+		itemDomain.newComments(commentReq);
 	}
 
 }
