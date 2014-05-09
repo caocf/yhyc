@@ -136,6 +136,12 @@
 			<version>2.5.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>sdk</artifactId>
+			<version>6.1.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
