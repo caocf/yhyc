@@ -1,5 +1,7 @@
 package com.aug3.yhyc.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -16,6 +18,7 @@ import com.aug3.sys.rs.response.RespType;
 import com.aug3.yhyc.domain.ItemDomain;
 import com.aug3.yhyc.dto.CommentDTO;
 import com.aug3.yhyc.dto.CommentReq;
+import com.aug3.yhyc.dto.ItemDTO;
 import com.aug3.yhyc.valueobj.Item;
 
 @Path("/item/")
@@ -48,8 +51,11 @@ public class ItemService extends BaseService {
 	public String listItems(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("workshop") String workshop) {
 
-		// return this.buidResponseResult(dtos, RespType.SUCCESS);
-		return null;
+		if (StringUtils.isBlank(workshop)) {
+			return buidResponseResult("invlid param workshop", RespType.PARAMETEREXCEPTION);
+		}
+		List<Item> items = itemDomain.findItemsByWorkshop(Long.parseLong(workshop));
+		return buidResponseResult(items, RespType.SUCCESS);
 	}
 
 	/**
@@ -65,8 +71,8 @@ public class ItemService extends BaseService {
 	public String showItem(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("item") String item) {
 
-		// return this.buidResponseResult(dtos, RespType.SUCCESS);
-		return null;
+		ItemDTO result = itemDomain.findItemByID(Long.parseLong(item));
+		return buidResponseResult(result, RespType.SUCCESS);
 	}
 
 	@GET
@@ -77,7 +83,7 @@ public class ItemService extends BaseService {
 		if (StringUtils.isBlank(pn)) {
 			pn = "1";
 		}
-		CommentDTO comments = itemDomain.getComments(Long.parseLong(item), Integer.parseInt(pn));
+		CommentDTO comments = itemDomain.findCommentsByItem(Long.parseLong(item), Integer.parseInt(pn));
 		return buidResponseResult(comments, RespType.SUCCESS);
 	}
 

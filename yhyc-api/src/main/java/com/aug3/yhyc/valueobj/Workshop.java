@@ -24,9 +24,9 @@ public class Workshop {
 
 	private List<Long> shequ;
 
-	private String cat;
+	private List<Integer> cat;
 
-	// 状态 : 1 - 正常      0 - 整装待发
+	// 状态 : 1 - 正常 0 - 整装待发
 	private String sts;
 
 	public long getId() {
@@ -109,11 +109,11 @@ public class Workshop {
 		this.shequ = shequ;
 	}
 
-	public String getCat() {
+	public List<Integer> getCat() {
 		return cat;
 	}
 
-	public void setCat(String cat) {
+	public void setCat(List<Integer> cat) {
 		this.cat = cat;
 	}
 

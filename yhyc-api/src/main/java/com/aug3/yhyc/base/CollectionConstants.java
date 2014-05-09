@@ -12,6 +12,8 @@ public class CollectionConstants {
 
 	public static final String COLL_ITEMS = "items";
 
+	public static final String COLL_PRODUCTS = "products";
+
 	public static final String COLL_COMMENTS = "comments";
 
 	public static final String COLL_SHEQU = "shequ";

@@ -9,6 +9,8 @@ import com.aug3.yhyc.base.Constants;
 import com.aug3.yhyc.dto.CommentDTO;
 import com.aug3.yhyc.dto.OrderItem;
 import com.aug3.yhyc.valueobj.Comment;
+import com.aug3.yhyc.valueobj.Item;
+import com.aug3.yhyc.valueobj.Product;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
@@ -39,6 +41,75 @@ public class ItemDao {
 				// oi.setAc(ac);
 				list.add(oi);
 			}
+		}
+
+		return list;
+
+	}
+
+	public Item findItemByID(Long itemId) {
+
+		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_ITEMS)
+				.find(new BasicDBObject("_id", itemId));
+
+		BasicDBObject dbObj;
+		Item item = null;
+		while (dbCur.hasNext()) {
+			dbObj = (BasicDBObject) dbCur.next();
+			item = new Item();
+			item.setId(dbObj.getLong("_id"));
+			item.setName(dbObj.getString("name"));
+			item.setPp(dbObj.getDouble("pp"));
+			item.setMp(dbObj.getDouble("mp"));
+			item.setPid(dbObj.getLong("pid"));
+			item.setFav(dbObj.getLong("fav"));
+			item.setSales(dbObj.getLong("sale"));
+		}
+
+		return item;
+
+	}
+
+	public Product findProductByID(Long pid) {
+
+		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_PRODUCTS)
+				.find(new BasicDBObject("_id", pid));
+
+		BasicDBObject dbObj;
+		Product p = null;
+		while (dbCur.hasNext()) {
+			dbObj = (BasicDBObject) dbCur.next();
+			p = new Product();
+			p.setId(dbObj.getLong("_id"));
+			p.setName(dbObj.getString("name"));
+			p.setPic(dbObj.getString("pic"));
+			p.setCat(dbObj.getString("cat"));
+
+			// TODO
+		}
+
+		return p;
+
+	}
+
+	public List<Item> findItemsByWorkshop(long workshop) {
+
+		List<Item> list = new ArrayList<Item>();
+
+		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_ITEMS)
+				.find(new BasicDBObject("sid", workshop).append("sts", 1));
+
+		BasicDBObject dbObj;
+		Item oi;
+		while (dbCur.hasNext()) {
+			dbObj = (BasicDBObject) dbCur.next();
+			oi = new Item();
+			oi.setId(dbObj.getLong("_id"));
+			oi.setName(dbObj.getString("name"));
+			oi.setPp(dbObj.getDouble("pp"));
+			oi.setMp(dbObj.getDouble("mp"));
+			oi.setPid(dbObj.getLong("pid"));
+			list.add(oi);
 		}
 
 		return list;

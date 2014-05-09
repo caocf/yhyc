@@ -7,20 +7,17 @@ public class Item {
 
 	private String name;
 
-	// 类目
-	private String category;
+	// 对应产品
+	private long pid;
+
+	// workshop id
+	private long sid;
 
 	// 库存
-	private long inventory;
+	private long invt;
 
 	// 规格
 	private String spec;
-
-	// 橱窗图片
-	private String pic;
-
-	// 卖家id
-	private String sid;
 
 	// 收藏人数
 	private long fav;
@@ -37,20 +34,8 @@ public class Item {
 	// 积分
 	private int ac;
 
-	// 产地
-	private String origin;
-
-	// 品牌
-	private String brand;
-
-	// 描述
-	private String desc;
-
-	// 图片组
-	private String url;
-
 	// 状态
-	private int status;
+	private int sts;
 
 	public long getId() {
 		return id;
@@ -68,20 +53,28 @@ public class Item {
 		this.name = name;
 	}
 
-	public String getCategory() {
-		return category;
+	public long getPid() {
+		return pid;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setPid(long pid) {
+		this.pid = pid;
 	}
 
-	public long getInventory() {
-		return inventory;
+	public long getSid() {
+		return sid;
 	}
 
-	public void setInventory(long inventory) {
-		this.inventory = inventory;
+	public void setSid(long sid) {
+		this.sid = sid;
+	}
+
+	public long getInvt() {
+		return invt;
+	}
+
+	public void setInvt(long invt) {
+		this.invt = invt;
 	}
 
 	public String getSpec() {
@@ -90,22 +83,6 @@ public class Item {
 
 	public void setSpec(String spec) {
 		this.spec = spec;
-	}
-
-	public String getPic() {
-		return pic;
-	}
-
-	public void setPic(String pic) {
-		this.pic = pic;
-	}
-
-	public String getSid() {
-		return sid;
-	}
-
-	public void setSid(String sid) {
-		this.sid = sid;
 	}
 
 	public long getFav() {
@@ -124,20 +101,20 @@ public class Item {
 		this.sales = sales;
 	}
 
-	public double getMp() {
-		return mp;
-	}
-
-	public void setMp(double mp) {
-		this.mp = mp;
-	}
-
 	public double getPp() {
 		return pp;
 	}
 
 	public void setPp(double pp) {
 		this.pp = pp;
+	}
+
+	public double getMp() {
+		return mp;
+	}
+
+	public void setMp(double mp) {
+		this.mp = mp;
 	}
 
 	public int getAc() {
@@ -148,44 +125,12 @@ public class Item {
 		this.ac = ac;
 	}
 
-	public String getOrigin() {
-		return origin;
+	public int getSts() {
+		return sts;
 	}
 
-	public void setOrigin(String origin) {
-		this.origin = origin;
-	}
-
-	public String getBrand() {
-		return brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
+	public void setSts(int sts) {
+		this.sts = sts;
 	}
 
 }

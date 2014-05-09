@@ -1,10 +1,15 @@
 package com.aug3.yhyc.domain;
 
+import java.util.List;
+
 import com.aug3.sys.util.DateUtil;
 import com.aug3.yhyc.dao.ItemDao;
 import com.aug3.yhyc.dto.CommentDTO;
 import com.aug3.yhyc.dto.CommentReq;
+import com.aug3.yhyc.dto.ItemDTO;
 import com.aug3.yhyc.valueobj.Comment;
+import com.aug3.yhyc.valueobj.Item;
+import com.aug3.yhyc.valueobj.Product;
 
 public class ItemDomain {
 
@@ -18,7 +23,20 @@ public class ItemDomain {
 		this.itemDao = itemDao;
 	}
 
-	public CommentDTO getComments(long itemId, int pn) {
+	public List<Item> findItemsByWorkshop(long workshop) {
+		return itemDao.findItemsByWorkshop(workshop);
+	}
+
+	public ItemDTO findItemByID(long itemID) {
+		Item item = itemDao.findItemByID(itemID);
+		Product p = itemDao.findProductByID(item.getPid());
+		ItemDTO itemDTO = new ItemDTO();
+		itemDTO.setItem(item);
+		itemDTO.setProduct(p);
+		return itemDTO;
+	}
+
+	public CommentDTO findCommentsByItem(long itemId, int pn) {
 
 		return itemDao.findComments(itemId, pn);
 	}

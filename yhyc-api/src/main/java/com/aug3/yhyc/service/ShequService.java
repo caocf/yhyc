@@ -59,9 +59,9 @@ public class ShequService extends BaseService {
 	@GET
 	@Path("/workshops")
 	public String getWorkshops(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("shequ") String shequ) {
+			@QueryParam("shequ") String shequ, @QueryParam("cat") String cat) {
 
-		List<WorkshopDTO> workshops = shequDomain.queryWorkshops(shequ);
+		List<WorkshopDTO> workshops = shequDomain.queryWorkshops(shequ, cat);
 		return buidResponseResult(workshops, RespType.SUCCESS);
 	}
 

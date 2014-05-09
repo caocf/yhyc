@@ -87,11 +87,12 @@ public class ShequDao {
 
 	}
 
-	public List<Workshop> findWorkshops(long shequ) {
+	public List<Workshop> findWorkshops(long shequ, String cat) {
 
 		List<Workshop> list = new ArrayList<Workshop>();
 
-		BasicDBObject qObj = new BasicDBObject("shequ", new BasicDBObject("$in", new Long[] { shequ }));
+		BasicDBObject qObj = new BasicDBObject("shequ", new BasicDBObject("$in", new Long[] { shequ })).append("cat",
+				new BasicDBObject("$in", new String[] { cat }));
 
 		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_WORKSHOP).find(qObj);
 

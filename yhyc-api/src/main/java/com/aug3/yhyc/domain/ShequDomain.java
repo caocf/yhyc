@@ -28,9 +28,9 @@ public class ShequDomain {
 		return shequDao.findShequ(city, q);
 	}
 
-	public List<WorkshopDTO> queryWorkshops(String shequ) {
+	public List<WorkshopDTO> queryWorkshops(String shequ, String cat) {
 
-		List<Workshop> list = shequDao.findWorkshops(Long.parseLong(shequ));
+		List<Workshop> list = shequDao.findWorkshops(Long.parseLong(shequ), cat);
 
 		Set<Long> shequids = new HashSet<Long>();
 		for (Workshop shop : list) {
