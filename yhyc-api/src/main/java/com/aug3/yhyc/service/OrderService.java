@@ -1,5 +1,7 @@
 package com.aug3.yhyc.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -11,12 +13,24 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.aug3.sys.rs.response.RespType;
+import com.aug3.yhyc.domain.OrderDomain;
 import com.aug3.yhyc.dto.Order;
 
 @Path("/order/")
 @XmlRootElement()
 @Produces("application/json")
 public class OrderService extends BaseService {
+
+	private OrderDomain orderDomain;
+
+	public OrderDomain getOrderDomain() {
+		return orderDomain;
+	}
+
+	public void setOrderDomain(OrderDomain orderDomain) {
+		this.orderDomain = orderDomain;
+	}
 
 	@POST
 	@Path("/new")
@@ -33,8 +47,9 @@ public class OrderService extends BaseService {
 	public String listOrders(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("uid") String uid, @QueryParam("status") String status) {
 
-		// return this.buidResponseResult(dtos, RespType.SUCCESS);
-		return null;
+		List<Order> orders = orderDomain.listOrders(uid, Integer.parseInt(status));
+
+		return this.buidResponseResult(orders, RespType.SUCCESS);
 	}
 
 	/**

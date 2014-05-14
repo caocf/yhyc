@@ -45,6 +45,12 @@ public class UserDomain {
 		return false;
 	}
 
+	/**
+	 * TODO
+	 * 
+	 * @param uid
+	 * @return
+	 */
 	public List<DeliveryContact> fetchContacts(String uid) {
 		return null;
 	}

@@ -38,6 +38,7 @@ public class ItemService extends BaseService {
 
 	@POST
 	@Path("/new")
+	// TODO
 	// @AccessTrace
 	// @AccessToken
 	public boolean newItem(@Context HttpServletRequest request, @FormParam("token") String token,
