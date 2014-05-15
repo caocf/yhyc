@@ -25,9 +25,27 @@ public class OrderDomain {
 
 	public List<Order> listOrders(String uid, int status) {
 
-		List<Order> orders = null;
+		List<Order> orders = orderDao.findOrdersByUid(uid, status);
 
 		return orders;
+	}
+
+	public List<Order> listOrdersByWorkshop(long workshop, int status) {
+
+		List<Order> orders = orderDao.findOrdersByWorkshop(workshop, status);
+
+		return orders;
+	}
+
+	public Order showOrder(long orderid) {
+
+		Order order = orderDao.findOrder(orderid);
+
+		return order;
+	}
+
+	public void editOrderStatus(long orderid, int status) {
+		orderDao.updateOrderStatus(orderid, status);
 	}
 
 }

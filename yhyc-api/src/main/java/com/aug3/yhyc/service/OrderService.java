@@ -61,21 +61,12 @@ public class OrderService extends BaseService {
 	 * @return
 	 */
 	@GET
-	@Path("/sales/todo")
-	public String listSalesTodoOrders(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("workshop") String workshop) {
+	@Path("/sales")
+	public String listSalesOrders(@Context HttpServletRequest request, @QueryParam("token") String token,
+			@QueryParam("workshop") String workshop, @QueryParam("status") String status) {
 
-		// return this.buidResponseResult(dtos, RespType.SUCCESS);
-		return null;
-	}
-
-	@GET
-	@Path("/sales/finished")
-	public String listSalesFinishedOrders(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("workshop") String workshop) {
-
-		// return this.buidResponseResult(dtos, RespType.SUCCESS);
-		return null;
+		List<Order> orders = orderDomain.listOrdersByWorkshop(Long.parseLong(workshop), Integer.parseInt(status));
+		return this.buidResponseResult(orders, RespType.SUCCESS);
 	}
 
 	@GET
@@ -83,8 +74,8 @@ public class OrderService extends BaseService {
 	public String showOrder(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("orderid") String orderid) {
 
-		// return this.buidResponseResult(dtos, RespType.SUCCESS);
-		return null;
+		Order order = orderDomain.showOrder(Long.parseLong(orderid));
+		return this.buidResponseResult(order, RespType.SUCCESS);
 	}
 
 	/**
@@ -101,8 +92,8 @@ public class OrderService extends BaseService {
 	public String editStatus(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("orderid") String orderid, @QueryParam("status") String status) {
 
-		// return this.buidResponseResult(dtos, RespType.SUCCESS);
-		return null;
+		orderDomain.editOrderStatus(Long.parseLong(orderid), Integer.parseInt(status));
+		return this.buidResponseResult("200", RespType.SUCCESS);
 	}
 
 }

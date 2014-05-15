@@ -9,7 +9,7 @@ import com.aug3.yhyc.valueobj.DeliveryContact;
 @SuppressWarnings("serial")
 public class Order implements Serializable {
 
-	// 日期+卖家id+流水号
+	// 日期+流水号
 	private long orderID;
 
 	private long uid;
