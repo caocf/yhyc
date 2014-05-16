@@ -15,6 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.StringUtils;
 
 import com.aug3.sys.rs.response.RespType;
+import com.aug3.sys.util.JSONUtil;
 import com.aug3.yhyc.domain.ItemDomain;
 import com.aug3.yhyc.dto.CommentDTO;
 import com.aug3.yhyc.dto.CommentReq;
@@ -42,8 +43,9 @@ public class ItemService extends BaseService {
 	// @AccessTrace
 	// @AccessToken
 	public boolean newItem(@Context HttpServletRequest request, @FormParam("token") String token,
-			@FormParam("uid") String uid, @FormParam("") Item itemObj) {
-		// TODO: change to order object
+			@FormParam("uid") String uid, @FormParam("item") String item) {
+
+		JSONUtil.fromJson(item, Item.class);
 		return false;
 	}
 

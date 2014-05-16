@@ -23,6 +23,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.aug3</groupId>
 			<artifactId>sys</artifactId>
 			<version>1.1.21</version>

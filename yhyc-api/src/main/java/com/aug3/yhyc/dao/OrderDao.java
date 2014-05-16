@@ -1,10 +1,12 @@
 package com.aug3.yhyc.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.aug3.storage.mongoclient.MongoAdaptor;
-import com.aug3.sys.util.DateUtil;
 import com.aug3.yhyc.base.CollectionConstants;
 import com.aug3.yhyc.dto.Order;
 import com.aug3.yhyc.dto.OrderItem;
@@ -158,60 +160,44 @@ public class OrderDao {
 
 	public boolean createOrder(Order order) {
 
-		List<Order> list = new ArrayList<Order>();
+		BasicDBObject doc = new BasicDBObject();
+		doc.put("_id", IDGenerator.nextOrderID(MongoAdaptor.getDB()));
+		doc.put("uid", order.getUid());
 
-		String today = DateUtil.formatCurrentDate();
-		order.setOrderID(Long.parseLong(today + IDGenerator.nextval(MongoAdaptor.getDB(), today, "orderid")));
-		
-		MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_ORDERS).save(new BasicDBObject());
+		List orders = new ArrayList();
+		List<OrderItem> li = order.getItems();
+		for (OrderItem item : li) {
+			HashMap m = new HashMap();
+			m.put("item", item.getId());
+			m.put("name", item.getName());
+			m.put("shop", item.getShop());
+			m.put("num", item.getNum());
+			m.put("pp", item.getPrice());
+			m.put("mp", item.getOrigprice());
 
-		BasicDBObject dbObj;
-		Order myorder;
-		BasicDBList items;
-		OrderItem orderItem;
-		BasicDBObject item;
-		List<OrderItem> orderItems;
-//		while (dbCur.hasNext()) {
-//			dbObj = (BasicDBObject) dbCur.next();
-//			myorder = new Order();
-//
-//			items = (BasicDBList) dbObj.get("items");
-//			orderItems = new ArrayList<OrderItem>();
-//			for (Object eachitem : items) {
-//				item = (BasicDBObject) eachitem;
-//				long shop = item.getLong("shop");
-//				if (shop == workshop) {
-//					orderItem = new OrderItem();
-//					orderItem.setId(item.getLong("item"));
-//					orderItem.setShop(shop);
-//					orderItem.setName(item.getString("name"));
-//					orderItem.setNum(item.getInt("num"));
-//					orderItem.setPrice(item.getDouble("pp"));
-//					orderItems.add(orderItem);
-//				}
-//			}
-//
-//			BasicDBObject delivery = (BasicDBObject) dbObj.get("delivery");
-//
-//			if (delivery != null) {
-//				DeliveryContact contact = new DeliveryContact();
-//				contact.setRecip(delivery.getString("recip"));
-//				contact.setAddr(delivery.getString("addr"));
-//				contact.setMobi(delivery.getString("mobi"));
-//				contact.setTel(delivery.getString("tel"));
-//				myorder.setDelivery(contact);
-//			}
-//			myorder.setItems(orderItems);
-//			myorder.setTotal(dbObj.getDouble("total"));
-//			myorder.setMsg(dbObj.getString("msg"));
-//			myorder.setDt(dbObj.getDate("dt"));
-//			myorder.setTs(dbObj.getDate("ts"));
-//
-//			list.add(myorder);
-//		}
-//
-//		return list;
-return true;
+			orders.add(m);
+		}
+		doc.put("items", orders);
+
+		doc.put("total", 1.1);
+		doc.put("ac", Math.round(1.1 / 10));
+
+		Map<String, String> delivery = new HashMap<String, String>();
+		DeliveryContact dc = order.getDelivery();
+		delivery.put("recip", dc.getRecip());
+		delivery.put("addr", dc.getAddr());
+		delivery.put("", dc.getMobi());
+		delivery.put("tel", dc.getTel());
+		doc.put("delivery", delivery);
+
+		Date d = new Date();
+		doc.put("ts", d);
+		doc.put("msg", order.getMsg());
+		doc.put("sts", order.getStatus());
+
+		MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_ORDERS).insert(doc);
+
+		return true;
 	}
 
 }

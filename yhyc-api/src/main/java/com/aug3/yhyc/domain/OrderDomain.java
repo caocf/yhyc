@@ -17,10 +17,8 @@ public class OrderDomain {
 		this.orderDao = orderDao;
 	}
 
-	public boolean newOrder(String uid, String passwd) {
-		// uid can be null
-		// TODO MD5 validate
-		return false;
+	public boolean newOrder(Order order) {
+		return orderDao.createOrder(order);
 	}
 
 	public List<Order> listOrders(String uid, int status) {

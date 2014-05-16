@@ -37,9 +37,10 @@ public class IDGenerator {
 		return value;
 	}
 
-	public static long nextLongToday(DB db, String key) {
+	public static long nextOrderID(DB db) {
 		String today = DateUtil.formatCurrentDate();
-		return Long.parseLong(today + df.format(IDGenerator.nextval(db, today, key)));
+		return Long.parseLong(today.substring(2).replaceAll("-", "")
+				+ df.format(IDGenerator.nextval(db, today, "orderid")));
 	}
 
 }

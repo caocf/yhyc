@@ -14,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aug3.sys.rs.response.RespType;
+import com.aug3.sys.util.JSONUtil;
 import com.aug3.yhyc.domain.OrderDomain;
 import com.aug3.yhyc.dto.Order;
 
@@ -36,10 +37,10 @@ public class OrderService extends BaseService {
 	@Path("/new")
 	// @AccessTrace
 	// @AccessToken
-	public boolean newOrder(@Context HttpServletRequest request, @FormParam("token") String token,
-			@FormParam("uid") String uid, @FormParam("") Order order) {
-		// TODO: change to order object
-		return false;
+	public String newOrder(@Context HttpServletRequest request, @FormParam("token") String token,
+			@FormParam("uid") String uid, @FormParam("order") String order) {
+		orderDomain.newOrder(JSONUtil.fromJson(order, Order.class));
+		return buidResponseResult("success!", RespType.SUCCESS);
 	}
 
 	@GET
@@ -93,7 +94,7 @@ public class OrderService extends BaseService {
 			@QueryParam("orderid") String orderid, @QueryParam("status") String status) {
 
 		orderDomain.editOrderStatus(Long.parseLong(orderid), Integer.parseInt(status));
-		return this.buidResponseResult("200", RespType.SUCCESS);
+		return this.buidResponseResult("success", RespType.SUCCESS);
 	}
 
 }
