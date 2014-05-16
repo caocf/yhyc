@@ -10,6 +10,10 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 
+import com.aug3.sys.rs.response.RespObj;
+import com.aug3.sys.rs.response.RespType;
+import com.aug3.sys.util.JSONUtil;
+import com.aug3.yhyc.dao.UserDao;
 import com.aug3.yhyc.interceptors.annotation.AccessToken;
 import com.aug3.yhyc.interceptors.annotation.AccessTrace;
 
@@ -51,7 +55,22 @@ public class AccessControllerAspect {
 	public Object accessToken(final ProceedingJoinPoint pjp, final AccessToken tokenAnnotation,
 			HttpServletRequest request, String token) throws Throwable {
 
-		return null;
+		boolean isValid = UserDao.isValidToken(token);
+
+		if (!isValid) {
+			RespObj returnDTO = new RespObj();
+			returnDTO.setCode(RespType.NO_PERMISSION.getCode());
+			returnDTO.setType("Invalid User!");
+			returnDTO.setMessage("ERR: " + RespType.NO_PERMISSION);
+			return JSONUtil.toJson(returnDTO);
+		}
+
+		try {
+			return pjp.proceed();
+		} catch (Throwable t) {
+			System.out.println("error occured");
+			throw t;
+		}
 
 	}
 

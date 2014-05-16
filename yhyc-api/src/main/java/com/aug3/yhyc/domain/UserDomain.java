@@ -2,8 +2,6 @@ package com.aug3.yhyc.domain;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.aug3.yhyc.dao.ItemDao;
 import com.aug3.yhyc.dao.UserDao;
 import com.aug3.yhyc.dto.OrderItem;
@@ -33,16 +31,7 @@ public class UserDomain {
 
 	public boolean isValidUser(String uid, String passwd) {
 
-		if (StringUtils.isBlank(passwd)) {
-			return false;
-		}
-
-		String userpass = "";
-
-		if (passwd.equalsIgnoreCase(userpass)) {
-			return true;
-		}
-		return false;
+		return userDao.isValidUser(uid, passwd);
 	}
 
 	/**
