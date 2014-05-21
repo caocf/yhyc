@@ -17,6 +17,7 @@ import com.aug3.yhyc.valueobj.Shequ;
 
 @Path("/shequ/")
 @XmlRootElement()
+@Produces("application/json;charset=UTF-8")
 public class ShequService extends BaseService {
 
 	private ShequDomain shequDomain;
@@ -37,7 +38,6 @@ public class ShequService extends BaseService {
 	 * @param q
 	 * @return
 	 */
-	@Produces("application/json")
 	@GET
 	@Path("/query")
 	public String queryShequ(@Context HttpServletRequest request, @QueryParam("token") String token,
@@ -55,13 +55,12 @@ public class ShequService extends BaseService {
 	 * @param shequ
 	 * @return
 	 */
-	@Produces("application/json")
 	@GET
 	@Path("/workshops")
 	public String getWorkshops(@Context HttpServletRequest request, @QueryParam("token") String token,
 			@QueryParam("shequ") String shequ, @QueryParam("cat") String cat) {
 
-		List<WorkshopDTO> workshops = shequDomain.queryWorkshops(shequ, cat);
+		List<WorkshopDTO> workshops = shequDomain.queryWorkshops(Long.parseLong(shequ), Integer.parseInt(cat));
 		return buidResponseResult(workshops, RespType.SUCCESS);
 	}
 

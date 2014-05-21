@@ -23,6 +23,8 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 		<jaxrs:serviceBeans>
 			<ref bean="userService" />
 			<ref bean="shequService" />
+			<ref bean="itemService" />
+			<ref bean="orderService" />
 		</jaxrs:serviceBeans>
 
 	</jaxrs:server>

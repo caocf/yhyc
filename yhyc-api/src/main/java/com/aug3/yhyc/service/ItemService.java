@@ -24,7 +24,7 @@ import com.aug3.yhyc.valueobj.Item;
 
 @Path("/item/")
 @XmlRootElement()
-@Produces("application/json")
+@Produces("application/json;charset=UTF-8")
 public class ItemService extends BaseService {
 
 	private ItemDomain itemDomain;

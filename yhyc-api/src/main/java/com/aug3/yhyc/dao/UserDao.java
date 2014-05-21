@@ -33,7 +33,7 @@ public class UserDao {
 			return false;
 	}
 
-	public List<Long> findFavorite(String uid) {
+	public List<Long> findFavorite(long uid) {
 
 		DBCursor cur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_USERS)
 				.find(new BasicDBObject("_id", uid), new BasicDBObject("fav", 1));
@@ -54,7 +54,7 @@ public class UserDao {
 		return items;
 	}
 
-	public List<Long> findShoppingCart(String uid) {
+	public List<Long> findShoppingCart(long uid) {
 
 		DBCursor cur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_USERS)
 				.find(new BasicDBObject("_id", uid), new BasicDBObject("cart", 1));

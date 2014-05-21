@@ -20,7 +20,7 @@ import com.aug3.yhyc.dto.Order;
 
 @Path("/order/")
 @XmlRootElement()
-@Produces("application/json")
+@Produces("application/json;charset=UTF-8")
 public class OrderService extends BaseService {
 
 	private OrderDomain orderDomain;

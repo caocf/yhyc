@@ -27,7 +27,7 @@ public class ItemDao {
 					.getDB()
 					.getCollection(CollectionConstants.COLL_ITEMS)
 					.find(new BasicDBObject("_id", new BasicDBObject("$in", itemIds)),
-							new BasicDBObject("name", 1).append("pic", 1).append("pp", 1).append("mp", 1));
+							new BasicDBObject("name", 1).append("pp", 1).append("mp", 1).append("sid", 1));
 
 			BasicDBObject dbObj;
 			OrderItem oi;
@@ -35,6 +35,7 @@ public class ItemDao {
 				dbObj = (BasicDBObject) dbCur.next();
 				oi = new OrderItem();
 				oi.setId(dbObj.getLong("_id"));
+				oi.setSid(dbObj.getLong("sid"));
 				oi.setName(dbObj.getString("name"));
 				oi.setPrice(dbObj.getDouble("pp"));
 				oi.setOrigprice(dbObj.getDouble("mp"));

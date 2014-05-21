@@ -14,8 +14,6 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	<!-- dao -->
 	<bean id="userDao" class="com.aug3.yhyc.dao.UserDao" />
 
-	<bean id="itemDao" class="com.aug3.yhyc.dao.ItemDao" />
-
 	<bean id="shequDao" class="com.aug3.yhyc.dao.ShequDao" />
 
 	<bean id="itemDao" class="com.aug3.yhyc.dao.ItemDao" />
@@ -25,6 +23,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	<!-- domain -->
 	<bean id="userDomain" class="com.aug3.yhyc.domain.UserDomain">
 		<property name="userDao" ref="userDao" />
+		<property name="itemDao" ref="itemDao" />
 	</bean>
 
 	<bean id="shequDomain" class="com.aug3.yhyc.domain.ShequDomain">

@@ -19,7 +19,7 @@ import com.aug3.yhyc.valueobj.DeliveryContact;
 
 @Path("/user/")
 @XmlRootElement()
-@Produces("application/json")
+@Produces("application/json;charset=UTF-8")
 public class UserService extends BaseService {
 
 	private UserDomain userDomain;
@@ -28,16 +28,17 @@ public class UserService extends BaseService {
 	@Path("/login")
 	// @AccessTrace
 	// @AccessToken
-	public boolean login(@Context HttpServletRequest request, @FormParam("token") String token,
-			@FormParam("uid") String uid, @FormParam("p") String p) {
+	public boolean login(@Context HttpServletRequest request,
+			@FormParam("token") String token, @FormParam("uid") String uid,
+			@FormParam("p") String p) {
 		return userDomain.isValidUser(uid, p);
 	}
 
 	// TODO
 	@GET
 	@Path("/contacts")
-	public String fetchContactsList(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("uid") String uid) {
+	public String fetchContactsList(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("uid") String uid) {
 
 		List<DeliveryContact> contacts = userDomain.fetchContacts(uid);
 		return this.buidResponseResult(contacts, RespType.SUCCESS);
@@ -45,19 +46,20 @@ public class UserService extends BaseService {
 
 	@GET
 	@Path("/favorite")
-	public String fetchFavorite(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("uid") String uid) {
+	public String fetchFavorite(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("uid") String uid) {
 
-		List<OrderItem> fav = userDomain.fetchFavorite(uid);
+		List<OrderItem> fav = userDomain.fetchFavorite(Long.parseLong(uid));
 		return buidResponseResult(fav, RespType.SUCCESS);
 	}
 
 	@GET
 	@Path("/shoppingcart")
-	public String fetchShoppingCart(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("uid") String uid) {
+	public String fetchShoppingCart(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("uid") String uid) {
 
-		List<OrderItem> cart = userDomain.fetchShoppingCart(uid);
+		List<OrderItem> cart = userDomain
+				.fetchShoppingCart(Long.parseLong(uid));
 		return buidResponseResult(cart, RespType.SUCCESS);
 	}
 

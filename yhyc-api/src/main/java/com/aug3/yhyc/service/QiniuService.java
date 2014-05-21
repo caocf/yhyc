@@ -26,7 +26,7 @@ import com.qiniu.api.rs.URLUtils;
 
 @Path("/qiniu/")
 @XmlRootElement()
-@Produces("application/json")
+@Produces("application/json;charset=UTF-8")
 public class QiniuService extends BaseService {
 
 	private static final Logger log = Logger.getLogger(QiniuService.class);

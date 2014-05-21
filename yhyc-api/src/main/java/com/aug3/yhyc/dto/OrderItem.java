@@ -7,7 +7,7 @@ public class OrderItem implements Serializable {
 	// item id : workshopid + 分类号+流水号
 	private long id;
 
-	private long shop;
+	private long sid;
 
 	// 商品名
 	private String name;
@@ -26,12 +26,12 @@ public class OrderItem implements Serializable {
 		return id;
 	}
 
-	public long getShop() {
-		return shop;
+	public long getSid() {
+		return sid;
 	}
 
-	public void setShop(long shop) {
-		this.shop = shop;
+	public void setSid(long sid) {
+		this.sid = sid;
 	}
 
 	public String getName() {

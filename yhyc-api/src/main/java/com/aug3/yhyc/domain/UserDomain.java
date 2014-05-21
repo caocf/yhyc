@@ -44,12 +44,12 @@ public class UserDomain {
 		return null;
 	}
 
-	public List<OrderItem> fetchFavorite(String uid) {
+	public List<OrderItem> fetchFavorite(long uid) {
 		List<Long> items = userDao.findFavorite(uid);
 		return itemDao.findItems(items);
 	}
 
-	public List<OrderItem> fetchShoppingCart(String uid) {
+	public List<OrderItem> fetchShoppingCart(long uid) {
 		List<Long> items = userDao.findShoppingCart(uid);
 		return itemDao.findItems(items);
 	}

@@ -31,7 +31,7 @@ public class OrderDao {
 			item = (BasicDBObject) eachitem;
 			orderItem = new OrderItem();
 			orderItem.setId(item.getLong("item"));
-			orderItem.setShop(item.getLong("shop"));
+			orderItem.setSid(item.getLong("shop"));
 			orderItem.setName(item.getString("name"));
 			orderItem.setNum(item.getInt("num"));
 			orderItem.setPrice(item.getDouble("pp"));
@@ -117,7 +117,7 @@ public class OrderDao {
 				if (shop == workshop) {
 					orderItem = new OrderItem();
 					orderItem.setId(item.getLong("item"));
-					orderItem.setShop(shop);
+					orderItem.setSid(shop);
 					orderItem.setName(item.getString("name"));
 					orderItem.setNum(item.getInt("num"));
 					orderItem.setPrice(item.getDouble("pp"));
@@ -170,7 +170,7 @@ public class OrderDao {
 			HashMap m = new HashMap();
 			m.put("item", item.getId());
 			m.put("name", item.getName());
-			m.put("shop", item.getShop());
+			m.put("shop", item.getSid());
 			m.put("num", item.getNum());
 			m.put("pp", item.getPrice());
 			m.put("mp", item.getOrigprice());
