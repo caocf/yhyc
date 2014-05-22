@@ -20,6 +20,7 @@ import com.aug3.yhyc.domain.ItemDomain;
 import com.aug3.yhyc.dto.CommentDTO;
 import com.aug3.yhyc.dto.CommentReq;
 import com.aug3.yhyc.dto.ItemDTO;
+import com.aug3.yhyc.dto.OrderItem;
 import com.aug3.yhyc.valueobj.Item;
 
 @Path("/item/")
@@ -96,6 +97,25 @@ public class ItemService extends BaseService {
 			@FormParam("") CommentReq commentReq) {
 
 		itemDomain.newComments(commentReq);
+	}
+	
+	@GET
+	@Path("/myfav")
+	public String fetchFavorite(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("uid") String uid) {
+
+		List<OrderItem> fav = itemDomain.fetchFavorite(Long.parseLong(uid));
+		return buidResponseResult(fav, RespType.SUCCESS);
+	}
+
+	@GET
+	@Path("/shoppingcart")
+	public String fetchShoppingCart(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("uid") String uid) {
+
+		List<OrderItem> cart = itemDomain
+				.fetchShoppingCart(Long.parseLong(uid));
+		return buidResponseResult(cart, RespType.SUCCESS);
 	}
 
 }

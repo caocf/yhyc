@@ -20,10 +20,11 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
 	<bean id="orderDao" class="com.aug3.yhyc.dao.OrderDao" />
 
+	<bean id="worksDao" class="com.aug3.yhyc.dao.WorksDao" />
+
 	<!-- domain -->
 	<bean id="userDomain" class="com.aug3.yhyc.domain.UserDomain">
 		<property name="userDao" ref="userDao" />
-		<property name="itemDao" ref="itemDao" />
 	</bean>
 
 	<bean id="shequDomain" class="com.aug3.yhyc.domain.ShequDomain">
@@ -31,11 +32,17 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	</bean>
 
 	<bean id="itemDomain" class="com.aug3.yhyc.domain.ItemDomain">
+		<property name="userDao" ref="userDao" />
 		<property name="itemDao" ref="itemDao" />
 	</bean>
 
 	<bean id="orderDomain" class="com.aug3.yhyc.domain.OrderDomain">
 		<property name="orderDao" ref="orderDao" />
+	</bean>
+
+	<bean id="worksDomain" class="com.aug3.yhyc.domain.WorksDomain">
+		<property name="userDao" ref="userDao" />
+		<property name="worksDao" ref="worksDao" />
 	</bean>
 
 	<!-- service -->
@@ -53,6 +60,10 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
 	<bean id="orderService" class="com.aug3.yhyc.service.OrderService">
 		<property name="orderDomain" ref="orderDomain" />
+	</bean>
+
+	<bean id="worksService" class="com.aug3.yhyc.service.WorksService">
+		<property name="worksDomain" ref="worksDomain" />
 	</bean>
 </beans>
 

@@ -4,16 +4,28 @@ import java.util.List;
 
 import com.aug3.sys.util.DateUtil;
 import com.aug3.yhyc.dao.ItemDao;
+import com.aug3.yhyc.dao.UserDao;
 import com.aug3.yhyc.dto.CommentDTO;
 import com.aug3.yhyc.dto.CommentReq;
 import com.aug3.yhyc.dto.ItemDTO;
+import com.aug3.yhyc.dto.OrderItem;
 import com.aug3.yhyc.valueobj.Comment;
 import com.aug3.yhyc.valueobj.Item;
 import com.aug3.yhyc.valueobj.Product;
 
 public class ItemDomain {
 
+	private UserDao userDao;
+
 	private ItemDao itemDao;
+
+	public UserDao getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
 
 	public ItemDao getItemDao() {
 		return itemDao;
@@ -66,6 +78,16 @@ public class ItemDomain {
 
 			return true;
 		}
+	}
+
+	public List<OrderItem> fetchFavorite(long uid) {
+		List<Long> items = userDao.findFavorite(uid);
+		return itemDao.findItems(items);
+	}
+
+	public List<OrderItem> fetchShoppingCart(long uid) {
+		List<Long> items = userDao.findShoppingCart(uid);
+		return itemDao.findItems(items);
 	}
 
 }

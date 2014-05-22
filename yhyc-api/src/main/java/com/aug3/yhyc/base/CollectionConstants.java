@@ -20,4 +20,6 @@ public class CollectionConstants {
 
 	public static final String COLL_WORKSHOP = "workshops";
 
+	public static final String COLL_WORKS = "works";
+
 }

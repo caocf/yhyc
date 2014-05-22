@@ -17,7 +17,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.WriteConcern;
 
-public class OrderDao {
+public class OrderDao extends BaseDao {
 
 	private Order getOrderInfo(BasicDBObject dbObj) {
 
@@ -59,8 +59,8 @@ public class OrderDao {
 
 	public List<Order> findOrdersByUid(String uid, int status) {
 
-		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_ORDERS)
-				.find(new BasicDBObject("uid", uid).append("sts", status));
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(
+				new BasicDBObject("uid", uid).append("sts", status));
 
 		BasicDBObject dbObj;
 		Order myorder;
@@ -78,8 +78,7 @@ public class OrderDao {
 
 	public Order findOrder(long orderid) {
 
-		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_ORDERS)
-				.find(new BasicDBObject("_id", orderid));
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(new BasicDBObject("_id", orderid));
 
 		Order myorder = null;
 		while (dbCur.hasNext()) {
@@ -96,8 +95,8 @@ public class OrderDao {
 
 		List<Order> list = new ArrayList<Order>();
 
-		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_ORDERS)
-				.find(new BasicDBObject("items.shop", new BasicDBObject("$in", workshop)).append("sts", status));
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(
+				new BasicDBObject("items.shop", new BasicDBObject("$in", workshop)).append("sts", status));
 
 		BasicDBObject dbObj;
 		Order myorder;
@@ -150,11 +149,8 @@ public class OrderDao {
 
 	public void updateOrderStatus(long orderid, int status) {
 
-		MongoAdaptor
-				.getDB()
-				.getCollection(CollectionConstants.COLL_ORDERS)
-				.update(new BasicDBObject("_id", orderid), new BasicDBObject("sts", status), false, false,
-						WriteConcern.SAFE);
+		getDBCollection(CollectionConstants.COLL_ORDERS).update(new BasicDBObject("_id", orderid),
+				new BasicDBObject("sts", status), false, false, WriteConcern.SAFE);
 
 	}
 
@@ -195,7 +191,7 @@ public class OrderDao {
 		doc.put("msg", order.getMsg());
 		doc.put("sts", order.getStatus());
 
-		MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_ORDERS).insert(doc);
+		getDBCollection(CollectionConstants.COLL_ORDERS).insert(doc);
 
 		return true;
 	}

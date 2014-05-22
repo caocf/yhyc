@@ -14,7 +14,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aug3.sys.rs.response.RespType;
 import com.aug3.yhyc.domain.UserDomain;
-import com.aug3.yhyc.dto.OrderItem;
 import com.aug3.yhyc.valueobj.DeliveryContact;
 
 @Path("/user/")
@@ -28,39 +27,19 @@ public class UserService extends BaseService {
 	@Path("/login")
 	// @AccessTrace
 	// @AccessToken
-	public boolean login(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("uid") String uid,
-			@FormParam("p") String p) {
+	public boolean login(@Context HttpServletRequest request, @FormParam("token") String token,
+			@FormParam("uid") String uid, @FormParam("p") String p) {
 		return userDomain.isValidUser(uid, p);
 	}
 
 	// TODO
 	@GET
 	@Path("/contacts")
-	public String fetchContactsList(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") String uid) {
+	public String fetchContactsList(@Context HttpServletRequest request, @QueryParam("token") String token,
+			@QueryParam("uid") String uid) {
 
 		List<DeliveryContact> contacts = userDomain.fetchContacts(uid);
 		return this.buidResponseResult(contacts, RespType.SUCCESS);
-	}
-
-	@GET
-	@Path("/favorite")
-	public String fetchFavorite(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") String uid) {
-
-		List<OrderItem> fav = userDomain.fetchFavorite(Long.parseLong(uid));
-		return buidResponseResult(fav, RespType.SUCCESS);
-	}
-
-	@GET
-	@Path("/shoppingcart")
-	public String fetchShoppingCart(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") String uid) {
-
-		List<OrderItem> cart = userDomain
-				.fetchShoppingCart(Long.parseLong(uid));
-		return buidResponseResult(cart, RespType.SUCCESS);
 	}
 
 	public UserDomain getUserDomain() {

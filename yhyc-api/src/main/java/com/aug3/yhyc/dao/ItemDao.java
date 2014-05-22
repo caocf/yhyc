@@ -3,9 +3,7 @@ package com.aug3.yhyc.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aug3.storage.mongoclient.MongoAdaptor;
 import com.aug3.yhyc.base.CollectionConstants;
-import com.aug3.yhyc.base.Constants;
 import com.aug3.yhyc.dto.CommentDTO;
 import com.aug3.yhyc.dto.OrderItem;
 import com.aug3.yhyc.valueobj.Comment;
@@ -16,18 +14,16 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.WriteConcern;
 
-public class ItemDao {
+public class ItemDao extends BaseDao {
 
 	public List<OrderItem> findItems(List<Long> itemIds) {
 
 		List<OrderItem> list = new ArrayList<OrderItem>();
 
 		if (itemIds != null && itemIds.size() > 0) {
-			DBCursor dbCur = MongoAdaptor
-					.getDB()
-					.getCollection(CollectionConstants.COLL_ITEMS)
-					.find(new BasicDBObject("_id", new BasicDBObject("$in", itemIds)),
-							new BasicDBObject("name", 1).append("pp", 1).append("mp", 1).append("sid", 1));
+			DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
+					new BasicDBObject("_id", new BasicDBObject("$in", itemIds)),
+					new BasicDBObject("name", 1).append("pp", 1).append("mp", 1).append("sid", 1));
 
 			BasicDBObject dbObj;
 			OrderItem oi;
@@ -50,8 +46,7 @@ public class ItemDao {
 
 	public Item findItemByID(Long itemId) {
 
-		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_ITEMS)
-				.find(new BasicDBObject("_id", itemId));
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(new BasicDBObject("_id", itemId));
 
 		BasicDBObject dbObj;
 		Item item = null;
@@ -73,8 +68,7 @@ public class ItemDao {
 
 	public Product findProductByID(Long pid) {
 
-		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_PRODUCTS)
-				.find(new BasicDBObject("_id", pid));
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_PRODUCTS).find(new BasicDBObject("_id", pid));
 
 		BasicDBObject dbObj;
 		Product p = null;
@@ -97,8 +91,8 @@ public class ItemDao {
 
 		List<Item> list = new ArrayList<Item>();
 
-		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_ITEMS)
-				.find(new BasicDBObject("sid", workshop).append("sts", 1));
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
+				new BasicDBObject("sid", workshop).append("sts", 1));
 
 		BasicDBObject dbObj;
 		Item oi;
@@ -121,7 +115,7 @@ public class ItemDao {
 
 		BasicDBObject qObj = new BasicDBObject("_id", itemId);
 
-		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_COMMENTS).find(qObj);
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_COMMENTS).find(qObj);
 
 		CommentDTO commentDTO = new CommentDTO();
 
@@ -129,11 +123,11 @@ public class ItemDao {
 			BasicDBObject dbObj = (BasicDBObject) dbCur.next();
 
 			BasicDBList commentlist = (BasicDBList) dbObj.get("comment");
-			int start = (pn - 1) * Constants.PAGE_NUM;
+			int start = skipSize(pn);
 			if (start >= commentlist.size()) {
 				return commentDTO;
 			}
-			commentlist = (BasicDBList) commentlist.subList(start, start + Constants.PAGE_NUM);
+			commentlist = (BasicDBList) commentlist.subList(start, start + pageSize());
 
 			for (Object obj : commentlist) {
 				BasicDBObject commentObj = (BasicDBObject) obj;
@@ -180,8 +174,8 @@ public class ItemDao {
 				new Comment[] { comment }).append("$position", 0));
 		BasicDBObject updateObj = new BasicDBObject().append("$inc", sts).append("$push", commentObj);
 		// $addToSet for tags
-		MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_COMMENTS)
-				.update(new BasicDBObject("_id", itemId), updateObj, true, false, WriteConcern.SAFE);
+		getDBCollection(CollectionConstants.COLL_COMMENTS).update(new BasicDBObject("_id", itemId), updateObj, true,
+				false, WriteConcern.SAFE);
 
 	}
 }

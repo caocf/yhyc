@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.aug3.storage.mongoclient.MongoAdaptor;
 import com.aug3.yhyc.base.CollectionConstants;
 import com.aug3.yhyc.util.RegexUtils;
 import com.aug3.yhyc.valueobj.Shequ;
@@ -16,7 +15,7 @@ import com.aug3.yhyc.valueobj.Workshop;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 
-public class ShequDao {
+public class ShequDao extends BaseDao {
 
 	public List<Shequ> findShequ(String city, String q) {
 
@@ -31,7 +30,7 @@ public class ShequDao {
 			}
 		}
 
-		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_SHEQU).find(qObj);
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_SHEQU).find(qObj);
 
 		BasicDBObject dbObj;
 		Shequ sq;
@@ -65,7 +64,7 @@ public class ShequDao {
 
 		BasicDBObject qObj = new BasicDBObject("_id", new BasicDBObject("$in", idset));
 
-		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_SHEQU).find(qObj);
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_SHEQU).find(qObj);
 
 		BasicDBObject dbObj;
 		Shequ sq;
@@ -95,7 +94,7 @@ public class ShequDao {
 		BasicDBObject qObj = new BasicDBObject("shequ", new BasicDBObject("$in", new Long[] { shequ })).append("cat",
 				new BasicDBObject("$in", new Integer[] { cat }));
 
-		DBCursor dbCur = MongoAdaptor.getDB().getCollection(CollectionConstants.COLL_WORKSHOP).find(qObj);
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_WORKSHOP).find(qObj);
 
 		BasicDBObject dbObj;
 		Workshop shop;

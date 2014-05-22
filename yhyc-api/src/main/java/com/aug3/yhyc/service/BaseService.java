@@ -1,5 +1,7 @@
 package com.aug3.yhyc.service;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.aug3.sys.rs.response.RespObj;
 import com.aug3.sys.rs.response.RespType;
 import com.aug3.sys.util.JSONUtil;
@@ -30,6 +32,18 @@ public abstract class BaseService {
 		returnDTO.setType(responseType.toString());
 		returnDTO.setMessage(message);
 		return JSONUtil.toJson(returnDTO);
+	}
+
+	protected int getPageNo(String pn) {
+		int page = 1;
+		if (StringUtils.isNotBlank(pn)) {
+			try {
+				page = Integer.parseInt(pn);
+			} catch (NumberFormatException e) {
+				page = 1;
+			}
+		}
+		return page;
 	}
 
 }
