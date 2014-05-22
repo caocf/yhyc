@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.aug3.yhyc.dao.UserDao;
 import com.aug3.yhyc.dao.WorksDao;
+import com.aug3.yhyc.valueobj.RecipeWizard;
 import com.aug3.yhyc.valueobj.Works;
 
 public class WorksDomain {
@@ -28,8 +29,12 @@ public class WorksDomain {
 		this.userDao = userDao;
 	}
 
-	public boolean uploadWorks(Works works) {
+	public boolean newWorks(Works works) {
 		return worksDao.createWorks(works);
+	}
+	
+	public boolean uploadSteps(long uid, long id, RecipeWizard wizard){
+		return worksDao.uploadSteps(uid, id, wizard);
 	}
 	
 	public boolean updateWorks(Works works) {

@@ -2,7 +2,7 @@ package com.aug3.yhyc.valueobj;
 
 import java.io.Serializable;
 
-public class RecipeWizard implements Serializable {
+public class RecipeWizard implements Serializable, Comparable {
 
 	private int seq;
 	private String pic;
@@ -36,6 +36,12 @@ public class RecipeWizard implements Serializable {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		RecipeWizard wiz = (RecipeWizard) o;
+		return this.seq - wiz.getSeq();
 	}
 
 }

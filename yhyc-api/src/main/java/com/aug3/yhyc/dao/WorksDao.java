@@ -1,11 +1,13 @@
 package com.aug3.yhyc.dao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import com.aug3.yhyc.base.CollectionConstants;
+import com.aug3.yhyc.util.IDGenerator;
 import com.aug3.yhyc.valueobj.RecipeWizard;
 import com.aug3.yhyc.valueobj.Works;
 import com.mongodb.BasicDBList;
@@ -19,6 +21,7 @@ public class WorksDao extends BaseDao {
 	public boolean createWorks(Works work) {
 
 		DBObject dbObj = new BasicDBObject();
+		dbObj.put("_id", IDGenerator.nextval(getDB(), CollectionConstants.IDS_WORKS));
 		dbObj.put("title", work.getTitle());
 		dbObj.put("ingredients", work.getIngredients());
 		dbObj.put("pic", work.getPic());
@@ -40,6 +43,47 @@ public class WorksDao extends BaseDao {
 		dbObj.put("ts", new Date());
 
 		getDBCollection(CollectionConstants.COLL_WORKS).insert(dbObj);
+		return false;
+
+	}
+
+	public boolean uploadSteps(long uid, long id, RecipeWizard wiz) {
+
+		DBObject dbObj = getDBCollection(CollectionConstants.COLL_WORKS).findOne(
+				new BasicDBObject("_id", id).append("author", uid));
+
+		BasicDBList wizards = (BasicDBList) dbObj.get("steps");
+		if (wizards == null) {
+			List<HashMap> steps = new ArrayList<HashMap>();
+			HashMap m = new HashMap();
+			m.put("seq", wiz.getSeq());
+			m.put("pic", wiz.getPic());
+			m.put("desc", wiz.getDesc());
+			steps.add(m);
+			dbObj.put("steps", steps);
+		} else {
+			int size = wizards.size();
+			boolean add = true;
+			for (int i = 0; i < size; i++) {
+				BasicDBObject stepObj = (BasicDBObject) wizards.get(i);
+				if (wiz.getSeq() == stepObj.getInt("seq")) {
+					add = false;
+					stepObj.put("pic", wiz.getPic());
+					stepObj.put("desc", wiz.getDesc());
+				}
+			}
+			if (add) {
+				HashMap m = new HashMap();
+				m.put("seq", wiz.getSeq());
+				m.put("pic", wiz.getPic());
+				m.put("desc", wiz.getDesc());
+				wizards.add(m);
+			}
+
+			dbObj.put("steps", wizards);
+		}
+
+		getDBCollection(CollectionConstants.COLL_WORKS).save(dbObj);
 		return false;
 
 	}
@@ -164,6 +208,7 @@ public class WorksDao extends BaseDao {
 
 			steps.add(new RecipeWizard(dbStep.getInt("seq"), dbStep.getString("pic"), dbStep.getString("desc")));
 		}
+		Collections.sort(steps);
 		works.setSteps(steps);
 
 		works.setFav(dbObj.getLong("fav"));

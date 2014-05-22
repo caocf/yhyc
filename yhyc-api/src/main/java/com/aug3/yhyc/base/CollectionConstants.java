@@ -22,4 +22,6 @@ public class CollectionConstants {
 
 	public static final String COLL_WORKS = "works";
 
+	// id
+	public static final String IDS_WORKS = "works";
 }

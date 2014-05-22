@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import com.aug3.sys.rs.response.RespType;
 import com.aug3.sys.util.JSONUtil;
 import com.aug3.yhyc.domain.WorksDomain;
+import com.aug3.yhyc.valueobj.RecipeWizard;
 import com.aug3.yhyc.valueobj.Works;
 
 @Path("/works/")
@@ -35,12 +36,22 @@ public class WorksService extends BaseService {
 	}
 
 	@POST
-	@Path("/upload")
+	@Path("/new")
 	// @AccessTrace
 	// @AccessToken
-	public String uploadWorks(@Context HttpServletRequest request, @FormParam("token") String token,
+	public String newWorks(@Context HttpServletRequest request, @FormParam("token") String token,
 			@FormParam("works") String works) {
-		worksDomain.uploadWorks(JSONUtil.fromJson(works, Works.class));
+		worksDomain.newWorks(JSONUtil.fromJson(works, Works.class));
+		return buidResponseResult("success!", RespType.SUCCESS);
+	}
+
+	@POST
+	@Path("/steps")
+	// @AccessTrace
+	// @AccessToken
+	public String uploadSteps(@Context HttpServletRequest request, @FormParam("token") String token,
+			@FormParam("uid") String uid, @FormParam("id") String id, @FormParam("") RecipeWizard wizard) {
+		worksDomain.uploadSteps(Long.parseLong(uid), Long.parseLong(id), wizard);
 		return buidResponseResult("success!", RespType.SUCCESS);
 	}
 
