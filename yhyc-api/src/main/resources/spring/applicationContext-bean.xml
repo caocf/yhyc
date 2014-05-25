@@ -12,9 +12,13 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 		/> -->
 
 	<!-- dao -->
+	<bean id="dictDao" class="com.aug3.yhyc.dao.DictDao" />
+
 	<bean id="userDao" class="com.aug3.yhyc.dao.UserDao" />
 
 	<bean id="shequDao" class="com.aug3.yhyc.dao.ShequDao" />
+
+	<bean id="shopDao" class="com.aug3.yhyc.dao.WorkshopDao" />
 
 	<bean id="itemDao" class="com.aug3.yhyc.dao.ItemDao" />
 
@@ -31,8 +35,15 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 		<property name="shequDao" ref="shequDao" />
 	</bean>
 
+	<bean id="shopDomain" class="com.aug3.yhyc.domain.WorkshopDomain">
+		<property name="shequDao" ref="shequDao" />
+		<property name="shopDao" ref="shopDao" />
+	</bean>
+
 	<bean id="itemDomain" class="com.aug3.yhyc.domain.ItemDomain">
+		<property name="dictDao" ref="dictDao" />
 		<property name="userDao" ref="userDao" />
+		<property name="shopDao" ref="shopDao" />
 		<property name="itemDao" ref="itemDao" />
 	</bean>
 
@@ -54,6 +65,10 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 		<property name="shequDomain" ref="shequDomain" />
 	</bean>
 
+	<bean id="shopService" class="com.aug3.yhyc.service.WorkshopService">
+		<property name="shopDomain" ref="shopDomain" />
+	</bean>
+
 	<bean id="itemService" class="com.aug3.yhyc.service.ItemService">
 		<property name="itemDomain" ref="itemDomain" />
 	</bean>
@@ -65,5 +80,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	<bean id="worksService" class="com.aug3.yhyc.service.WorksService">
 		<property name="worksDomain" ref="worksDomain" />
 	</bean>
+
+	<bean id="storageService" class="com.aug3.yhyc.service.QiniuService" />
 </beans>
 

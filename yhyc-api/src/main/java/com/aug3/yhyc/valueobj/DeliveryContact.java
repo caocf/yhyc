@@ -1,6 +1,7 @@
 package com.aug3.yhyc.valueobj;
 
 public class DeliveryContact {
+	
 	// 收件人
 	private String recip;
 
@@ -10,7 +11,14 @@ public class DeliveryContact {
 	// 手机
 	private String mobi;
 
-	private String tel;
+	// want delivery day
+	private String d;
+
+	// want delivery time
+	private String t;
+
+	// 快递费
+	private int fee;
 
 	public String getRecip() {
 		return recip;
@@ -36,12 +44,28 @@ public class DeliveryContact {
 		this.mobi = mobi;
 	}
 
-	public String getTel() {
-		return tel;
+	public String getD() {
+		return d;
 	}
 
-	public void setTel(String tel) {
-		this.tel = tel;
+	public void setD(String d) {
+		this.d = d;
+	}
+
+	public String getT() {
+		return t;
+	}
+
+	public void setT(String t) {
+		this.t = t;
+	}
+
+	public int getFee() {
+		return fee;
+	}
+
+	public void setFee(int fee) {
+		this.fee = fee;
 	}
 
 }

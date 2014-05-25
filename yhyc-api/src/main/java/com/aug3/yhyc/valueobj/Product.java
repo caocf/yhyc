@@ -28,7 +28,7 @@ public class Product {
 	private String brand;
 
 	// 描述
-	private List<Intro> desc;
+	private String desc;
 
 	// 状态
 	private int sts;
@@ -97,11 +97,11 @@ public class Product {
 		this.brand = brand;
 	}
 
-	public List<Intro> getDesc() {
+	public String getDesc() {
 		return desc;
 	}
 
-	public void setDesc(List<Intro> desc) {
+	public void setDesc(String desc) {
 		this.desc = desc;
 	}
 
@@ -111,45 +111,6 @@ public class Product {
 
 	public void setSts(int sts) {
 		this.sts = sts;
-	}
-
-	public class Intro {
-		// 图片描述
-		private String exp;
-		// 图片url
-		private String pic;
-
-		public String getExp() {
-			return exp;
-		}
-
-		public void setExp(String exp) {
-			this.exp = exp;
-		}
-
-		public String getPic() {
-			return pic;
-		}
-
-		public void setPic(String pic) {
-			this.pic = pic;
-		}
-
-	}
-
-	public enum PTag {
-		DIET(1), ;
-
-		private int code;
-
-		private PTag(int code) {
-			this.code = code;
-		}
-
-		@Override
-		public String toString() {
-			return String.valueOf(this.code);
-		}
 	}
 
 }

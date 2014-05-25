@@ -6,6 +6,8 @@ public class CollectionConstants {
 	private CollectionConstants() {
 	}
 
+	public static final String COLL_TAGS = "tags";
+
 	public static final String COLL_USERS = "users";
 
 	public static final String COLL_ORDERS = "orders";

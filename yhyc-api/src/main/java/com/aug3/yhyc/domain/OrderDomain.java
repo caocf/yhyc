@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.aug3.yhyc.dao.OrderDao;
 import com.aug3.yhyc.dto.Order;
+import com.aug3.yhyc.dto.Orders;
 
 public class OrderDomain {
 
@@ -17,7 +18,7 @@ public class OrderDomain {
 		this.orderDao = orderDao;
 	}
 
-	public boolean newOrder(Order order) {
+	public boolean newOrder(Orders order) {
 		return orderDao.createOrder(order);
 	}
 
@@ -30,14 +31,14 @@ public class OrderDomain {
 
 	public List<Order> listOrdersByWorkshop(long workshop, int status) {
 
-		List<Order> orders = orderDao.findOrdersByWorkshop(workshop, status);
+		List<Order> orders = orderDao.findByWorkshop(workshop, status);
 
 		return orders;
 	}
 
 	public Order showOrder(long orderid) {
 
-		Order order = orderDao.findOrder(orderid);
+		Order order = orderDao.findByID(orderid);
 
 		return order;
 	}

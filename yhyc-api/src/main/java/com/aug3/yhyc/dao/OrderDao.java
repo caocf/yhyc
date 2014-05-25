@@ -8,54 +8,25 @@ import java.util.Map;
 
 import com.aug3.storage.mongoclient.MongoAdaptor;
 import com.aug3.yhyc.base.CollectionConstants;
+import com.aug3.yhyc.dto.ItemDTO;
 import com.aug3.yhyc.dto.Order;
-import com.aug3.yhyc.dto.OrderItem;
+import com.aug3.yhyc.dto.Orders;
+import com.aug3.yhyc.util.ConfigManager;
 import com.aug3.yhyc.util.IDGenerator;
 import com.aug3.yhyc.valueobj.DeliveryContact;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.WriteConcern;
 
 public class OrderDao extends BaseDao {
 
-	private Order getOrderInfo(BasicDBObject dbObj) {
+	private static final int delivery_fee = Integer.parseInt(ConfigManager
+			.getProperties().getProperty("delivery.fee", "2"));
 
-		BasicDBList items = (BasicDBList) dbObj.get("items");
-		List<OrderItem> orderItems = new ArrayList<OrderItem>();
-		OrderItem orderItem;
-		BasicDBObject item;
-		Order myorder = new Order();
-
-		for (Object eachitem : items) {
-			item = (BasicDBObject) eachitem;
-			orderItem = new OrderItem();
-			orderItem.setId(item.getLong("item"));
-			orderItem.setSid(item.getLong("shop"));
-			orderItem.setName(item.getString("name"));
-			orderItem.setNum(item.getInt("num"));
-			orderItem.setPrice(item.getDouble("pp"));
-			orderItems.add(orderItem);
-		}
-		myorder.setItems(orderItems);
-
-		BasicDBObject delivery = (BasicDBObject) dbObj.get("delivery");
-
-		if (delivery != null) {
-			DeliveryContact contact = new DeliveryContact();
-			contact.setRecip(delivery.getString("recip"));
-			contact.setAddr(delivery.getString("addr"));
-			contact.setMobi(delivery.getString("mobi"));
-			contact.setTel(delivery.getString("tel"));
-			myorder.setDelivery(contact);
-		}
-		myorder.setTotal(dbObj.getDouble("total"));
-		myorder.setMsg(dbObj.getString("msg"));
-		myorder.setDt(dbObj.getDate("dt"));
-		myorder.setTs(dbObj.getDate("ts"));
-
-		return myorder;
-	}
+	private static final int delivery_minimum = Integer.parseInt(ConfigManager
+			.getProperties().getProperty("delivery.minimum", "20"));
 
 	public List<Order> findOrdersByUid(String uid, int status) {
 
@@ -76,9 +47,10 @@ public class OrderDao extends BaseDao {
 
 	}
 
-	public Order findOrder(long orderid) {
+	public Order findByID(long orderid) {
 
-		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(new BasicDBObject("_id", orderid));
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(
+				new BasicDBObject("_id", orderid));
 
 		Order myorder = null;
 		while (dbCur.hasNext()) {
@@ -91,54 +63,17 @@ public class OrderDao extends BaseDao {
 
 	}
 
-	public List<Order> findOrdersByWorkshop(long workshop, int status) {
+	public List<Order> findByWorkshop(long workshop, int status) {
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(
+				new BasicDBObject("sid", new BasicDBObject("$in", workshop))
+						.append("sts", status));
 
 		List<Order> list = new ArrayList<Order>();
 
-		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(
-				new BasicDBObject("items.shop", new BasicDBObject("$in", workshop)).append("sts", status));
-
-		BasicDBObject dbObj;
-		Order myorder;
-		BasicDBList items;
-		OrderItem orderItem;
-		BasicDBObject item;
-		List<OrderItem> orderItems;
 		while (dbCur.hasNext()) {
-			dbObj = (BasicDBObject) dbCur.next();
-			myorder = new Order();
-
-			items = (BasicDBList) dbObj.get("items");
-			orderItems = new ArrayList<OrderItem>();
-			for (Object eachitem : items) {
-				item = (BasicDBObject) eachitem;
-				long shop = item.getLong("shop");
-				if (shop == workshop) {
-					orderItem = new OrderItem();
-					orderItem.setId(item.getLong("item"));
-					orderItem.setSid(shop);
-					orderItem.setName(item.getString("name"));
-					orderItem.setNum(item.getInt("num"));
-					orderItem.setPrice(item.getDouble("pp"));
-					orderItems.add(orderItem);
-				}
-			}
-
-			BasicDBObject delivery = (BasicDBObject) dbObj.get("delivery");
-
-			if (delivery != null) {
-				DeliveryContact contact = new DeliveryContact();
-				contact.setRecip(delivery.getString("recip"));
-				contact.setAddr(delivery.getString("addr"));
-				contact.setMobi(delivery.getString("mobi"));
-				contact.setTel(delivery.getString("tel"));
-				myorder.setDelivery(contact);
-			}
-			myorder.setItems(orderItems);
-			myorder.setTotal(dbObj.getDouble("total"));
-			myorder.setMsg(dbObj.getString("msg"));
-			myorder.setDt(dbObj.getDate("dt"));
-			myorder.setTs(dbObj.getDate("ts"));
+			BasicDBObject dbObj = (BasicDBObject) dbCur.next();
+			Order myorder = getOrderInfo(dbObj);
 
 			list.add(myorder);
 		}
@@ -149,51 +84,125 @@ public class OrderDao extends BaseDao {
 
 	public void updateOrderStatus(long orderid, int status) {
 
-		getDBCollection(CollectionConstants.COLL_ORDERS).update(new BasicDBObject("_id", orderid),
-				new BasicDBObject("sts", status), false, false, WriteConcern.SAFE);
+		getDBCollection(CollectionConstants.COLL_ORDERS).update(
+				new BasicDBObject("_id", orderid),
+				new BasicDBObject("sts", status), false, false,
+				WriteConcern.SAFE);
 
 	}
 
-	public boolean createOrder(Order order) {
+	/**
+	 * separate order by workshop
+	 * 
+	 * @param order
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean createOrder(Orders order) {
 
-		BasicDBObject doc = new BasicDBObject();
-		doc.put("_id", IDGenerator.nextOrderID(MongoAdaptor.getDB()));
-		doc.put("uid", order.getUid());
+		Map<Long, List<ItemDTO>> orderMap = order.getItems();
 
-		List orders = new ArrayList();
-		List<OrderItem> li = order.getItems();
-		for (OrderItem item : li) {
-			HashMap m = new HashMap();
-			m.put("item", item.getId());
-			m.put("name", item.getName());
-			m.put("shop", item.getSid());
-			m.put("num", item.getNum());
-			m.put("pp", item.getPrice());
-			m.put("mp", item.getOrigprice());
+		List<DBObject> doclist = new ArrayList<DBObject>();
 
-			orders.add(m);
+		for (Long shopid : orderMap.keySet()) {
+
+			BasicDBObject doc = new BasicDBObject();
+
+			doc.put("_id", IDGenerator.nextOrderID(MongoAdaptor.getDB()));
+			doc.put("uid", order.getUid());
+			doc.put("sid", shopid);
+
+			List orders = new ArrayList();
+			List<ItemDTO> li = orderMap.get(shopid);
+			double total = 0;
+			for (ItemDTO item : li) {
+				HashMap m = new HashMap();
+				m.put("id", item.getId());
+				m.put("name", item.getName());
+				m.put("n", item.getNum());
+				m.put("pp", item.getPrice());
+				orders.add(m);
+				total += item.getPrice();
+			}
+			doc.put("items", orders);
+
+			DeliveryContact dc = order.getDelivery();
+			Map delivery = new HashMap();
+			delivery.put("recip", dc.getRecip());
+			delivery.put("addr", dc.getAddr());
+			delivery.put("mobi", dc.getMobi());
+			delivery.put("d", dc.getD());
+			delivery.put("t", dc.getT());
+			if (total < delivery_minimum) {
+				delivery.put("fee", delivery_fee);
+				total += delivery_fee;
+			}
+			doc.put("delivery", delivery);
+
+			// calculate and compare with client total
+			doc.put("total", total);
+			// calculate
+			doc.put("ac", Math.round(total / 10));
+
+			Date d = new Date();
+			doc.put("ts", d);
+			doc.put("msg", order.getMsg());
+			doc.put("sts", 0);
+
+			doclist.add(doc);
+
 		}
-		doc.put("items", orders);
 
-		doc.put("total", 1.1);
-		doc.put("ac", Math.round(1.1 / 10));
-
-		Map<String, String> delivery = new HashMap<String, String>();
-		DeliveryContact dc = order.getDelivery();
-		delivery.put("recip", dc.getRecip());
-		delivery.put("addr", dc.getAddr());
-		delivery.put("", dc.getMobi());
-		delivery.put("tel", dc.getTel());
-		doc.put("delivery", delivery);
-
-		Date d = new Date();
-		doc.put("ts", d);
-		doc.put("msg", order.getMsg());
-		doc.put("sts", order.getStatus());
-
-		getDBCollection(CollectionConstants.COLL_ORDERS).insert(doc);
-
+		if (doclist.size() > 0) {
+			getDBCollection(CollectionConstants.COLL_ORDERS).insert(doclist);
+		}
 		return true;
+	}
+
+	private Order getOrderInfo(BasicDBObject dbObj) {
+
+		Order order = new Order();
+
+		order.setId(dbObj.getLong("id"));
+		order.setUid(dbObj.getLong("uid"));
+		order.setSid(dbObj.getLong("sid"));
+
+		List<ItemDTO> orderItems = new ArrayList<ItemDTO>();
+		ItemDTO orderItem;
+		BasicDBObject item;
+
+		BasicDBList items = (BasicDBList) dbObj.get("items");
+		for (Object eachitem : items) {
+			item = (BasicDBObject) eachitem;
+			orderItem = new ItemDTO();
+			orderItem.setId(item.getLong("id"));
+			orderItem.setName(item.getString("name"));
+			orderItem.setNum(item.getInt("n"));
+			orderItem.setPrice(item.getDouble("pp"));
+			orderItems.add(orderItem);
+		}
+		order.setItems(orderItems);
+
+		BasicDBObject delivery = (BasicDBObject) dbObj.get("delivery");
+		if (delivery != null) {
+			DeliveryContact contact = new DeliveryContact();
+			contact.setRecip(delivery.getString("recip"));
+			contact.setAddr(delivery.getString("addr"));
+			contact.setMobi(delivery.getString("mobi"));
+			contact.setD(delivery.getString("d"));
+			contact.setT(delivery.getString("t"));
+			contact.setFee(delivery.getInt("fee"));
+			order.setDelivery(contact);
+		}
+
+		order.setMsg(dbObj.getString("msg"));
+
+		order.setTotal(dbObj.getDouble("total"));
+		order.setAc(dbObj.getInt("ac"));
+		order.setDt(dbObj.getDate("dt"));
+		order.setTs(dbObj.getDate("ts"));
+
+		return order;
 	}
 
 }

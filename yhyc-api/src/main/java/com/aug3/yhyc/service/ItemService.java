@@ -19,8 +19,8 @@ import com.aug3.sys.util.JSONUtil;
 import com.aug3.yhyc.domain.ItemDomain;
 import com.aug3.yhyc.dto.CommentDTO;
 import com.aug3.yhyc.dto.CommentReq;
-import com.aug3.yhyc.dto.ItemDTO;
-import com.aug3.yhyc.dto.OrderItem;
+import com.aug3.yhyc.dto.ProductItem;
+import com.aug3.yhyc.dto.ShopItem;
 import com.aug3.yhyc.valueobj.Item;
 
 @Path("/item/")
@@ -43,8 +43,9 @@ public class ItemService extends BaseService {
 	// TODO
 	// @AccessTrace
 	// @AccessToken
-	public boolean newItem(@Context HttpServletRequest request, @FormParam("token") String token,
-			@FormParam("uid") String uid, @FormParam("item") String item) {
+	public boolean newItem(@Context HttpServletRequest request,
+			@FormParam("token") String token, @FormParam("uid") String uid,
+			@FormParam("item") String item) {
 
 		JSONUtil.fromJson(item, Item.class);
 		return false;
@@ -52,13 +53,16 @@ public class ItemService extends BaseService {
 
 	@GET
 	@Path("/list")
-	public String listItems(@Context HttpServletRequest request, @QueryParam("token") String token,
+	public String listItems(@Context HttpServletRequest request,
+			@QueryParam("token") String token,
 			@QueryParam("workshop") String workshop) {
 
 		if (StringUtils.isBlank(workshop)) {
-			return buidResponseResult("invlid param workshop", RespType.PARAMETEREXCEPTION);
+			return buidResponseResult("invlid param workshop",
+					RespType.PARAMETEREXCEPTION);
 		}
-		List<Item> items = itemDomain.findItemsByWorkshop(Long.parseLong(workshop));
+		List<Item> items = itemDomain.findItemsByWorkshop(Long
+				.parseLong(workshop));
 		return buidResponseResult(items, RespType.SUCCESS);
 	}
 
@@ -72,39 +76,42 @@ public class ItemService extends BaseService {
 	 */
 	@GET
 	@Path("/show")
-	public String showItem(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("item") String item) {
+	public String showItem(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("item") String item) {
 
-		ItemDTO result = itemDomain.findItemByID(Long.parseLong(item));
+		ProductItem result = itemDomain.findItemByID(Long.parseLong(item));
 		return buidResponseResult(result, RespType.SUCCESS);
 	}
 
 	@GET
 	@Path("/comments")
-	public String listComments(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("item") String item, String pn) {
+	public String listComments(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("item") String item,
+			String pn) {
 
 		if (StringUtils.isBlank(pn)) {
 			pn = "1";
 		}
-		CommentDTO comments = itemDomain.findCommentsByItem(Long.parseLong(item), Integer.parseInt(pn));
+		CommentDTO comments = itemDomain.findCommentsByItem(
+				Long.parseLong(item), Integer.parseInt(pn));
 		return buidResponseResult(comments, RespType.SUCCESS);
 	}
 
 	@POST
 	@Path("/comment/new")
-	public void newComment(@Context HttpServletRequest request, @FormParam("token") String token,
+	public void newComment(@Context HttpServletRequest request,
+			@FormParam("token") String token,
 			@FormParam("") CommentReq commentReq) {
 
 		itemDomain.newComments(commentReq);
 	}
-	
+
 	@GET
 	@Path("/myfav")
 	public String fetchFavorite(@Context HttpServletRequest request,
 			@QueryParam("token") String token, @QueryParam("uid") String uid) {
 
-		List<OrderItem> fav = itemDomain.fetchFavorite(Long.parseLong(uid));
+		List<ShopItem> fav = itemDomain.fetchFavorite(Long.parseLong(uid));
 		return buidResponseResult(fav, RespType.SUCCESS);
 	}
 
@@ -113,8 +120,7 @@ public class ItemService extends BaseService {
 	public String fetchShoppingCart(@Context HttpServletRequest request,
 			@QueryParam("token") String token, @QueryParam("uid") String uid) {
 
-		List<OrderItem> cart = itemDomain
-				.fetchShoppingCart(Long.parseLong(uid));
+		List<ShopItem> cart = itemDomain.fetchShoppingCart(Long.parseLong(uid));
 		return buidResponseResult(cart, RespType.SUCCESS);
 	}
 

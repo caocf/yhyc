@@ -17,6 +17,7 @@ import com.aug3.sys.rs.response.RespType;
 import com.aug3.sys.util.JSONUtil;
 import com.aug3.yhyc.domain.OrderDomain;
 import com.aug3.yhyc.dto.Order;
+import com.aug3.yhyc.dto.Orders;
 
 @Path("/order/")
 @XmlRootElement()
@@ -39,7 +40,7 @@ public class OrderService extends BaseService {
 	// @AccessToken
 	public String newOrder(@Context HttpServletRequest request, @FormParam("token") String token,
 			@FormParam("uid") String uid, @FormParam("order") String order) {
-		orderDomain.newOrder(JSONUtil.fromJson(order, Order.class));
+		orderDomain.newOrder(JSONUtil.fromJson(order, Orders.class));
 		return buidResponseResult("success!", RespType.SUCCESS);
 	}
 

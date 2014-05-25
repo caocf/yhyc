@@ -21,8 +21,10 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
 	<jaxrs:server id="service" address="/services/">
 		<jaxrs:serviceBeans>
+			<ref bean="storageService" />
 			<ref bean="userService" />
 			<ref bean="shequService" />
+			<ref bean="shopService" />
 			<ref bean="itemService" />
 			<ref bean="orderService" />
 			<ref bean="worksService" />
@@ -30,7 +32,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
 	</jaxrs:server>
 
-	<aop:aspectj-autoproxy/>
+	<aop:aspectj-autoproxy />
 
 	<context:component-scan base-package="com.aug3.yhyc.interceptors">
 		<context:include-filter type="annotation"

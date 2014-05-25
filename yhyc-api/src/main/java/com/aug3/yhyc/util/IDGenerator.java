@@ -15,9 +15,14 @@ public class IDGenerator {
 		long value = 0;
 		try {
 			BasicDBObject query = new BasicDBObject("name", name);
-			BasicDBObject update = new BasicDBObject("$inc", new BasicDBObject(key, 1l));
-			return Long.valueOf(db.getCollection("ids").findAndModify(query, null, null, false, update, true, true)
-					.get(key).toString().replace(".0", ""));
+			BasicDBObject update = new BasicDBObject("$inc", new BasicDBObject(
+					key, 1l));
+			return Long
+					.valueOf(db
+							.getCollection("ids")
+							.findAndModify(query, null, null, false, update,
+									true, true).get(key).toString()
+							.replace(".0", ""));
 		} catch (MongoException e) {
 			e.printStackTrace();
 		}
@@ -28,9 +33,14 @@ public class IDGenerator {
 		long value = 0;
 		try {
 			BasicDBObject query = new BasicDBObject("name", name);
-			BasicDBObject update = new BasicDBObject("$inc", new BasicDBObject("value", 1l));
-			return Long.valueOf(db.getCollection("ids").findAndModify(query, null, null, false, update, true, true)
-					.get("value").toString().replace(".0", ""));
+			BasicDBObject update = new BasicDBObject("$inc", new BasicDBObject(
+					"value", 1l));
+			return Long
+					.valueOf(db
+							.getCollection("ids")
+							.findAndModify(query, null, null, false, update,
+									true, true).get("value").toString()
+							.replace(".0", ""));
 		} catch (MongoException e) {
 			e.printStackTrace();
 		}

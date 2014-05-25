@@ -11,7 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import com.aug3.yhyc.base.CollectionConstants;
 import com.aug3.yhyc.util.RegexUtils;
 import com.aug3.yhyc.valueobj.Shequ;
-import com.aug3.yhyc.valueobj.Workshop;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 
@@ -30,7 +29,8 @@ public class ShequDao extends BaseDao {
 			}
 		}
 
-		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_SHEQU).find(qObj);
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_SHEQU).find(
+				qObj);
 
 		BasicDBObject dbObj;
 		Shequ sq;
@@ -62,9 +62,11 @@ public class ShequDao extends BaseDao {
 	 */
 	public Map<Long, Shequ> findShequ(Collection<Long> idset) {
 
-		BasicDBObject qObj = new BasicDBObject("_id", new BasicDBObject("$in", idset));
+		BasicDBObject qObj = new BasicDBObject("_id", new BasicDBObject("$in",
+				idset));
 
-		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_SHEQU).find(qObj);
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_SHEQU).find(
+				qObj);
 
 		BasicDBObject dbObj;
 		Shequ sq;
@@ -84,37 +86,6 @@ public class ShequDao extends BaseDao {
 		}
 
 		return resultMap;
-
-	}
-
-	public List<Workshop> findWorkshops(long shequ, int cat) {
-
-		List<Workshop> list = new ArrayList<Workshop>();
-
-		BasicDBObject qObj = new BasicDBObject("shequ", new BasicDBObject("$in", new Long[] { shequ })).append("cat",
-				new BasicDBObject("$in", new Integer[] { cat }));
-
-		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_WORKSHOP).find(qObj);
-
-		BasicDBObject dbObj;
-		Workshop shop;
-		while (dbCur.hasNext()) {
-			dbObj = (BasicDBObject) dbCur.next();
-			shop = new Workshop();
-			shop.setId(dbObj.getLong("_id"));
-			shop.setName(dbObj.getString("name"));
-			shop.setOwner(dbObj.getString("owner"));
-			shop.setDist(dbObj.getString("dist"));
-			shop.setAddr(dbObj.getString("addr"));
-			shop.setTel(dbObj.getString("tel"));
-			shop.setStart(dbObj.getString("start"));
-			shop.setShequ((List<Long>) dbObj.get("shequ"));
-			shop.setCat((List<Integer>) dbObj.get("cat"));
-
-			list.add(shop);
-		}
-
-		return list;
 
 	}
 

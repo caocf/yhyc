@@ -8,6 +8,24 @@ public class Workshop {
 
 	private String name;
 
+	// 店铺图片
+	private String pic;
+
+	// 营业执照或组织机构代码
+	private String regi;
+
+	// 保证金
+	private double margin;
+
+	// 服务打分
+	private double service;
+
+	// 送货速度打分
+	private double speed;
+
+	// 商品质量
+	private double quality;
+
 	private String owner;
 
 	private String idcard;
@@ -39,6 +57,54 @@ public class Workshop {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getPic() {
+		return pic;
+	}
+
+	public void setPic(String pic) {
+		this.pic = pic;
+	}
+
+	public String getRegi() {
+		return regi;
+	}
+
+	public void setRegi(String regi) {
+		this.regi = regi;
+	}
+
+	public double getMargin() {
+		return margin;
+	}
+
+	public void setMargin(double margin) {
+		this.margin = margin;
+	}
+
+	public double getService() {
+		return service;
+	}
+
+	public void setService(double service) {
+		this.service = service;
+	}
+
+	public double getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
+	public double getQuality() {
+		return quality;
+	}
+
+	public void setQuality(double quality) {
+		this.quality = quality;
 	}
 
 	public void setName(String name) {

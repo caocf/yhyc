@@ -10,6 +10,9 @@ public class Item {
 	// 对应产品
 	private long pid;
 
+	// pic name
+	private String pic;
+
 	// workshop id
 	private long sid;
 
@@ -21,7 +24,7 @@ public class Item {
 
 	// 收藏人数
 	private long fav;
-
+	
 	// 卖出数
 	private long sales;
 
@@ -33,6 +36,9 @@ public class Item {
 
 	// 积分
 	private int ac;
+	
+	// 活动状态
+	private int act;
 
 	// 状态
 	private int sts;
@@ -59,6 +65,14 @@ public class Item {
 
 	public void setPid(long pid) {
 		this.pid = pid;
+	}
+
+	public String getPic() {
+		return pic;
+	}
+
+	public void setPic(String pic) {
+		this.pic = pic;
 	}
 
 	public long getSid() {
@@ -123,6 +137,14 @@ public class Item {
 
 	public void setAc(int ac) {
 		this.ac = ac;
+	}
+
+	public int getAct() {
+		return act;
+	}
+
+	public void setAct(int act) {
+		this.act = act;
 	}
 
 	public int getSts() {

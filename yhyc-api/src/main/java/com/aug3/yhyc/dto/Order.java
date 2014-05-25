@@ -10,12 +10,20 @@ import com.aug3.yhyc.valueobj.DeliveryContact;
 public class Order implements Serializable {
 
 	// 日期+流水号
-	private long orderID;
+	private long id;
 
 	private long uid;
 
+	private long sid;
+
 	// 商品
-	private List<OrderItem> items;
+	private List<ItemDTO> items;
+
+	// 订单递送
+	private DeliveryContact delivery;
+
+	// 留言
+	private String msg;
 
 	// 订单总价
 	private double total;
@@ -23,27 +31,21 @@ public class Order implements Serializable {
 	// 订单积分
 	private int ac;
 
-	// 订单收货人
-	private DeliveryContact delivery;
-
 	// 下单时间
 	private Date ts;
 
 	// 发货时间
 	private Date dt;
 
-	// 留言
-	private String msg;
-
-	// 待确认/发货中/交易取消/已发货/交易结束
+	// 0:待确认/1:已确认/2:发货中/3:交易取消/4:已发货/5:交易结束
 	private int status;
 
-	public long getOrderID() {
-		return orderID;
+	public long getId() {
+		return id;
 	}
 
-	public void setOrderID(long orderID) {
-		this.orderID = orderID;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public long getUid() {
@@ -54,12 +56,36 @@ public class Order implements Serializable {
 		this.uid = uid;
 	}
 
-	public List<OrderItem> getItems() {
+	public long getSid() {
+		return sid;
+	}
+
+	public void setSid(long sid) {
+		this.sid = sid;
+	}
+
+	public List<ItemDTO> getItems() {
 		return items;
 	}
 
-	public void setItems(List<OrderItem> items) {
+	public void setItems(List<ItemDTO> items) {
 		this.items = items;
+	}
+
+	public DeliveryContact getDelivery() {
+		return delivery;
+	}
+
+	public void setDelivery(DeliveryContact delivery) {
+		this.delivery = delivery;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 
 	public double getTotal() {
@@ -78,14 +104,6 @@ public class Order implements Serializable {
 		this.ac = ac;
 	}
 
-	public DeliveryContact getDelivery() {
-		return delivery;
-	}
-
-	public void setDelivery(DeliveryContact delivery) {
-		this.delivery = delivery;
-	}
-
 	public Date getTs() {
 		return ts;
 	}
@@ -100,14 +118,6 @@ public class Order implements Serializable {
 
 	public void setDt(Date dt) {
 		this.dt = dt;
-	}
-
-	public String getMsg() {
-		return msg;
-	}
-
-	public void setMsg(String msg) {
-		this.msg = msg;
 	}
 
 	public int getStatus() {

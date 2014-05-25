@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aug3.sys.rs.response.RespType;
 import com.aug3.yhyc.domain.ShequDomain;
-import com.aug3.yhyc.dto.WorkshopDTO;
 import com.aug3.yhyc.valueobj.Shequ;
 
 @Path("/shequ/")
@@ -40,28 +39,12 @@ public class ShequService extends BaseService {
 	 */
 	@GET
 	@Path("/query")
-	public String queryShequ(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("city") String city, @QueryParam("q") String q) {
+	public String queryShequ(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("city") String city,
+			@QueryParam("q") String q) {
 
 		List<Shequ> result = shequDomain.queryShequ(city, q);
 		return buidResponseResult(result, RespType.SUCCESS);
-	}
-
-	/**
-	 * 获取社区对应的云仓网点信息
-	 * 
-	 * @param request
-	 * @param token
-	 * @param shequ
-	 * @return
-	 */
-	@GET
-	@Path("/workshops")
-	public String getWorkshops(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("shequ") String shequ, @QueryParam("cat") String cat) {
-
-		List<WorkshopDTO> workshops = shequDomain.queryWorkshops(Long.parseLong(shequ), Integer.parseInt(cat));
-		return buidResponseResult(workshops, RespType.SUCCESS);
 	}
 
 }

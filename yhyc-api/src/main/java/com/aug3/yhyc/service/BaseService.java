@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import com.aug3.sys.rs.response.RespObj;
 import com.aug3.sys.rs.response.RespType;
 import com.aug3.sys.util.JSONUtil;
+import com.google.gson.GsonBuilder;
 
 public abstract class BaseService {
 
@@ -31,6 +32,21 @@ public abstract class BaseService {
 		returnDTO.setCode(responseType.getCode());
 		returnDTO.setType(responseType.toString());
 		returnDTO.setMessage(message);
+		return JSONUtil.toJson(returnDTO);
+	}
+
+	protected String buidResponseResult(Object message, RespType responseType,
+			boolean disableHtmlEscaping) {
+		
+		RespObj returnDTO = new RespObj();
+		returnDTO.setCode(responseType.getCode());
+		returnDTO.setType(responseType.toString());
+		returnDTO.setMessage(message);
+
+		if (disableHtmlEscaping) {
+			return new GsonBuilder().disableHtmlEscaping().create()
+					.toJson(returnDTO);
+		}
 		return JSONUtil.toJson(returnDTO);
 	}
 
