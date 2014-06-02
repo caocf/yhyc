@@ -84,7 +84,7 @@ public class ItemService extends BaseService {
 	@Path("/comments")
 	public String listComments(@Context HttpServletRequest request,
 			@QueryParam("token") String token, @QueryParam("item") long item,
-			int pn) {
+			@QueryParam("pn") int pn) {
 
 		if (pn == 0) {
 			pn = 1;

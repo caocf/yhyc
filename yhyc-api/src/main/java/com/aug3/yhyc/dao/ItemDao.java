@@ -237,9 +237,12 @@ public class ItemDao extends BaseDao {
 			commentDTO.setId(itemId);
 			commentDTO.setCount(dbObj.getInt("count"));
 			commentDTO.setScore(dbObj.getInt("score"));
-			commentDTO.setGood(dbObj.getInt("good"));
-			commentDTO.setNorm(dbObj.getInt("norm"));
-			commentDTO.setBad(dbObj.getInt("bad"));
+			commentDTO.setGood(dbObj.containsField("good") ? dbObj
+					.getInt("good") : 0);
+			commentDTO.setNorm(dbObj.containsField("norm") ? dbObj
+					.getInt("norm") : 0);
+			commentDTO.setBad(dbObj.containsField("bad") ? dbObj.getInt("bad")
+					: 0);
 
 		}
 
