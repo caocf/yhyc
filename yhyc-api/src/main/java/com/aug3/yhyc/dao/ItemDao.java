@@ -1,7 +1,10 @@
 package com.aug3.yhyc.dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.aug3.yhyc.base.CollectionConstants;
 import com.aug3.yhyc.base.Constants;
@@ -14,6 +17,7 @@ import com.aug3.yhyc.valueobj.Product;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.WriteConcern;
 
 public class ItemDao extends BaseDao {
@@ -40,6 +44,30 @@ public class ItemDao extends BaseDao {
 		}
 
 		return list;
+
+	}
+
+	public Map<Long, ItemDTO> findItemsMap(Collection<Long> itemIds) {
+
+		Map<Long, ItemDTO> map = new HashMap<Long, ItemDTO>();
+
+		if (itemIds != null && itemIds.size() > 0) {
+			DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS)
+					.find(new BasicDBObject("_id", new BasicDBObject("$in",
+							itemIds)),
+							new BasicDBObject("name", 1).append("pp", 1)
+									.append("mp", 1).append("pid", 1)
+									.append("sid", 1).append("act", 1));
+
+			BasicDBObject dbObj;
+			while (dbCur.hasNext()) {
+				dbObj = (BasicDBObject) dbCur.next();
+
+				map.put(dbObj.getLong("_id"), transferDBObj2ItemDTO(dbObj));
+			}
+		}
+
+		return map;
 
 	}
 
@@ -181,21 +209,19 @@ public class ItemDao extends BaseDao {
 
 		BasicDBObject qObj = new BasicDBObject("_id", itemId);
 
+		BasicDBObject slice = new BasicDBObject("comment", new BasicDBObject(
+				"$slice", new Integer[] { skipSize(pn), pageSize() }));
+
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_COMMENTS)
-				.find(qObj);
+				.find(qObj, slice);
 
 		CommentDTO commentDTO = new CommentDTO();
 
 		while (dbCur.hasNext()) {
+
 			BasicDBObject dbObj = (BasicDBObject) dbCur.next();
 
 			BasicDBList commentlist = (BasicDBList) dbObj.get("comment");
-			int start = skipSize(pn);
-			if (start >= commentlist.size()) {
-				return commentDTO;
-			}
-			commentlist = (BasicDBList) commentlist.subList(start, start
-					+ pageSize());
 
 			for (Object obj : commentlist) {
 				BasicDBObject commentObj = (BasicDBObject) obj;
@@ -223,27 +249,38 @@ public class ItemDao extends BaseDao {
 
 	public void newComment(long itemId, Comment comment) {
 
-		BasicDBObject sts = new BasicDBObject().append("count", 1).append(
+		BasicDBObject incr_sts = new BasicDBObject().append("count", 1).append(
 				"score", comment.getScore());
 		switch (comment.getScore()) {
 		case 4:
 		case 5:
-			sts.append("good", 1);
+			incr_sts.append("good", 1);
 			break;
 		case 3:
 		case 2:
-			sts.append("norm", 1);
+			incr_sts.append("norm", 1);
 			break;
 		case 1:
-			sts.append("bad", 1);
+			incr_sts.append("bad", 1);
 			break;
 		}
 
-		BasicDBObject commentObj = new BasicDBObject("comment",
-				new BasicDBObject().append("$each", new Comment[] { comment })
-						.append("$position", 0));
-		BasicDBObject updateObj = new BasicDBObject().append("$inc", sts)
-				.append("$push", commentObj);
+		// TODO can use $sort to sort array
+
+		DBObject commentObj = new BasicDBObject();
+		commentObj.put("uid", comment.getUid());
+		commentObj.put("name", comment.getName());
+		commentObj.put("content", comment.getContent());
+		commentObj.put("score", comment.getScore());
+		commentObj.put("ts", comment.getTs());
+
+		BasicDBObject add_commentObj = new BasicDBObject("comment",
+				new BasicDBObject().append("$each",
+						new DBObject[] { commentObj }).append("$position", 0));
+
+		BasicDBObject updateObj = new BasicDBObject().append("$inc", incr_sts)
+				.append("$push", add_commentObj);
+
 		// $addToSet for tags
 		getDBCollection(CollectionConstants.COLL_COMMENTS).update(
 				new BasicDBObject("_id", itemId), updateObj, true, false,

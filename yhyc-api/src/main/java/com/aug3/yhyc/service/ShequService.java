@@ -10,7 +10,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.aug3.sys.rs.response.RespType;
 import com.aug3.yhyc.domain.ShequDomain;
 import com.aug3.yhyc.valueobj.Shequ;
 
@@ -44,7 +43,7 @@ public class ShequService extends BaseService {
 			@QueryParam("q") String q) {
 
 		List<Shequ> result = shequDomain.queryShequ(city, q);
-		return buidResponseResult(result, RespType.SUCCESS);
+		return buidResponseSuccess(result);
 	}
 
 }

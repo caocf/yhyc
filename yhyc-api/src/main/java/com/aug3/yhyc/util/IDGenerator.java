@@ -1,6 +1,8 @@
 package com.aug3.yhyc.util;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Random;
 
 import com.aug3.sys.util.DateUtil;
 import com.mongodb.BasicDBObject;
@@ -10,6 +12,10 @@ import com.mongodb.MongoException;
 public class IDGenerator {
 
 	private static final DecimalFormat df = new DecimalFormat("000000");
+
+	private static final DecimalFormat udf = new DecimalFormat("00000000");
+
+	private static final Random random = new Random();
 
 	public static synchronized long nextval(DB db, String name, String key) {
 		long value = 0;
@@ -50,7 +56,14 @@ public class IDGenerator {
 	public static long nextOrderID(DB db) {
 		String today = DateUtil.formatCurrentDate();
 		return Long.parseLong(today.substring(2).replaceAll("-", "")
-				+ df.format(IDGenerator.nextval(db, today, "orderid")));
+				+ df.format(IDGenerator.nextval(db, today, "orderid")
+						+ random.nextInt(10)));
+	}
+
+	public static long nextUserID(DB db) {
+		return Long
+				.parseLong((Calendar.getInstance().get(Calendar.YEAR) - 2000)
+						+ udf.format(IDGenerator.nextval(db, "userid")));
 	}
 
 }

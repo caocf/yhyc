@@ -10,7 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.aug3.sys.rs.response.RespType;
+import com.aug3.yhyc.base.RespType;
 import com.aug3.yhyc.util.Qiniu;
 
 @Path("/qiniu/")
@@ -25,7 +25,7 @@ public class QiniuService extends BaseService {
 
 		String uptoken = Qiniu.uptoken();
 
-		return this.buidResponseResult(uptoken, RespType.SUCCESS);
+		return buidResponseSuccess(uptoken);
 	}
 
 	/**

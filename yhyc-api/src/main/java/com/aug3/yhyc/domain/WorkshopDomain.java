@@ -62,6 +62,7 @@ public class WorkshopDomain {
 			dto.setAddr(shop.getAddr());
 			dto.setTel(shop.getTel());
 			dto.setStart(shop.getStart());
+			dto.setNotice(shop.getNotice());
 
 			List<Shequ> sqlist = new ArrayList<Shequ>();
 			for (Long id : shop.getShequ()) {

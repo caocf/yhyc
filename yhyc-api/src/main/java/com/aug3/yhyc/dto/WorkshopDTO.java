@@ -21,6 +21,8 @@ public class WorkshopDTO implements Serializable {
 
 	private String start;
 
+	private String notice;
+
 	private List<Shequ> shequ;
 
 	public long getId() {
@@ -85,6 +87,14 @@ public class WorkshopDTO implements Serializable {
 
 	public void setShequ(List<Shequ> shequ) {
 		this.shequ = shequ;
+	}
+
+	public String getNotice() {
+		return notice;
+	}
+
+	public void setNotice(String notice) {
+		this.notice = notice;
 	}
 
 }

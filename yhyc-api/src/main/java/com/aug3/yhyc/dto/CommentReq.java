@@ -1,51 +1,30 @@
 package com.aug3.yhyc.dto;
 
-public class CommentReq {
+import java.io.Serializable;
+import java.util.Map;
 
-	private String items;
-	private String uid;
-	private String name;
-	private String score = "5";
-	private String content;
+import com.aug3.yhyc.valueobj.Comment;
 
-	public String getItems() {
-		return items;
+public class CommentReq implements Serializable {
+
+	private long orderid;
+
+	private Map<Long, Comment> itemsRating;
+
+	public long getOrderid() {
+		return orderid;
 	}
 
-	public void setItems(String items) {
-		this.items = items;
+	public void setOrderid(long orderid) {
+		this.orderid = orderid;
 	}
 
-	public String getUid() {
-		return uid;
+	public Map<Long, Comment> getItemsRating() {
+		return itemsRating;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getScore() {
-		return score;
-	}
-
-	public void setScore(String score) {
-		this.score = score;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
+	public void setItemsRating(Map<Long, Comment> itemsRating) {
+		this.itemsRating = itemsRating;
 	}
 
 }

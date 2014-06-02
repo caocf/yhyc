@@ -14,7 +14,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.aug3.sys.rs.response.RespType;
 import com.aug3.sys.util.JSONUtil;
 import com.aug3.yhyc.domain.WorksDomain;
 import com.aug3.yhyc.valueobj.RecipeWizard;
@@ -39,80 +38,85 @@ public class WorksService extends BaseService {
 	@Path("/new")
 	// @AccessTrace
 	// @AccessToken
-	public String newWorks(@Context HttpServletRequest request, @FormParam("token") String token,
-			@FormParam("works") String works) {
+	public String newWorks(@Context HttpServletRequest request,
+			@FormParam("token") String token, @FormParam("works") String works) {
 		worksDomain.newWorks(JSONUtil.fromJson(works, Works.class));
-		return buidResponseResult("success!", RespType.SUCCESS);
+		return buidResponseSuccess("success!");
 	}
 
 	@POST
 	@Path("/steps")
 	// @AccessTrace
 	// @AccessToken
-	public String uploadSteps(@Context HttpServletRequest request, @FormParam("token") String token,
-			@FormParam("uid") String uid, @FormParam("id") String id, @FormParam("") RecipeWizard wizard) {
-		worksDomain.uploadSteps(Long.parseLong(uid), Long.parseLong(id), wizard);
-		return buidResponseResult("success!", RespType.SUCCESS);
+	public String uploadSteps(@Context HttpServletRequest request,
+			@FormParam("token") String token, @FormParam("uid") long uid,
+			@FormParam("id") long id, @FormParam("") RecipeWizard wizard) {
+		worksDomain.uploadSteps(uid, id, wizard);
+		return buidResponseSuccess("success!");
 	}
 
 	@POST
 	@Path("/update")
 	// @AccessTrace
 	// @AccessToken
-	public String updateWorks(@Context HttpServletRequest request, @FormParam("token") String token,
-			@FormParam("works") String works) {
+	public String updateWorks(@Context HttpServletRequest request,
+			@FormParam("token") String token, @FormParam("works") String works) {
 		worksDomain.updateWorks(JSONUtil.fromJson(works, Works.class));
-		return buidResponseResult("success!", RespType.SUCCESS);
+		return buidResponseSuccess("success!");
 	}
 
 	@GET
 	@Path("/delete")
 	// @AccessTrace
 	// @AccessToken
-	public String deleteWorks(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("uid") String uid, @QueryParam("id") String id, @QueryParam("admin") String admin) {
+	public String deleteWorks(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("uid") long uid,
+			@QueryParam("id") long id, @QueryParam("admin") String admin) {
 		if (StringUtils.isBlank("admin")) {
 			admin = "FALSE";
 		}
-		worksDomain.deleteWorks(Long.parseLong(uid), Long.parseLong(id), Boolean.getBoolean(admin.toUpperCase()));
-		return buidResponseResult("delete success!", RespType.SUCCESS);
+		worksDomain.deleteWorks(uid, id,
+				Boolean.getBoolean(admin.toUpperCase()));
+		return buidResponseSuccess("delete success!");
 	}
 
 	@GET
 	@Path("/list")
-	public String listWorks(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("pn") String pn) {
+	public String listWorks(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("pn") String pn) {
 
 		List<Works> works = worksDomain.listWorks(getPageNo(pn));
 
-		return this.buidResponseResult(works, RespType.SUCCESS);
+		return this.buidResponseSuccess(works);
 	}
 
 	@GET
 	@Path("/show")
-	public String showOrder(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("id") String id) {
+	public String showOrder(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("id") long id) {
 
-		Works works = worksDomain.showWorks(Long.parseLong(id));
-		return this.buidResponseResult(works, RespType.SUCCESS);
+		Works works = worksDomain.showWorks(id);
+		return this.buidResponseSuccess(works);
 	}
 
 	@GET
 	@Path("/my")
-	public String myWorks(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("uid") String uid, @QueryParam("pn") String pn) {
+	public String myWorks(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("uid") long uid,
+			@QueryParam("pn") String pn) {
 
-		List<Works> works = worksDomain.listWorksByUser(Long.parseLong(uid), getPageNo(pn));
-		return this.buidResponseResult(works, RespType.SUCCESS);
+		List<Works> works = worksDomain.listWorksByUser(uid, getPageNo(pn));
+		return this.buidResponseSuccess(works);
 	}
 
 	@GET
 	@Path("/myfav")
-	public String myFavWorks(@Context HttpServletRequest request, @QueryParam("token") String token,
-			@QueryParam("uid") String uid, @QueryParam("pn") String pn) {
+	public String myFavWorks(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("uid") long uid,
+			@QueryParam("pn") String pn) {
 
-		List<Works> works = worksDomain.listFavWorksByUser(Long.parseLong(uid), getPageNo(pn));
-		return this.buidResponseResult(works, RespType.SUCCESS);
+		List<Works> works = worksDomain.listFavWorksByUser(uid, getPageNo(pn));
+		return this.buidResponseSuccess(works);
 	}
 
 }

@@ -44,6 +44,8 @@ public class Workshop {
 
 	private List<Integer> cat;
 
+	private String notice;
+
 	// 状态 : 1 - 正常 0 - 整装待发
 	private String sts;
 
@@ -189,6 +191,14 @@ public class Workshop {
 
 	public void setSts(String sts) {
 		this.sts = sts;
+	}
+
+	public String getNotice() {
+		return notice;
+	}
+
+	public void setNotice(String notice) {
+		this.notice = notice;
 	}
 
 }

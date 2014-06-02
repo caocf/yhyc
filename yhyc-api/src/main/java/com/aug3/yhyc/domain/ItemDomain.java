@@ -8,6 +8,7 @@ import java.util.Map;
 import com.aug3.sys.util.DateUtil;
 import com.aug3.yhyc.dao.DictDao;
 import com.aug3.yhyc.dao.ItemDao;
+import com.aug3.yhyc.dao.OrderDao;
 import com.aug3.yhyc.dao.UserDao;
 import com.aug3.yhyc.dao.WorkshopDao;
 import com.aug3.yhyc.dto.CommentDTO;
@@ -30,6 +31,8 @@ public class ItemDomain {
 	private WorkshopDao shopDao;
 
 	private ItemDao itemDao;
+
+	private OrderDao orderDao;
 
 	public DictDao getDictDao() {
 		return dictDao;
@@ -63,6 +66,14 @@ public class ItemDomain {
 		this.itemDao = itemDao;
 	}
 
+	public OrderDao getOrderDao() {
+		return orderDao;
+	}
+
+	public void setOrderDao(OrderDao orderDao) {
+		this.orderDao = orderDao;
+	}
+
 	public List<Item> findItemsByWorkshop(long workshop) {
 		return itemDao.findItemsByWorkshop(workshop);
 	}
@@ -91,29 +102,21 @@ public class ItemDomain {
 
 	public boolean newComments(CommentReq commentReq) {
 
-		String items = commentReq.getItems();
-		if (items == null)
+		Map<Long, Comment> comments = commentReq.getItemsRating();
+		if (comments == null)
 			return false;
 
-		String[] parts = items.split(",");
-		if (parts == null) {
-			return false;
-		} else {
-			Comment comment = new Comment();
+		for (Long item : comments.keySet()) {
+			Comment comment = comments.get(item);
 
-			if (commentReq.getUid() != null)
-				comment.setUid(Long.parseLong(commentReq.getUid()));
-			comment.setName(commentReq.getName());
-			comment.setScore(Integer.parseInt(commentReq.getScore()));
-			comment.setContent(commentReq.getContent());
 			comment.setTs(DateUtil.formatCurrentDate());
 
-			for (int i = 0; i < parts.length; i++) {
-				itemDao.newComment(Long.parseLong(parts[i]), comment);
-			}
-
-			return true;
+			itemDao.newComment(item, comment);
 		}
+
+		orderDao.updateStatus(commentReq.getOrderid(), 6);
+
+		return true;
 	}
 
 	public List<ShopItem> fetchFavorite(long uid) {

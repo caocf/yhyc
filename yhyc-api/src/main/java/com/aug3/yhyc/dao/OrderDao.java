@@ -19,6 +19,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.WriteConcern;
+import com.mongodb.WriteResult;
 
 public class OrderDao extends BaseDao {
 
@@ -28,10 +29,22 @@ public class OrderDao extends BaseDao {
 	private static final int delivery_minimum = Integer.parseInt(ConfigManager
 			.getProperties().getProperty("delivery.minimum", "20"));
 
-	public List<Order> findOrdersByUid(String uid, int status) {
+	public List<Order> findOrdersByUid(long uid, int status) {
+
+		DBObject query = null;
+
+		if (status == 12340) {
+			query = new BasicDBObject("uid", uid).append("sts",
+					new BasicDBObject("$lt", 5));
+		} else if (status == 5) {// 结束
+			query = new BasicDBObject("uid", uid).append("sts",
+					new BasicDBObject("$gte", 5));
+		} else {
+			query = new BasicDBObject("uid", uid).append("sts", status);
+		}
 
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(
-				new BasicDBObject("uid", uid).append("sts", status));
+				query);
 
 		BasicDBObject dbObj;
 		Order myorder;
@@ -82,13 +95,43 @@ public class OrderDao extends BaseDao {
 
 	}
 
-	public void updateOrderStatus(long orderid, int status) {
+	public int deliverOrder(long orderid) {
 
-		getDBCollection(CollectionConstants.COLL_ORDERS).update(
-				new BasicDBObject("_id", orderid),
-				new BasicDBObject("sts", status), false, false,
-				WriteConcern.SAFE);
+		WriteResult wr = getDBCollection(CollectionConstants.COLL_ORDERS)
+				.update(new BasicDBObject("_id", orderid),
+						new BasicDBObject("$set", new BasicDBObject("sts", 4)
+								.append("dt", new Date())), false, false,
+						WriteConcern.SAFE);
 
+		if (wr != null) {
+			return wr.getN();
+		}
+
+		return 0;
+	}
+
+	public int updateStatus(long orderid, int status) {
+
+		WriteResult wr = null;
+
+		if (status == 3) {
+			wr = getDBCollection(CollectionConstants.COLL_ORDERS)
+					.update(new BasicDBObject("_id", orderid).append("sts", 0),
+							new BasicDBObject("$set", new BasicDBObject("sts",
+									status)), false, false, WriteConcern.SAFE);
+
+		} else {
+			wr = getDBCollection(CollectionConstants.COLL_ORDERS)
+					.update(new BasicDBObject("_id", orderid),
+							new BasicDBObject("$set", new BasicDBObject("sts",
+									status)), false, false, WriteConcern.SAFE);
+		}
+
+		if (wr != null) {
+			return wr.getN();
+		}
+
+		return 0;
 	}
 
 	/**
@@ -163,7 +206,7 @@ public class OrderDao extends BaseDao {
 
 		Order order = new Order();
 
-		order.setId(dbObj.getLong("id"));
+		order.setId(dbObj.getLong("_id"));
 		order.setUid(dbObj.getLong("uid"));
 		order.setSid(dbObj.getLong("sid"));
 
@@ -172,6 +215,7 @@ public class OrderDao extends BaseDao {
 		BasicDBObject item;
 
 		BasicDBList items = (BasicDBList) dbObj.get("items");
+
 		for (Object eachitem : items) {
 			item = (BasicDBObject) eachitem;
 			orderItem = new ItemDTO();
@@ -181,6 +225,7 @@ public class OrderDao extends BaseDao {
 			orderItem.setPrice(item.getDouble("pp"));
 			orderItems.add(orderItem);
 		}
+
 		order.setItems(orderItems);
 
 		BasicDBObject delivery = (BasicDBObject) dbObj.get("delivery");
@@ -201,6 +246,7 @@ public class OrderDao extends BaseDao {
 		order.setAc(dbObj.getInt("ac"));
 		order.setDt(dbObj.getDate("dt"));
 		order.setTs(dbObj.getDate("ts"));
+		order.setStatus(dbObj.getInt("sts"));
 
 		return order;
 	}

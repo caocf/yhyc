@@ -21,7 +21,7 @@ public class BaseDao {
 	}
 
 	protected DBCollection getDBCollection(String collection) {
-		return MongoAdaptor.getDB().getCollection(collection);
+		return getDB().getCollection(collection);
 	}
 
 }

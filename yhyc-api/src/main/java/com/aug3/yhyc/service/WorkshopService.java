@@ -10,7 +10,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.aug3.sys.rs.response.RespType;
 import com.aug3.yhyc.domain.WorkshopDomain;
 import com.aug3.yhyc.dto.WorkshopDTO;
 
@@ -40,12 +39,11 @@ public class WorkshopService extends BaseService {
 	@GET
 	@Path("/list")
 	public String getWorkshops(@Context HttpServletRequest request,
-			@QueryParam("token") String token,
-			@QueryParam("shequ") String shequ, @QueryParam("cat") String cat) {
+			@QueryParam("token") String token, @QueryParam("shequ") long shequ,
+			@QueryParam("cat") int cat) {
 
-		List<WorkshopDTO> workshops = shopDomain.queryWorkshops(
-				Long.parseLong(shequ), Integer.parseInt(cat));
-		return buidResponseResult(workshops, RespType.SUCCESS);
+		List<WorkshopDTO> workshops = shopDomain.queryWorkshops(shequ, cat);
+		return buidResponseSuccess(workshops);
 	}
 
 }

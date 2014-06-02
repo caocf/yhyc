@@ -1,22 +1,19 @@
 package com.aug3.yhyc.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
-import com.aug3.sys.rs.response.RespObj;
-import com.aug3.sys.rs.response.RespType;
 import com.aug3.sys.util.JSONUtil;
+import com.aug3.yhyc.base.RespObj;
+import com.aug3.yhyc.base.RespType;
 import com.google.gson.GsonBuilder;
 
 public abstract class BaseService {
 
-	/**
-	 * 当操作成功并且不需要返回任何数据时使用，例如数据增加情况
-	 */
-	public static final RespObj SUCCESS = new RespObj();
-
-	static {
-		SUCCESS.setCode(RespType.SUCCESS.getCode());
-		SUCCESS.setType(RespType.SUCCESS.name());
+	protected String buidResponseSuccess(Object message) {
+		return buidResponseResult(message, RespType.SUCCESS);
 	}
 
 	/**
@@ -37,7 +34,7 @@ public abstract class BaseService {
 
 	protected String buidResponseResult(Object message, RespType responseType,
 			boolean disableHtmlEscaping) {
-		
+
 		RespObj returnDTO = new RespObj();
 		returnDTO.setCode(responseType.getCode());
 		returnDTO.setType(responseType.toString());
@@ -60,6 +57,15 @@ public abstract class BaseService {
 			}
 		}
 		return page;
+	}
+
+	protected List<Long> transfer2Long(String commaSeparated) {
+		String[] array = commaSeparated.split(",");
+		List<Long> result = new ArrayList<Long>();
+		for (String s : array) {
+			result.add(Long.parseLong(s));
+		}
+		return result;
 	}
 
 }

@@ -39,6 +39,7 @@ public class WorkshopDao extends BaseDao {
 			shop.setStart(dbObj.getString("start"));
 			shop.setShequ((List<Long>) dbObj.get("shequ"));
 			shop.setCat((List<Integer>) dbObj.get("cat"));
+			shop.setNotice(dbObj.getString("notice"));
 
 			list.add(shop);
 		}
@@ -69,6 +70,7 @@ public class WorkshopDao extends BaseDao {
 			shop.setAddr(dbObj.getString("addr"));
 			shop.setTel(dbObj.getString("tel"));
 			shop.setStart(dbObj.getString("start"));
+			shop.setNotice(dbObj.getString("notice"));
 
 			map.put(shop.getId(), shop);
 		}

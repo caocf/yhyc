@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.codec.EncoderException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 
+import com.aug3.sys.cache.SystemCache;
 import com.qiniu.api.auth.AuthException;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.config.Config;
@@ -68,20 +70,30 @@ public class Qiniu {
 
 	public static String downloadUrl(String fn) {
 
-		String baseUrl = null;
-		try {
-			baseUrl = URLUtils.makeBaseUrl(domain, fn);
-		} catch (EncoderException e) {
-			log.error(e.getMessage());
-		}
-		GetPolicy getPolicy = new GetPolicy();
-		getPolicy.expires = 3600;
+		SystemCache sc = new SystemCache();
+		String downloadUrl = (String) sc.get(fn);
 
-		String downloadUrl = null;
-		try {
-			downloadUrl = getPolicy.makeRequest(baseUrl, mac);
-		} catch (AuthException e) {
-			log.error(e.getMessage());
+		if (StringUtils.isBlank(downloadUrl)) {
+
+			String baseUrl = null;
+			try {
+				baseUrl = URLUtils.makeBaseUrl(domain, fn);
+			} catch (EncoderException e) {
+				log.error(e.getMessage());
+			}
+			GetPolicy getPolicy = new GetPolicy();
+
+			int ttl = 3600 * 24 * 7;
+
+			getPolicy.expires = ttl;
+
+			try {
+				downloadUrl = getPolicy.makeRequest(baseUrl, mac);
+			} catch (AuthException e) {
+				log.error(e.getMessage());
+			}
+
+			sc.put(fn, downloadUrl, ttl / 2);
 		}
 
 		return downloadUrl;

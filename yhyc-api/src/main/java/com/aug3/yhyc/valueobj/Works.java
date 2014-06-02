@@ -24,6 +24,7 @@ public class Works implements Serializable {
 	// time spent in minutes
 	private int mins;
 
+	// 小贴士
 	private String summary;
 
 	private Date ts;
