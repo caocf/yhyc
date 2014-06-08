@@ -21,9 +21,19 @@ public class QiniuService extends BaseService {
 	@GET
 	@Path("/uptoken")
 	public String uptoken(@Context HttpServletRequest request,
-			@QueryParam("token") String token) {
+			@QueryParam("token") String token,
+			@QueryParam("bucket") String bucket, @QueryParam("key") String key) {
 
-		String uptoken = Qiniu.uptoken();
+		if ("item".equalsIgnoreCase(bucket)) {
+			bucket = Qiniu.getItemBucket();
+		} else if ("user".equalsIgnoreCase(bucket)) {
+			bucket = Qiniu.getUserBucket();
+		} else {
+			return buidResponseResult("wrong parameter bucket",
+					RespType.INVALID_PARAMETERS);
+		}
+
+		String uptoken = Qiniu.uptoken(bucket, key);
 
 		return buidResponseSuccess(uptoken);
 	}
@@ -46,7 +56,8 @@ public class QiniuService extends BaseService {
 	public String downloadUrl(@Context HttpServletRequest request,
 			@QueryParam("token") String token, @QueryParam("fn") String fn) {
 
-		Map<String, String> urlMap = Qiniu.downloadUrls(fn);
+		Map<String, String> urlMap = Qiniu.downloadUrls(fn,
+				Qiniu.getItemDomain());
 
 		return buidResponseResult(urlMap, RespType.SUCCESS, true);
 	}

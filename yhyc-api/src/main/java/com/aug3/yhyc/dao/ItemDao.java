@@ -185,7 +185,7 @@ public class ItemDao extends BaseDao {
 		item.setMp(dbObj.getDouble("mp"));
 		item.setPid(dbObj.getLong("pid"));
 		item.setAct(dbObj.getInt("act"));
-		item.setPic(Qiniu.downloadUrl(item.getPid() + Constants.PNG));
+		item.setPic(getItemUrl(item.getPid()));
 		item.setFav(dbObj.getLong("fav"));
 		item.setSales(dbObj.getLong("sale"));
 		return item;
@@ -201,7 +201,7 @@ public class ItemDao extends BaseDao {
 		i.setPrice(dbObj.getDouble("pp"));
 		i.setOrigprice(dbObj.getDouble("mp"));
 		i.setAct(dbObj.getInt("act"));
-		i.setPic(Qiniu.downloadUrl(i.getPid() + Constants.PNG));
+		i.setPic(getItemUrl(i.getPid()));
 		return i;
 	}
 
@@ -289,5 +289,9 @@ public class ItemDao extends BaseDao {
 				new BasicDBObject("_id", itemId), updateObj, true, false,
 				WriteConcern.SAFE);
 
+	}
+
+	public String getItemUrl(long itemid) {
+		return Qiniu.downloadUrl(itemid + Constants.PNG, Qiniu.getItemDomain());
 	}
 }

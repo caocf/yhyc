@@ -27,6 +27,10 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	<bean id="worksDao" class="com.aug3.yhyc.dao.WorksDao" />
 
 	<!-- domain -->
+	<bean id="dictDomain" class="com.aug3.yhyc.domain.DictDomain">
+		<property name="dictDao" ref="dictDao" />
+	</bean>
+
 	<bean id="userDomain" class="com.aug3.yhyc.domain.UserDomain">
 		<property name="userDao" ref="userDao" />
 	</bean>
@@ -45,10 +49,12 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 		<property name="userDao" ref="userDao" />
 		<property name="shopDao" ref="shopDao" />
 		<property name="itemDao" ref="itemDao" />
+		<property name="orderDao" ref="orderDao" />
 	</bean>
 
 	<bean id="orderDomain" class="com.aug3.yhyc.domain.OrderDomain">
 		<property name="orderDao" ref="orderDao" />
+		<property name="itemDao" ref="itemDao" />
 	</bean>
 
 	<bean id="worksDomain" class="com.aug3.yhyc.domain.WorksDomain">
@@ -57,6 +63,10 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	</bean>
 
 	<!-- service -->
+	<bean id="dictService" class="com.aug3.yhyc.service.DictService">
+		<property name="dictDomain" ref="dictDomain" />
+	</bean>
+
 	<bean id="userService" class="com.aug3.yhyc.service.UserService">
 		<property name="userDomain" ref="userDomain" />
 	</bean>

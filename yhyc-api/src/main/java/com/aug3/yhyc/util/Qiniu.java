@@ -24,10 +24,16 @@ public class Qiniu {
 			.getProperty("storage.key.access");
 	private static final String secretkey = ConfigManager.getProperties()
 			.getProperty("storage.key.secret");
-	private static final String domain = ConfigManager.getProperties()
-			.getProperty("storage.domain");
 	private static final String bucket = ConfigManager.getProperties()
 			.getProperty("storage.bucket");
+	private static final String user_bucket = ConfigManager.getProperties()
+			.getProperty("storage.bucket.user");
+	private static final String domain = ConfigManager.getProperties()
+			.getProperty("storage.domain");
+
+	private static final String itemDomain = domain.replace("{bucket}", bucket);
+	private static final String userDomain = domain.replace("{bucket}",
+			user_bucket);
 
 	private static Mac mac = null;
 
@@ -37,11 +43,32 @@ public class Qiniu {
 		mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
 	}
 
-	public static String uptoken() {
+	public static String getItemBucket() {
+
+		return bucket;
+
+	}
+
+	public static String getUserBucket() {
+
+		return user_bucket;
+
+	}
+
+	public static String getItemDomain() {
+		return itemDomain;
+	}
+
+	public static String getUserDomain() {
+		return userDomain;
+	}
+
+	public static String uptoken(String bucket, String key) {
 
 		// 请确保该bucket已经存在
 		PutPolicy putPolicy = new PutPolicy(bucket);
 		putPolicy.expires = 3600;
+		putPolicy.scope = bucket + ":" + key;
 
 		String uptoken = "";
 		try {
@@ -55,20 +82,20 @@ public class Qiniu {
 		return uptoken;
 	}
 
-	public static Map<String, String> downloadUrls(String fn) {
+	public static Map<String, String> downloadUrls(String fn, String domain) {
 
 		String[] keys = fn.split(",");
 		Map<String, String> urlMap = new HashMap<String, String>();
 
 		for (String key : keys) {
 
-			urlMap.put(key, downloadUrl(key));
+			urlMap.put(key, downloadUrl(key, domain));
 		}
 
 		return urlMap;
 	}
 
-	public static String downloadUrl(String fn) {
+	public static String downloadUrl(String fn, String domain) {
 
 		SystemCache sc = new SystemCache();
 		String downloadUrl = (String) sc.get(fn);

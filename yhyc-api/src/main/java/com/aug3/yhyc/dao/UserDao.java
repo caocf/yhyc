@@ -91,7 +91,7 @@ public class UserDao extends BaseDao {
 			user.setHasAvatar(true);
 
 			if (userPic)
-				user.setAvatar(Qiniu.downloadUrl(avatar));
+				user.setAvatar(Qiniu.downloadUrl(avatar, Qiniu.getUserDomain()));
 		}
 		return user;
 	}
