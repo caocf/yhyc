@@ -13,29 +13,24 @@ import com.mongodb.DBCursor;
 
 public class DictDao extends BaseDao {
 
-	private static Map<Integer, String> tags = null;
-
 	public Map<Integer, String> findTags(Collection<Integer> tagids) {
 
-		if (tags == null) {
+		BasicDBObject qObj = new BasicDBObject("_id", new BasicDBObject("$in",
+				tagids));
 
-			BasicDBObject qObj = new BasicDBObject("_id", new BasicDBObject(
-					"$in", tagids));
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_TAGS).find(
+				qObj);
 
-			DBCursor dbCur = getDBCollection(CollectionConstants.COLL_TAGS)
-					.find(qObj);
+		BasicDBObject dbObj;
 
-			BasicDBObject dbObj;
+		Map<Integer, String> tags = new ConcurrentHashMap<Integer, String>();
 
-			tags = new ConcurrentHashMap<Integer, String>();
+		while (dbCur.hasNext()) {
+			dbObj = (BasicDBObject) dbCur.next();
 
-			while (dbCur.hasNext()) {
-				dbObj = (BasicDBObject) dbCur.next();
-
-				tags.put(dbObj.getInt("_id"), dbObj.getString("name"));
-			}
-
+			tags.put(dbObj.getInt("code"), dbObj.getString("name"));
 		}
+
 		return tags;
 	}
 

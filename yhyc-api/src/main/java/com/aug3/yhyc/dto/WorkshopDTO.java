@@ -13,6 +13,8 @@ public class WorkshopDTO implements Serializable {
 
 	private String owner;
 
+	private String pic;
+
 	private String dist;
 
 	private String addr;
@@ -22,6 +24,8 @@ public class WorkshopDTO implements Serializable {
 	private String start;
 
 	private String notice;
+
+	private int cat;
 
 	private List<Shequ> shequ;
 
@@ -47,6 +51,14 @@ public class WorkshopDTO implements Serializable {
 
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+
+	public String getPic() {
+		return pic;
+	}
+
+	public void setPic(String pic) {
+		this.pic = pic;
 	}
 
 	public String getDist() {
@@ -79,6 +91,14 @@ public class WorkshopDTO implements Serializable {
 
 	public void setStart(String start) {
 		this.start = start;
+	}
+
+	public int getCat() {
+		return cat;
+	}
+
+	public void setCat(int cat) {
+		this.cat = cat;
 	}
 
 	public List<Shequ> getShequ() {

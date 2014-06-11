@@ -63,6 +63,20 @@ public class ItemService extends BaseService {
 		return buidResponseSuccess(items);
 	}
 
+	@GET
+	@Path("/filter")
+	public String filterItems(@Context HttpServletRequest request,
+			@QueryParam("token") String token,
+			@QueryParam("workshop") long workshop, @QueryParam("cat") int cat) {
+
+		if (workshop == 0) {
+			return buidResponseResult("invlid param workshop",
+					RespType.INVALID_PARAMETERS);
+		}
+		List<Item> items = itemDomain.filterItems(workshop, cat);
+		return buidResponseSuccess(items);
+	}
+
 	/**
 	 * show items, multiple items separated by comma
 	 * 

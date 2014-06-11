@@ -42,7 +42,7 @@ public class Workshop {
 
 	private List<Long> shequ;
 
-	private List<Integer> cat;
+	private int cat;
 
 	private String notice;
 
@@ -177,11 +177,11 @@ public class Workshop {
 		this.shequ = shequ;
 	}
 
-	public List<Integer> getCat() {
+	public int getCat() {
 		return cat;
 	}
 
-	public void setCat(List<Integer> cat) {
+	public void setCat(int cat) {
 		this.cat = cat;
 	}
 

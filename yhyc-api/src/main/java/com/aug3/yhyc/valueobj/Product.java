@@ -10,7 +10,7 @@ public class Product {
 	private String name;
 
 	// 类目
-	private String cat;
+	private int cat;
 
 	// tags
 	private List<Integer> tags;
@@ -29,6 +29,10 @@ public class Product {
 
 	// 描述
 	private String desc;
+
+	private String cooked;
+
+	private String cpic;
 
 	// 状态
 	private int sts;
@@ -49,11 +53,11 @@ public class Product {
 		this.name = name;
 	}
 
-	public String getCat() {
+	public int getCat() {
 		return cat;
 	}
 
-	public void setCat(String cat) {
+	public void setCat(int cat) {
 		this.cat = cat;
 	}
 
@@ -103,6 +107,22 @@ public class Product {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public String getCooked() {
+		return cooked;
+	}
+
+	public void setCooked(String cooked) {
+		this.cooked = cooked;
+	}
+
+	public String getCpic() {
+		return cpic;
+	}
+
+	public void setCpic(String cpic) {
+		this.cpic = cpic;
 	}
 
 	public int getSts() {

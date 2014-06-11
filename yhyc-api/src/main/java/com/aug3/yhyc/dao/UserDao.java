@@ -262,10 +262,10 @@ public class UserDao extends BaseDao {
 
 		while (cur.hasNext()) {
 			BasicDBObject dbo = (BasicDBObject) cur.next();
-			BasicDBList favlist = (BasicDBList) dbo.get("cart");
-			if (favlist != null && favlist.size() > 0) {
+			BasicDBList cartList = (BasicDBList) dbo.get("cart");
+			if (cartList != null && cartList.size() > 0) {
 
-				for (Object itemid : favlist) {
+				for (Object itemid : cartList) {
 					items.add((Long) itemid);
 				}
 			}

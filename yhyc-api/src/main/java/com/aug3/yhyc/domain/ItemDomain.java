@@ -78,6 +78,27 @@ public class ItemDomain {
 		return itemDao.findItemsByWorkshop(workshop);
 	}
 
+	public List<Item> findPromotionItemsByWorkshop(long workshop) {
+		return itemDao.findPromotionItemsByWorkshop(workshop);
+	}
+
+	/**
+	 * 
+	 * @param workshop
+	 * @param cat
+	 *            cat==0 all; cat==1 promotion; cat==2 season;
+	 * @return
+	 */
+	public List<Item> filterItems(long workshop, int cat) {
+
+		if (cat == 0) {
+			return findItemsByWorkshop(workshop);
+		} else if (cat == 1) {
+			return findPromotionItemsByWorkshop(workshop);
+		}
+		return itemDao.filterItems(workshop, cat);
+	}
+
 	public ProductItem findItemByID(long itemID) {
 		Item item = itemDao.findItemByID(itemID);
 
@@ -177,6 +198,7 @@ public class ItemDomain {
 			for (Integer id : tagsid) {
 				tags.add(tagMap.get(id));
 			}
+			prod.setTags(tags);
 		}
 
 		// if (p.getRef() != null) {

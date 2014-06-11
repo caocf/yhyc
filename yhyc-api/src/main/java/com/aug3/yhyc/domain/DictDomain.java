@@ -1,6 +1,7 @@
 package com.aug3.yhyc.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,24 +25,27 @@ public class DictDomain {
 
 		SystemCache sc = new SystemCache();
 
-		Map<Integer, List<Category>> categories = (Map<Integer, List<Category>>) sc
-				.get("categories");
+		Map<Integer, List<Category>> categories = null;
 
-		if (categories == null) {
+		if (sc.get("categories") == null) {
+
 			List<Category> categorylist = dictDao.findCategories();
 
+			categories = new HashMap<Integer, List<Category>>();
 			for (Category cat : categorylist) {
 
-				if (categories.containsKey(cat.getCode())) {
-					categories.get(cat.getCode()).add(cat);
+				if (categories.containsKey(cat.getP())) {
+					categories.get(cat.getP()).add(cat);
 				} else {
 					List<Category> newCategory = new ArrayList<Category>();
 					newCategory.add(cat);
-					categories.put(cat.getCode(), newCategory);
+					categories.put(cat.getP(), newCategory);
 				}
 			}
 
 			sc.put("categories", categories, 3600 * 6);
+		} else {
+			categories = (Map<Integer, List<Category>>) sc.get("categories");
 		}
 
 		return categories;

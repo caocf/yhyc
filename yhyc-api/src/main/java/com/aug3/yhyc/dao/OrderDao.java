@@ -179,6 +179,8 @@ public class OrderDao extends BaseDao {
 			if (total < delivery_minimum) {
 				delivery.put("fee", delivery_fee);
 				total += delivery_fee;
+			} else {
+				delivery.put("fee", 0);
 			}
 			doc.put("delivery", delivery);
 
@@ -236,7 +238,8 @@ public class OrderDao extends BaseDao {
 			contact.setMobi(delivery.getString("mobi"));
 			contact.setD(delivery.getString("d"));
 			contact.setT(delivery.getString("t"));
-			contact.setFee(delivery.getInt("fee"));
+			contact.setFee(delivery.containsField("fee") ? delivery
+					.getInt("fee") : 0);
 			order.setDelivery(contact);
 		}
 

@@ -144,10 +144,12 @@ public class ItemDao extends BaseDao {
 			p.setId(dbObj.getLong("_id"));
 			p.setName(dbObj.getString("name"));
 			p.setPic(dbObj.getString("pic"));
-			p.setCat(dbObj.getString("cat"));
+			p.setCat(dbObj.getInt("cat"));
 			p.setTags((List<Integer>) dbObj.get("tags"));
 			p.setRef((List<Long>) dbObj.get("ref"));
 			p.setDesc(dbObj.getString("desc"));
+			p.setCooked(dbObj.getString("cooked"));
+			p.setCpic(dbObj.getString("cpic"));
 			p.setSts(dbObj.getInt("sts"));
 		}
 
@@ -163,6 +165,51 @@ public class ItemDao extends BaseDao {
 				new BasicDBObject("_id", new BasicDBObject().append("$gte",
 						workshop * 1000).append("$lte", workshop * 1000 + 999))
 						.append("sid", workshop).append("sts", 1));
+
+		BasicDBObject dbObj;
+		while (dbCur.hasNext()) {
+			dbObj = (BasicDBObject) dbCur.next();
+
+			list.add(transferDBObj2Item(dbObj));
+		}
+
+		return list;
+
+	}
+
+	public List<Item> findPromotionItemsByWorkshop(long workshop) {
+
+		List<Item> list = new ArrayList<Item>();
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
+				new BasicDBObject("_id", new BasicDBObject().append("$gte",
+						workshop * 1000).append("$lte", workshop * 1000 + 999))
+						.append("sid", workshop).append("act", 1)
+						.append("sts", 1));
+
+		BasicDBObject dbObj;
+		while (dbCur.hasNext()) {
+			dbObj = (BasicDBObject) dbCur.next();
+
+			list.add(transferDBObj2Item(dbObj));
+		}
+
+		return list;
+
+	}
+
+	public List<Item> filterItems(long workshop, int cat) {
+
+		List<Item> list = new ArrayList<Item>();
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
+				new BasicDBObject("_id", new BasicDBObject().append("$gte",
+						workshop * 1000).append("$lte", workshop * 1000 + 999))
+						.append("sid", workshop)
+						.append("pid",
+								new BasicDBObject().append("$gte", cat * 1000)
+										.append("$lte", cat * 1000 + 999))
+						.append("sts", 1));
 
 		BasicDBObject dbObj;
 		while (dbCur.hasNext()) {

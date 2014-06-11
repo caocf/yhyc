@@ -1,6 +1,8 @@
 package com.aug3.yhyc.valueobj;
 
-public class Category {
+import java.io.Serializable;
+
+public class Category implements Serializable{
 
 	private int code;
 

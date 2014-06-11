@@ -21,6 +21,10 @@ public class ProductDTO {
 	// 描述
 	private String desc;
 
+	private String cooked;
+
+	private String cpic;
+
 	public long getId() {
 		return id;
 	}
@@ -67,6 +71,22 @@ public class ProductDTO {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public String getCooked() {
+		return cooked;
+	}
+
+	public void setCooked(String cooked) {
+		this.cooked = cooked;
+	}
+
+	public String getCpic() {
+		return cpic;
+	}
+
+	public void setCpic(String cpic) {
+		this.cpic = cpic;
 	}
 
 }

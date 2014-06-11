@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aug3.yhyc.domain.DictDomain;
+import com.aug3.yhyc.dto.CategoryDTO;
 import com.aug3.yhyc.valueobj.Category;
 
 @Path("/dict/")
@@ -35,7 +36,9 @@ public class DictService extends BaseService {
 			@QueryParam("token") String token) {
 
 		Map<Integer, List<Category>> categories = dictDomain.mapCategory();
-		return buidResponseSuccess(categories);
+		CategoryDTO dto = new CategoryDTO();
+		dto.setCategories(categories);
+		return buidResponseSuccess(dto);
 	}
 
 }
