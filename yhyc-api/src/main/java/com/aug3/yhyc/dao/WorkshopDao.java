@@ -9,11 +9,15 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.aug3.yhyc.base.CollectionConstants;
+import com.aug3.yhyc.dto.RequestShop;
 import com.aug3.yhyc.dto.WorkshopDTO;
+import com.aug3.yhyc.util.IDGenerator;
 import com.aug3.yhyc.util.Qiniu;
 import com.aug3.yhyc.valueobj.Workshop;
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 
 public class WorkshopDao extends BaseDao {
 
@@ -22,7 +26,8 @@ public class WorkshopDao extends BaseDao {
 		List<Workshop> list = new ArrayList<Workshop>();
 
 		BasicDBObject qObj = new BasicDBObject("shequ", new BasicDBObject(
-				"$in", new Long[] { shequ })).append("cat", cat);
+				"$in", new Long[] { shequ })).append("cat", new BasicDBObject(
+				"$in", new Integer[] { cat }));
 
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_WORKSHOP)
 				.find(qObj);
@@ -38,12 +43,13 @@ public class WorkshopDao extends BaseDao {
 			String pic = dbObj.getString("pic");
 			shop.setPic(StringUtils.isBlank(pic) ? "" : Qiniu.downloadUrl(pic,
 					Qiniu.getUserDomain()));
-			shop.setDist(dbObj.getString("dist"));
+			shop.setCity(dbObj.getInt("city"));
+			shop.setDist(dbObj.getInt("dist"));
 			shop.setAddr(dbObj.getString("addr"));
 			shop.setTel(dbObj.getString("tel"));
 			shop.setStart(dbObj.getString("start"));
 			shop.setShequ((List<Long>) dbObj.get("shequ"));
-			shop.setCat(dbObj.getInt("cat"));
+			shop.setCat((List<Integer>) dbObj.get("cat"));
 			shop.setNotice(dbObj.getString("notice"));
 
 			list.add(shop);
@@ -71,17 +77,57 @@ public class WorkshopDao extends BaseDao {
 			shop.setId(dbObj.getLong("_id"));
 			shop.setName(dbObj.getString("name"));
 			shop.setOwner(dbObj.getString("owner"));
-			shop.setDist(dbObj.getString("dist"));
 			shop.setAddr(dbObj.getString("addr"));
 			shop.setTel(dbObj.getString("tel"));
 			shop.setStart(dbObj.getString("start"));
 			shop.setNotice(dbObj.getString("notice"));
-			shop.setCat(dbObj.getInt("cat"));
+			shop.setCat((List<Integer>) dbObj.get("cat"));
 
 			map.put(shop.getId(), shop);
 		}
 
 		return map;
+
+	}
+
+	public boolean requestShop(RequestShop shop) {
+
+		DBObject doc = new BasicDBObject();
+		doc.put("_id", IDGenerator.nextval(getDB(), "requestshop"));
+		doc.put("uid", shop.getUid());
+		doc.put("owner", shop.getOwner());
+		doc.put("idcard", shop.getIdcard());
+		doc.put("tel", shop.getTel());
+		doc.put("mail", shop.getMail());
+		doc.put("dist", shop.getDist());
+		doc.put("busi", shop.getBusi());
+		doc.put("exp", shop.getExp());
+		doc.put("desc", shop.getDesc());
+
+		getDBCollection(CollectionConstants.COLL_REQSHOP).insert(doc);
+
+		return true;
+
+	}
+
+	public boolean requestShopExist(RequestShop shop) {
+
+		BasicDBList or = new BasicDBList();
+		or.add(new BasicDBObject().append("idcard", shop.getIdcard()));
+		or.add(new BasicDBObject().append("mail", shop.getMail()));
+		or.add(new BasicDBObject().append("tel", shop.getTel()));
+		if (shop.getUid() != 0) {
+			or.add(new BasicDBObject().append("uid", shop.getUid()));
+		}
+
+		DBObject result = getDBCollection(CollectionConstants.COLL_REQSHOP)
+				.findOne(new BasicDBObject("$or", or));
+
+		if (result == null) {
+			return false;
+		}
+
+		return true;
 
 	}
 

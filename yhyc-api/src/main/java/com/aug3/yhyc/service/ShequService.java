@@ -39,10 +39,10 @@ public class ShequService extends BaseService {
 	@GET
 	@Path("/query")
 	public String queryShequ(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("city") String city,
-			@QueryParam("q") String q) {
+			@QueryParam("token") String token, @QueryParam("city") int city,
+			@QueryParam("dist") int dist, @QueryParam("q") String q) {
 
-		List<Shequ> result = shequDomain.queryShequ(city, q);
+		List<Shequ> result = shequDomain.queryShequ(city, dist, q);
 		return buidResponseSuccess(result);
 	}
 

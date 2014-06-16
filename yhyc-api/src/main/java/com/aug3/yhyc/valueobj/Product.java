@@ -34,6 +34,8 @@ public class Product {
 
 	private String cpic;
 
+	private boolean season;
+
 	// 状态
 	private int sts;
 
@@ -131,6 +133,14 @@ public class Product {
 
 	public void setSts(int sts) {
 		this.sts = sts;
+	}
+
+	public boolean isSeason() {
+		return season;
+	}
+
+	public void setSeason(boolean season) {
+		this.season = season;
 	}
 
 }

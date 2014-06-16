@@ -19,9 +19,9 @@ public class UserDomain {
 		this.userDao = userDao;
 	}
 
-	public User find(User user) {
+	public User login(User user) {
 
-		return userDao.find(user);
+		return userDao.login(user);
 	}
 
 	public User find(long uid) {
@@ -49,12 +49,25 @@ public class UserDomain {
 
 	}
 
-	public boolean exist(User user) {
+	public long exist(User user) {
 		return userDao.exist(user);
 	}
 
 	public long register(User user) {
 		return userDao.create(user);
+	}
+
+	public void update(User user) {
+		userDao.update(user);
+	}
+
+	public long registerTempUser(User user) {
+		long ret = userDao.existByMobile(user.getMobi());
+		if (ret == 0) {
+			return userDao.createTemp(user);
+		} else {
+			return ret;
+		}
 	}
 
 	/**

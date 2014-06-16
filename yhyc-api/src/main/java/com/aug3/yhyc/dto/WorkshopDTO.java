@@ -15,8 +15,6 @@ public class WorkshopDTO implements Serializable {
 
 	private String pic;
 
-	private String dist;
-
 	private String addr;
 
 	private String tel;
@@ -25,7 +23,7 @@ public class WorkshopDTO implements Serializable {
 
 	private String notice;
 
-	private int cat;
+	private List<Integer> cat;
 
 	private List<Shequ> shequ;
 
@@ -61,14 +59,6 @@ public class WorkshopDTO implements Serializable {
 		this.pic = pic;
 	}
 
-	public String getDist() {
-		return dist;
-	}
-
-	public void setDist(String dist) {
-		this.dist = dist;
-	}
-
 	public String getAddr() {
 		return addr;
 	}
@@ -93,11 +83,11 @@ public class WorkshopDTO implements Serializable {
 		this.start = start;
 	}
 
-	public int getCat() {
+	public List<Integer> getCat() {
 		return cat;
 	}
 
-	public void setCat(int cat) {
+	public void setCat(List<Integer> cat) {
 		this.cat = cat;
 	}
 

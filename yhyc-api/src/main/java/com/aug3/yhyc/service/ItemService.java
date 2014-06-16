@@ -12,6 +12,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.aug3.sys.util.JSONUtil;
 import com.aug3.yhyc.base.RespType;
 import com.aug3.yhyc.domain.ItemDomain;
@@ -67,13 +69,13 @@ public class ItemService extends BaseService {
 	@Path("/filter")
 	public String filterItems(@Context HttpServletRequest request,
 			@QueryParam("token") String token,
-			@QueryParam("workshop") long workshop, @QueryParam("cat") int cat) {
+			@QueryParam("workshop") long workshop, @QueryParam("cat") int cat, @QueryParam("type") int type) {
 
 		if (workshop == 0) {
 			return buidResponseResult("invlid param workshop",
 					RespType.INVALID_PARAMETERS);
 		}
-		List<Item> items = itemDomain.filterItems(workshop, cat);
+		List<Item> items = itemDomain.filterItems(workshop, cat, type);
 		return buidResponseSuccess(items);
 	}
 
@@ -114,6 +116,21 @@ public class ItemService extends BaseService {
 			@FormParam("comments") String comments) {
 
 		itemDomain.newComments(JSONUtil.fromJson(comments, CommentReq.class));
+	}
+
+	@GET
+	@Path("/groupbyshop")
+	public String groupItemsByShop(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("items") String items) {
+
+		if (StringUtils.isBlank(items)) {
+			return buidResponseResult("invlid param items",
+					RespType.INVALID_PARAMETERS);
+		}
+		
+		List<ShopItem> shopitems = itemDomain
+				.groupItemsByShop(transfer2Long(items));
+		return buidResponseSuccess(shopitems);
 	}
 
 	@GET

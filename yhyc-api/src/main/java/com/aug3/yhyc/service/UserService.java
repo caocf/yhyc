@@ -33,7 +33,7 @@ public class UserService extends BaseService {
 	public String login(@Context HttpServletRequest request,
 			@FormParam("token") String token, @FormParam("user") String user) {
 
-		User retUser = userDomain.find(JSONUtil.fromJson(user, User.class));
+		User retUser = userDomain.login(JSONUtil.fromJson(user, User.class));
 		if (retUser != null) {
 			return buidResponseResult(retUser, RespType.LOGIN_SUCCESS);
 		} else {
@@ -49,12 +49,18 @@ public class UserService extends BaseService {
 			@FormParam("token") String token, @FormParam("user") String user) {
 
 		User u = JSONUtil.fromJson(user, User.class);
-		if (userDomain.exist(u))
-			return buidResponseResult("user already exists",
-					RespType.USER_EXIST);
+		long ret = userDomain.exist(u);
 
-		long uid = userDomain.register(u);
-		return buidResponseSuccess(uid);
+		if (ret == 0) {
+			long uid = userDomain.register(u);
+			return buidResponseSuccess(uid);
+		} else if (ret < 20) {
+			return buidResponseResult(ret, RespType.USER_EXIST);
+		} else {
+			u.setUid(ret);
+			userDomain.update(u);
+			return buidResponseSuccess(u.getUid());
+		}
 
 	}
 

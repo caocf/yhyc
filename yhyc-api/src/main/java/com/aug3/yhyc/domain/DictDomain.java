@@ -8,6 +8,7 @@ import java.util.Map;
 import com.aug3.sys.cache.SystemCache;
 import com.aug3.yhyc.dao.DictDao;
 import com.aug3.yhyc.valueobj.Category;
+import com.aug3.yhyc.valueobj.Region;
 
 public class DictDomain {
 
@@ -49,6 +50,10 @@ public class DictDomain {
 		}
 
 		return categories;
+	}
+
+	public List<Region> listRegion() {
+		return dictDao.findRegion();
 	}
 
 }

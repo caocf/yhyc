@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.aug3.yhyc.base.CollectionConstants;
 import com.aug3.yhyc.valueobj.Category;
+import com.aug3.yhyc.valueobj.Region;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 
@@ -55,5 +56,29 @@ public class DictDao extends BaseDao {
 		}
 
 		return categories;
+	}
+
+	public List<Region> findRegion() {
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_REGIONS)
+				.find();
+
+		BasicDBObject dbObj;
+		Region region;
+
+		List<Region> list = new ArrayList<Region>();
+
+		while (dbCur.hasNext()) {
+			dbObj = (BasicDBObject) dbCur.next();
+			region = new Region();
+			region.setId(dbObj.getInt("_id"));
+			region.setName(dbObj.getString("name"));
+			region.setP(dbObj.getInt("p"));
+			region.setLevel(dbObj.getInt("level"));
+			list.add(region);
+		}
+
+		return list;
+
 	}
 }

@@ -16,8 +16,10 @@ import org.apache.log4j.Logger;
 
 import com.aug3.sys.util.JSONUtil;
 import com.aug3.yhyc.domain.OrderDomain;
+import com.aug3.yhyc.domain.UserDomain;
 import com.aug3.yhyc.dto.Order;
 import com.aug3.yhyc.dto.Orders;
+import com.aug3.yhyc.valueobj.User;
 
 @Path("/order/")
 @XmlRootElement()
@@ -28,12 +30,22 @@ public class OrderService extends BaseService {
 
 	private OrderDomain orderDomain;
 
+	private UserDomain userDomain;
+
 	public OrderDomain getOrderDomain() {
 		return orderDomain;
 	}
 
 	public void setOrderDomain(OrderDomain orderDomain) {
 		this.orderDomain = orderDomain;
+	}
+
+	public UserDomain getUserDomain() {
+		return userDomain;
+	}
+
+	public void setUserDomain(UserDomain userDomain) {
+		this.userDomain = userDomain;
 	}
 
 	@POST
@@ -44,7 +56,15 @@ public class OrderService extends BaseService {
 			@FormParam("token") String token, @FormParam("uid") long uid,
 			@FormParam("order") String order) {
 		LOG.info(order);
-		orderDomain.newOrder(JSONUtil.fromJson(order, Orders.class));
+		Orders orders = JSONUtil.fromJson(order, Orders.class);
+		if (uid == 0 && orders.getUid() == 0) {
+			User user = new User();
+			user.setName(orders.getDelivery().getRecip());
+			user.setMobi(orders.getDelivery().getMobi());
+			long u = userDomain.registerTempUser(user);
+			orders.setUid(u);
+		}
+		orderDomain.newOrder(orders);
 		return buidResponseSuccess("success!");
 	}
 

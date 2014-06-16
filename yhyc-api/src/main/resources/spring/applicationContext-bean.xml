@@ -85,6 +85,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
 	<bean id="orderService" class="com.aug3.yhyc.service.OrderService">
 		<property name="orderDomain" ref="orderDomain" />
+		<property name="userDomain" ref="userDomain" />
 	</bean>
 
 	<bean id="worksService" class="com.aug3.yhyc.service.WorksService">

@@ -25,6 +25,8 @@ public class ProductDTO {
 
 	private String cpic;
 
+	private boolean season;
+
 	public long getId() {
 		return id;
 	}
@@ -87,6 +89,14 @@ public class ProductDTO {
 
 	public void setCpic(String cpic) {
 		this.cpic = cpic;
+	}
+
+	public boolean isSeason() {
+		return season;
+	}
+
+	public void setSeason(boolean season) {
+		this.season = season;
 	}
 
 }

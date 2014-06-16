@@ -86,17 +86,19 @@ public class ItemDomain {
 	 * 
 	 * @param workshop
 	 * @param cat
-	 *            cat==0 all; cat==1 promotion; cat==2 season;
+	 *            101,102,103,104,105,106
+	 * @param type
+	 *            type==0 all; type==1 promotion; type==2 season;
 	 * @return
 	 */
-	public List<Item> filterItems(long workshop, int cat) {
+	public List<Item> filterItems(long workshop, int cat, int type) {
 
-		if (cat == 0) {
-			return findItemsByWorkshop(workshop);
-		} else if (cat == 1) {
-			return findPromotionItemsByWorkshop(workshop);
+		if (type == 0) {
+			return itemDao.filterItemsByWorkshop(workshop, cat);
+		} else if (type == 1) {
+			return itemDao.filterPromotionItemsByWorkshop(workshop, cat);
 		}
-		return itemDao.filterItems(workshop, cat);
+		return itemDao.filterItems(workshop, type);
 	}
 
 	public ProductItem findItemByID(long itemID) {
@@ -153,7 +155,7 @@ public class ItemDomain {
 		return groupItemsByShop(items);
 	}
 
-	private List<ShopItem> groupItemsByShop(List<Long> itemids) {
+	public List<ShopItem> groupItemsByShop(List<Long> itemids) {
 
 		List<ShopItem> result = new ArrayList<ShopItem>();
 
@@ -190,6 +192,9 @@ public class ItemDomain {
 		prod.setName(p.getName());
 		prod.setPic(p.getPic());
 		prod.setDesc(p.getDesc());
+		prod.setCooked(p.getCooked());
+		prod.setCpic(p.getCpic());
+		prod.setSeason(p.isSeason());
 
 		List<Integer> tagsid = p.getTags();
 		if (tagsid != null) {

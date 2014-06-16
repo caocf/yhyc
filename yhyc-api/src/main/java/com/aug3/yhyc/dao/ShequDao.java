@@ -16,9 +16,10 @@ import com.mongodb.DBCursor;
 
 public class ShequDao extends BaseDao {
 
-	public List<Shequ> findShequ(String city, String q) {
+	public List<Shequ> findShequ(int city, int dist, String q) {
 
-		BasicDBObject qObj = new BasicDBObject("city", city);
+		BasicDBObject qObj = new BasicDBObject("city", city).append("dist",
+				dist);
 		if (StringUtils.isNotBlank(q)) {
 			if (RegexUtils.isLetter(q)) {
 				// TODO db.shequ.ensureIndex( {py: "text"} )
@@ -43,8 +44,8 @@ public class ShequDao extends BaseDao {
 			sq.setId(dbObj.getLong("_id"));
 			sq.setPy(dbObj.getString("py"));
 			sq.setName(dbObj.getString("name"));
-			sq.setCity(dbObj.getString("city"));
-			sq.setDist(dbObj.getString("dist"));
+			sq.setCity(dbObj.getInt("city"));
+			sq.setDist(dbObj.getInt("dist"));
 			sq.setAddr(dbObj.getString("addr"));
 			sq.setDesc(dbObj.getString("desc"));
 			list.add(sq);
@@ -78,8 +79,8 @@ public class ShequDao extends BaseDao {
 			sq.setId(dbObj.getLong("_id"));
 			sq.setPy(dbObj.getString("py"));
 			sq.setName(dbObj.getString("name"));
-			sq.setCity(dbObj.getString("city"));
-			sq.setDist(dbObj.getString("dist"));
+			sq.setCity(dbObj.getInt("city"));
+			sq.setDist(dbObj.getInt("dist"));
 			sq.setAddr(dbObj.getString("addr"));
 			sq.setDesc(dbObj.getString("desc"));
 			resultMap.put(sq.getId(), sq);

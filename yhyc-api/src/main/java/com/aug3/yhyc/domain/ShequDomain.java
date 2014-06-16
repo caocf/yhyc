@@ -17,8 +17,8 @@ public class ShequDomain {
 		this.shequDao = shequDao;
 	}
 
-	public List<Shequ> queryShequ(String city, String q) {
-		return shequDao.findShequ(city, q);
+	public List<Shequ> queryShequ(int city, int dist, String q) {
+		return shequDao.findShequ(city, dist, q);
 	}
 
 }

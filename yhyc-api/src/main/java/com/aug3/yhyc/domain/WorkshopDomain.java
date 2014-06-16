@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.aug3.yhyc.dao.ShequDao;
 import com.aug3.yhyc.dao.WorkshopDao;
+import com.aug3.yhyc.dto.RequestShop;
 import com.aug3.yhyc.dto.WorkshopDTO;
 import com.aug3.yhyc.valueobj.Shequ;
 import com.aug3.yhyc.valueobj.Workshop;
@@ -59,12 +60,11 @@ public class WorkshopDomain {
 			dto.setName(shop.getName());
 			dto.setOwner(shop.getOwner());
 			dto.setPic(shop.getPic());
-			dto.setDist(shop.getDist());
 			dto.setAddr(shop.getAddr());
 			dto.setTel(shop.getTel());
 			dto.setStart(shop.getStart());
 			dto.setNotice(shop.getNotice());
-			dto.setCat(cat);
+			dto.setCat(shop.getCat());
 
 			List<Shequ> sqlist = new ArrayList<Shequ>();
 			for (Long id : shop.getShequ()) {
@@ -74,6 +74,16 @@ public class WorkshopDomain {
 			result.add(dto);
 		}
 		return result;
+	}
+
+	public boolean requestShop(RequestShop shop) {
+		return shopDao.requestShop(shop);
+	}
+	
+	public boolean requestShopExist(RequestShop shop) {
+
+		return shopDao.requestShopExist(shop);
+
 	}
 
 }

@@ -30,9 +30,9 @@ public class Workshop {
 
 	private String idcard;
 
-	private String city;
+	private int city;
 
-	private String dist;
+	private int dist;
 
 	private String addr;
 
@@ -42,7 +42,7 @@ public class Workshop {
 
 	private List<Long> shequ;
 
-	private int cat;
+	private List<Integer> cat;
 
 	private String notice;
 
@@ -129,19 +129,19 @@ public class Workshop {
 		this.idcard = idcard;
 	}
 
-	public String getCity() {
+	public int getCity() {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(int city) {
 		this.city = city;
 	}
 
-	public String getDist() {
+	public int getDist() {
 		return dist;
 	}
 
-	public void setDist(String dist) {
+	public void setDist(int dist) {
 		this.dist = dist;
 	}
 
@@ -177,11 +177,11 @@ public class Workshop {
 		this.shequ = shequ;
 	}
 
-	public int getCat() {
+	public List<Integer> getCat() {
 		return cat;
 	}
 
-	public void setCat(int cat) {
+	public void setCat(List<Integer> cat) {
 		this.cat = cat;
 	}
 

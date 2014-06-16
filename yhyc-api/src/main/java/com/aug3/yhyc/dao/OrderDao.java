@@ -44,7 +44,7 @@ public class OrderDao extends BaseDao {
 		}
 
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(
-				query);
+				query).sort(new BasicDBObject("_id", -1));
 
 		BasicDBObject dbObj;
 		Order myorder;
@@ -80,7 +80,8 @@ public class OrderDao extends BaseDao {
 
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(
 				new BasicDBObject("sid", new BasicDBObject("$in", workshop))
-						.append("sts", status));
+						.append("sts", status)).sort(
+				new BasicDBObject("_id", -1));
 
 		List<Order> list = new ArrayList<Order>();
 

@@ -15,6 +15,8 @@ public enum RespType {
 	LOGIN_FAILED("0998"),
 
 	USER_EXIST("990"),
+	
+	DUPLICATE_RECORD("991"),
 
 	INVALID_PASSWD("997"),
 

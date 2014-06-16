@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.aug3.yhyc.domain.DictDomain;
 import com.aug3.yhyc.dto.CategoryDTO;
 import com.aug3.yhyc.valueobj.Category;
+import com.aug3.yhyc.valueobj.Region;
 
 @Path("/dict/")
 @XmlRootElement()
@@ -39,6 +40,15 @@ public class DictService extends BaseService {
 		CategoryDTO dto = new CategoryDTO();
 		dto.setCategories(categories);
 		return buidResponseSuccess(dto);
+	}
+
+	@GET
+	@Path("/region")
+	public String listRegion(@Context HttpServletRequest request,
+			@QueryParam("token") String token) {
+
+		List<Region> result = dictDomain.listRegion();
+		return buidResponseSuccess(result);
 	}
 
 }

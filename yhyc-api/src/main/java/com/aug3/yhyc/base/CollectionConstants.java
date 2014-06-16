@@ -21,8 +21,12 @@ public class CollectionConstants {
 	public static final String COLL_COMMENTS = "comments";
 
 	public static final String COLL_SHEQU = "shequ";
+	
+	public static final String COLL_REGIONS = "regions";
 
 	public static final String COLL_WORKSHOP = "workshops";
+	
+	public static final String COLL_REQSHOP = "requestshops";
 
 	public static final String COLL_WORKS = "works";
 

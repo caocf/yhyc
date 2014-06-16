@@ -10,9 +10,9 @@ public class Shequ implements Serializable {
 	private String py;
 
 	// 城市
-	private String city;
+	private int city;
 	// 区域
-	private String dist;
+	private int dist;
 	private String addr;
 
 	// 经纬度
@@ -46,19 +46,19 @@ public class Shequ implements Serializable {
 		this.py = py;
 	}
 
-	public String getCity() {
+	public int getCity() {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(int city) {
 		this.city = city;
 	}
 
-	public String getDist() {
+	public int getDist() {
 		return dist;
 	}
 
-	public void setDist(String dist) {
+	public void setDist(int dist) {
 		this.dist = dist;
 	}
 

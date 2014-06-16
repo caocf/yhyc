@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.aug3.yhyc.base.CollectionConstants;
 import com.aug3.yhyc.base.Constants;
 import com.aug3.yhyc.dto.CommentDTO;
@@ -148,8 +150,12 @@ public class ItemDao extends BaseDao {
 			p.setTags((List<Integer>) dbObj.get("tags"));
 			p.setRef((List<Long>) dbObj.get("ref"));
 			p.setDesc(dbObj.getString("desc"));
-			p.setCooked(dbObj.getString("cooked"));
-			p.setCpic(dbObj.getString("cpic"));
+			p.setCooked(dbObj.getString("cook"));
+			String caipu = dbObj.getString("cpic");
+			if (StringUtils.isNotBlank(caipu)) {
+				p.setCpic(getCaipuUrl(dbObj.getString("cpic")));
+			}
+			p.setSeason(dbObj.getBoolean("season", false));
 			p.setSts(dbObj.getInt("sts"));
 		}
 
@@ -185,6 +191,57 @@ public class ItemDao extends BaseDao {
 				new BasicDBObject("_id", new BasicDBObject().append("$gte",
 						workshop * 1000).append("$lte", workshop * 1000 + 999))
 						.append("sid", workshop).append("act", 1)
+						.append("sts", 1));
+
+		BasicDBObject dbObj;
+		while (dbCur.hasNext()) {
+			dbObj = (BasicDBObject) dbCur.next();
+
+			list.add(transferDBObj2Item(dbObj));
+		}
+
+		return list;
+
+	}
+
+	public List<Item> filterItemsByWorkshop(long workshop, int cat) {
+
+		List<Item> list = new ArrayList<Item>();
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
+				new BasicDBObject("_id", new BasicDBObject().append("$gte",
+						workshop * 1000).append("$lte", workshop * 1000 + 999))
+						.append("sid", workshop)
+						.append("pid",
+								new BasicDBObject()
+										.append("$gte", cat * 100000).append(
+												"$lte", cat * 100000 + 99999))
+						.append("sts", 1));
+
+		BasicDBObject dbObj;
+		while (dbCur.hasNext()) {
+			dbObj = (BasicDBObject) dbCur.next();
+
+			list.add(transferDBObj2Item(dbObj));
+		}
+
+		return list;
+
+	}
+
+	public List<Item> filterPromotionItemsByWorkshop(long workshop, int cat) {
+
+		List<Item> list = new ArrayList<Item>();
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
+				new BasicDBObject("_id", new BasicDBObject().append("$gte",
+						workshop * 1000).append("$lte", workshop * 1000 + 999))
+						.append("sid", workshop)
+						.append("act", 1)
+						.append("pid",
+								new BasicDBObject()
+										.append("$gte", cat * 100000).append(
+												"$lte", cat * 100000 + 99999))
 						.append("sts", 1));
 
 		BasicDBObject dbObj;
@@ -340,5 +397,9 @@ public class ItemDao extends BaseDao {
 
 	public String getItemUrl(long itemid) {
 		return Qiniu.downloadUrl(itemid + Constants.PNG, Qiniu.getItemDomain());
+	}
+
+	public String getCaipuUrl(String cookPic) {
+		return Qiniu.downloadUrl(cookPic, Qiniu.getCaipuDomain());
 	}
 }
