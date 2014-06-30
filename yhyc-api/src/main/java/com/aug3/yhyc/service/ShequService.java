@@ -43,7 +43,7 @@ public class ShequService extends BaseService {
 			@QueryParam("dist") int dist, @QueryParam("q") String q) {
 
 		List<Shequ> result = shequDomain.queryShequ(city, dist, q);
-		return buidResponseSuccess(result);
+		return buildResponseSuccess(result);
 	}
 
 }

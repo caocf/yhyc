@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aug3.yhyc.domain.DictDomain;
 import com.aug3.yhyc.dto.CategoryDTO;
+import com.aug3.yhyc.dto.DeliveryTime;
 import com.aug3.yhyc.valueobj.Category;
 import com.aug3.yhyc.valueobj.Region;
 
@@ -39,7 +40,7 @@ public class DictService extends BaseService {
 		Map<Integer, List<Category>> categories = dictDomain.mapCategory();
 		CategoryDTO dto = new CategoryDTO();
 		dto.setCategories(categories);
-		return buidResponseSuccess(dto);
+		return buildResponseSuccess(dto);
 	}
 
 	@GET
@@ -48,7 +49,16 @@ public class DictService extends BaseService {
 			@QueryParam("token") String token) {
 
 		List<Region> result = dictDomain.listRegion();
-		return buidResponseSuccess(result);
+		return buildResponseSuccess(result);
+	}
+
+	@GET
+	@Path("/deliverytime")
+	public String deliverytime(@Context HttpServletRequest request,
+			@QueryParam("token") String token) {
+
+		DeliveryTime dt = dictDomain.deliverytime();
+		return buildResponseSuccess(dt);
 	}
 
 }

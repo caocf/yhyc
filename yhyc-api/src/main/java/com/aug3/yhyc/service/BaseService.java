@@ -12,8 +12,8 @@ import com.google.gson.GsonBuilder;
 
 public abstract class BaseService {
 
-	protected String buidResponseSuccess(Object message) {
-		return buidResponseResult(message, RespType.SUCCESS);
+	protected String buildResponseSuccess(Object message) {
+		return buildResponseResult(message, RespType.SUCCESS);
 	}
 
 	/**
@@ -24,7 +24,7 @@ public abstract class BaseService {
 	 * @param responseTyp
 	 * @return
 	 */
-	protected String buidResponseResult(Object message, RespType responseType) {
+	protected String buildResponseResult(Object message, RespType responseType) {
 		RespObj returnDTO = new RespObj();
 		returnDTO.setCode(responseType.getCode());
 		returnDTO.setType(responseType.toString());
@@ -32,7 +32,7 @@ public abstract class BaseService {
 		return JSONUtil.toJson(returnDTO);
 	}
 
-	protected String buidResponseResult(Object message, RespType responseType,
+	protected String buildResponseResult(Object message, RespType responseType,
 			boolean disableHtmlEscaping) {
 
 		RespObj returnDTO = new RespObj();
@@ -60,8 +60,11 @@ public abstract class BaseService {
 	}
 
 	protected List<Long> transfer2Long(String commaSeparated) {
-		String[] array = commaSeparated.split(",");
 		List<Long> result = new ArrayList<Long>();
+		if (StringUtils.isBlank(commaSeparated)) {
+			return result;
+		}
+		String[] array = commaSeparated.split(",");
 		for (String s : array) {
 			result.add(Long.parseLong(s));
 		}

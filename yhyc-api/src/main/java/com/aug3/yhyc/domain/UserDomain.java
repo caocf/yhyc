@@ -1,5 +1,6 @@
 package com.aug3.yhyc.domain;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.aug3.yhyc.dao.UserDao;
@@ -24,6 +25,11 @@ public class UserDomain {
 		return userDao.login(user);
 	}
 
+	public boolean isUserExist(User user) {
+
+		return userDao.isUserExist(user);
+	}
+
 	public User find(long uid) {
 
 		return userDao.find(uid);
@@ -33,8 +39,12 @@ public class UserDomain {
 		return userDao.findPrefs(uid);
 	}
 
-	public boolean updateUserPrefs(long uid, String field, List<Long> items,
-			int crud) {
+	public void updatePoint(long uid, int district, long shequ) {
+		userDao.updatePoint(uid, district, shequ);
+	}
+
+	public boolean updateUserPrefs(long uid, String field,
+			Collection<Long> items, int crud) {
 
 		switch (crud) {
 		case 1:
@@ -55,6 +65,14 @@ public class UserDomain {
 
 	public long register(User user) {
 		return userDao.create(user);
+	}
+
+	public boolean modifyPassword(String mobi, String mail, String passwd) {
+		return userDao.modifyPassword(mobi, mail, passwd);
+	}
+
+	public boolean confirmPassword(String mail, long t) {
+		return userDao.confirmPassword(mail, t);
 	}
 
 	public void update(User user) {

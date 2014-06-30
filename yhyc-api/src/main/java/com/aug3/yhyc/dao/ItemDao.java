@@ -21,6 +21,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.WriteConcern;
+import com.mongodb.WriteResult;
 
 public class ItemDao extends BaseDao {
 
@@ -163,6 +164,26 @@ public class ItemDao extends BaseDao {
 
 	}
 
+	public boolean updateItem(long workshop, Item item) {
+
+		WriteResult wr = null;
+
+		BasicDBObject updateObj = new BasicDBObject("$set", new BasicDBObject(
+				"name", item.getName()).append("pp", item.getPp())
+				.append("mp", item.getMp()).append("sts", item.getSts())
+				.append("act", item.getAct()));
+
+		wr = getDBCollection(CollectionConstants.COLL_ITEMS).update(
+				new BasicDBObject("_id", item.getId()).append("sid", workshop),
+				updateObj, false, false, WriteConcern.SAFE);
+
+		if (wr != null) {
+			return wr.getN() > 0;
+		}
+
+		return false;
+	}
+
 	public List<Item> findItemsByWorkshop(long workshop) {
 
 		List<Item> list = new ArrayList<Item>();
@@ -170,7 +191,8 @@ public class ItemDao extends BaseDao {
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
 				new BasicDBObject("_id", new BasicDBObject().append("$gte",
 						workshop * 1000).append("$lte", workshop * 1000 + 999))
-						.append("sid", workshop).append("sts", 1));
+						.append("sid", workshop).append("sts",
+								new BasicDBObject("$gte", 1)));
 
 		BasicDBObject dbObj;
 		while (dbCur.hasNext()) {
@@ -191,7 +213,7 @@ public class ItemDao extends BaseDao {
 				new BasicDBObject("_id", new BasicDBObject().append("$gte",
 						workshop * 1000).append("$lte", workshop * 1000 + 999))
 						.append("sid", workshop).append("act", 1)
-						.append("sts", 1));
+						.append("sts", new BasicDBObject("$gte", 1)));
 
 		BasicDBObject dbObj;
 		while (dbCur.hasNext()) {
@@ -204,19 +226,23 @@ public class ItemDao extends BaseDao {
 
 	}
 
-	public List<Item> filterItemsByWorkshop(long workshop, int cat) {
+	public List<Item> filterItemsByWorkshop(long workshop, int cat,
+			boolean allStat) {
 
 		List<Item> list = new ArrayList<Item>();
 
+		BasicDBObject queryObj = new BasicDBObject("_id", new BasicDBObject()
+				.append("$gte", workshop * 1000).append("$lte",
+						workshop * 1000 + 999)).append("sid", workshop).append(
+				"pid",
+				new BasicDBObject().append("$gte", cat * 100000).append("$lte",
+						cat * 100000 + 99999));
+		if (!allStat) {
+			queryObj.append("sts", new BasicDBObject("$gte", 1));
+		}
+
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
-				new BasicDBObject("_id", new BasicDBObject().append("$gte",
-						workshop * 1000).append("$lte", workshop * 1000 + 999))
-						.append("sid", workshop)
-						.append("pid",
-								new BasicDBObject()
-										.append("$gte", cat * 100000).append(
-												"$lte", cat * 100000 + 99999))
-						.append("sts", 1));
+				queryObj);
 
 		BasicDBObject dbObj;
 		while (dbCur.hasNext()) {
@@ -229,20 +255,25 @@ public class ItemDao extends BaseDao {
 
 	}
 
-	public List<Item> filterPromotionItemsByWorkshop(long workshop, int cat) {
+	public List<Item> filterPromotionItemsByWorkshop(long workshop, int cat,
+			boolean allStat) {
 
 		List<Item> list = new ArrayList<Item>();
 
+		BasicDBObject queryObj = new BasicDBObject("_id", new BasicDBObject()
+				.append("$gte", workshop * 1000).append("$lte",
+						workshop * 1000 + 999))
+				.append("sid", workshop)
+				.append("act", 1)
+				.append("pid",
+						new BasicDBObject().append("$gte", cat * 100000)
+								.append("$lte", cat * 100000 + 99999));
+		if (!allStat) {
+			queryObj.append("sts", new BasicDBObject("$gte", 1));
+		}
+
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
-				new BasicDBObject("_id", new BasicDBObject().append("$gte",
-						workshop * 1000).append("$lte", workshop * 1000 + 999))
-						.append("sid", workshop)
-						.append("act", 1)
-						.append("pid",
-								new BasicDBObject()
-										.append("$gte", cat * 100000).append(
-												"$lte", cat * 100000 + 99999))
-						.append("sts", 1));
+				queryObj);
 
 		BasicDBObject dbObj;
 		while (dbCur.hasNext()) {
@@ -255,18 +286,22 @@ public class ItemDao extends BaseDao {
 
 	}
 
-	public List<Item> filterItems(long workshop, int cat) {
+	public List<Item> filterItems(long workshop, int cat, boolean allStat) {
 
 		List<Item> list = new ArrayList<Item>();
 
+		BasicDBObject queryObj = new BasicDBObject("_id", new BasicDBObject()
+				.append("$gte", workshop * 1000).append("$lte",
+						workshop * 1000 + 999)).append("sid", workshop).append(
+				"pid",
+				new BasicDBObject().append("$gte", cat * 1000).append("$lte",
+						cat * 1000 + 999));
+		if (!allStat) {
+			queryObj.append("sts", new BasicDBObject("$gte", 1));
+		}
+
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
-				new BasicDBObject("_id", new BasicDBObject().append("$gte",
-						workshop * 1000).append("$lte", workshop * 1000 + 999))
-						.append("sid", workshop)
-						.append("pid",
-								new BasicDBObject().append("$gte", cat * 1000)
-										.append("$lte", cat * 1000 + 999))
-						.append("sts", 1));
+				queryObj);
 
 		BasicDBObject dbObj;
 		while (dbCur.hasNext()) {
@@ -292,6 +327,7 @@ public class ItemDao extends BaseDao {
 		item.setPic(getItemUrl(item.getPid()));
 		item.setFav(dbObj.getLong("fav"));
 		item.setSales(dbObj.getLong("sale"));
+		item.setSts(dbObj.getInt("sts"));
 		return item;
 	}
 

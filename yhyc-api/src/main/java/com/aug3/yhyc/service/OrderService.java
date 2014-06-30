@@ -1,6 +1,8 @@
 package com.aug3.yhyc.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
@@ -12,11 +14,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.aug3.sys.util.JSONUtil;
+import com.aug3.yhyc.base.RespType;
 import com.aug3.yhyc.domain.OrderDomain;
+import com.aug3.yhyc.domain.OrderStatus;
 import com.aug3.yhyc.domain.UserDomain;
+import com.aug3.yhyc.dto.ItemDTO;
 import com.aug3.yhyc.dto.Order;
 import com.aug3.yhyc.dto.Orders;
 import com.aug3.yhyc.valueobj.User;
@@ -64,8 +70,19 @@ public class OrderService extends BaseService {
 			long u = userDomain.registerTempUser(user);
 			orders.setUid(u);
 		}
-		orderDomain.newOrder(orders);
-		return buidResponseSuccess("success!");
+		List<Long> orderids = orderDomain.newOrder(orders);
+
+		Set<Long> itemids = new HashSet<Long>();
+		Set<Long> shops = orders.getItems().keySet();
+		for (Long shop : shops) {
+			List<ItemDTO> items = orders.getItems().get(shop);
+			for (ItemDTO i : items) {
+				itemids.add(i.getId());
+			}
+		}
+		userDomain.updateUserPrefs(orders.getUid(), "cart", itemids, 2);
+
+		return buildResponseSuccess(orderids);
 	}
 
 	@GET
@@ -76,7 +93,33 @@ public class OrderService extends BaseService {
 
 		List<Order> orders = orderDomain.listOrders(uid, status);
 
-		return buidResponseSuccess(orders);
+		return buildResponseSuccess(orders);
+	}
+
+	@GET
+	@Path("/listbyids")
+	public String listOrdersByID(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("id") String id,
+			@QueryParam("status") int status) {
+
+		if (StringUtils.isBlank(id)) {
+			return buildResponseResult("invlid param id",
+					RespType.INVALID_PARAMETERS);
+		}
+
+		List<Order> orders = orderDomain.listOrdersByID(transfer2Long(id),
+				status);
+
+		return buildResponseSuccess(orders);
+	}
+
+	@GET
+	@Path("/show")
+	public String showOrder(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("id") long id) {
+
+		Order order = orderDomain.showOrder(id);
+		return buildResponseSuccess(order);
 	}
 
 	/**
@@ -95,25 +138,18 @@ public class OrderService extends BaseService {
 			@QueryParam("status") int status) {
 
 		List<Order> orders = orderDomain.listOrdersByWorkshop(workshop, status);
-		return buidResponseSuccess(orders);
-	}
-
-	@GET
-	@Path("/show")
-	public String showOrder(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("id") long id) {
-
-		Order order = orderDomain.showOrder(id);
-		return buidResponseSuccess(order);
+		return buildResponseSuccess(orders);
 	}
 
 	@GET
 	@Path("/deliver")
 	public String deliverOrder(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("id") long id) {
+			@QueryParam("token") String token, @QueryParam("order") long order) {
 
-		orderDomain.deliverOrder(id);
-		return buidResponseSuccess("success");
+		int n = orderDomain.editOrderStatus(order,
+				OrderStatus.DELIVERING.getValue());
+
+		return buildResponseSuccess(n);
 	}
 
 	/**
@@ -133,7 +169,7 @@ public class OrderService extends BaseService {
 
 		int n = orderDomain.editOrderStatus(order, status);
 
-		return buidResponseSuccess(n);
+		return buildResponseSuccess(n);
 	}
 
 }

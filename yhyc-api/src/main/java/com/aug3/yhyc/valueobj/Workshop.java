@@ -26,7 +26,9 @@ public class Workshop {
 	// 商品质量
 	private double quality;
 
-	private String owner;
+	private long owner;
+
+	private List<Long> emp;
 
 	private String idcard;
 
@@ -113,12 +115,20 @@ public class Workshop {
 		this.name = name;
 	}
 
-	public String getOwner() {
+	public long getOwner() {
 		return owner;
 	}
 
-	public void setOwner(String owner) {
+	public void setOwner(long owner) {
 		this.owner = owner;
+	}
+
+	public List<Long> getEmp() {
+		return emp;
+	}
+
+	public void setEmp(List<Long> emp) {
+		this.emp = emp;
 	}
 
 	public String getIdcard() {

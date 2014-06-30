@@ -74,6 +74,10 @@ public class ItemDomain {
 		this.orderDao = orderDao;
 	}
 
+	public boolean updateItem(long workshop, Item item) {
+		return itemDao.updateItem(workshop, item);
+	}
+	
 	public List<Item> findItemsByWorkshop(long workshop) {
 		return itemDao.findItemsByWorkshop(workshop);
 	}
@@ -91,14 +95,14 @@ public class ItemDomain {
 	 *            type==0 all; type==1 promotion; type==2 season;
 	 * @return
 	 */
-	public List<Item> filterItems(long workshop, int cat, int type) {
+	public List<Item> filterItems(long workshop, int cat, int type, boolean allStat) {
 
 		if (type == 0) {
-			return itemDao.filterItemsByWorkshop(workshop, cat);
+			return itemDao.filterItemsByWorkshop(workshop, cat, allStat);
 		} else if (type == 1) {
-			return itemDao.filterPromotionItemsByWorkshop(workshop, cat);
+			return itemDao.filterPromotionItemsByWorkshop(workshop, cat, allStat);
 		}
-		return itemDao.filterItems(workshop, type);
+		return itemDao.filterItems(workshop, type, allStat);
 	}
 
 	public ProductItem findItemByID(long itemID) {
@@ -137,7 +141,7 @@ public class ItemDomain {
 			itemDao.newComment(item, comment);
 		}
 
-		orderDao.updateStatus(commentReq.getOrderid(), 6);
+		orderDao.updateStatus(commentReq.getOrderid(), OrderStatus.COMMENT.getValue());
 
 		return true;
 	}
@@ -173,7 +177,7 @@ public class ItemDomain {
 				}
 			}
 
-			Map<Long, WorkshopDTO> shops = shopDao.findByID(shopitems.keySet());
+			Map<Long, WorkshopDTO> shops = shopDao.findByIDs(shopitems.keySet());
 
 			for (Long sid : shopitems.keySet()) {
 				ShopItem si = new ShopItem();

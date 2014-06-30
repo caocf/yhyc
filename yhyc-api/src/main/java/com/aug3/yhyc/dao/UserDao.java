@@ -2,15 +2,22 @@ package com.aug3.yhyc.dao;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.aug3.sys.util.DateUtil;
 import com.aug3.sys.util.EncryptUtil;
 import com.aug3.yhyc.base.CollectionConstants;
+import com.aug3.yhyc.base.Constants;
 import com.aug3.yhyc.dto.UserPrefs;
+import com.aug3.yhyc.mail.MailSender;
+import com.aug3.yhyc.util.ConfigManager;
 import com.aug3.yhyc.util.IDGenerator;
 import com.aug3.yhyc.util.Qiniu;
 import com.aug3.yhyc.valueobj.User;
@@ -27,8 +34,7 @@ public class UserDao extends BaseDao {
 
 	public User login(User user) {
 
-		BasicDBObject dbObj = new BasicDBObject().append("password",
-				user.getPassword());
+		BasicDBObject dbObj = new BasicDBObject();
 
 		if (user.getUid() != 0) {
 			dbObj.append("_id", user.getUid());
@@ -36,6 +42,12 @@ public class UserDao extends BaseDao {
 			dbObj.append("mobi", user.getMobi());
 		} else if (StringUtils.isNotBlank(user.getMail())) {
 			dbObj.append("mail", user.getMail());
+		}
+
+		dbObj.append("password", user.getPassword());
+
+		if (user.getType() == 99) {
+			dbObj.append("type", user.getType());
 		}
 
 		DBObject userObj = getDBCollection(CollectionConstants.COLL_USERS)
@@ -48,7 +60,34 @@ public class UserDao extends BaseDao {
 			return buildUser(result, false);
 
 		} else {
+
 			return null;
+		}
+
+	}
+
+	public boolean isUserExist(User user) {
+
+		BasicDBObject dbObj = new BasicDBObject();
+
+		if (user.getUid() != 0) {
+			dbObj.append("_id", user.getUid());
+		} else if (StringUtils.isNotBlank(user.getMobi())) {
+			dbObj.append("mobi", user.getMobi());
+		} else if (StringUtils.isNotBlank(user.getMail())) {
+			dbObj.append("mail", user.getMail());
+		}
+
+		long count = getDBCollection(CollectionConstants.COLL_USERS).count(
+				dbObj);
+
+		if (count == 0) {
+
+			return false;
+
+		} else {
+
+			return true;
 		}
 
 	}
@@ -85,6 +124,8 @@ public class UserDao extends BaseDao {
 		user.setMobi(dbObj.getString("mobi"));
 		user.setMail(dbObj.getString("mail"));
 		user.setAc(dbObj.containsField("ac") ? dbObj.getInt("ac") : 10);
+		user.setShequ(dbObj.containsField("shequ") ? dbObj.getLong("shequ") : 0);
+		user.setDist(dbObj.containsField("dist") ? dbObj.getInt("dist") : 0);
 
 		String avatar = dbObj.getString("pic");
 
@@ -156,6 +197,7 @@ public class UserDao extends BaseDao {
 		dbObj.put("password", user.getPassword());
 		dbObj.put("mobi", user.getMobi());
 		dbObj.put("mail", user.getMail());
+		dbObj.put("job", user.getJob());
 		dbObj.put("fav", new Long[] {});
 		dbObj.put("cart", new Long[] {});
 		dbObj.put("ac", 10);
@@ -164,6 +206,50 @@ public class UserDao extends BaseDao {
 
 		getDBCollection(CollectionConstants.COLL_USERS).insert(dbObj);
 		return uid;
+	}
+
+	public boolean modifyPassword(String mobi, String mail, String passwd) {
+
+		int x = new Random().nextInt(7);
+		x += 1;
+		long t = System.currentTimeMillis() + 12 * 3600 * 1000 + x * 1016;
+
+		getDBCollection(CollectionConstants.COLL_USERS).update(
+				new BasicDBObject("mail", mail).append("mobi", mobi),
+				new BasicDBObject("$set", new BasicDBObject("upwd", passwd)
+						.append("upt", t)), false, false, WriteConcern.SAFE);
+
+		MailSender.getInstance().sendPasswordNotification(mail, t);
+
+		return true;
+	}
+
+	public boolean confirmPassword(String mail, long t) {
+
+		DBObject dbObj = getDBCollection(CollectionConstants.COLL_USERS)
+				.findOne(
+						new BasicDBObject().append("mail", mail).append("upt",
+								t));
+
+		if (dbObj == null) {
+			return false;
+		}
+
+		if (System.currentTimeMillis() > t) {
+			return false;
+		}
+
+		String pwd = (String) dbObj.get("upwd");
+		String pwd_origin = (String) dbObj.get("password");
+
+		getDBCollection(CollectionConstants.COLL_USERS).update(
+				new BasicDBObject("mail", mail),
+				new BasicDBObject("$set", new BasicDBObject("password", pwd)
+						.append("upwd", pwd_origin).append("upt",
+								System.currentTimeMillis())), false, false,
+				WriteConcern.SAFE);
+
+		return true;
 	}
 
 	public void update(User user) {
@@ -233,10 +319,39 @@ public class UserDao extends BaseDao {
 
 		}
 
+		String u = ConfigManager.getProperties().getProperty("urls");
+		if (StringUtils.isNotBlank(u)) {
+			String[] files = u.split(";");
+			Map<String, String> urls = new HashMap<String, String>();
+			for (String fn : files) {
+				urls.put(
+						fn,
+						Qiniu.downloadUrl(fn + Constants.PNG,
+								Qiniu.getCaipuDomain()));
+			}
+			userPrefs.setUrls(urls);
+		}
+
 		return userPrefs;
 	}
 
-	public boolean addUserPrefs(long uid, String field, List<Long> items) {
+	public void updatePoint(long uid, int district, long shequ) {
+
+		BasicDBObject updateObj = new BasicDBObject();
+		if (district > 0) {
+			updateObj.append("dist", district);
+		}
+		if (shequ > 0) {
+			updateObj.append("shequ", shequ);
+		}
+
+		getDBCollection(CollectionConstants.COLL_USERS).update(
+				new BasicDBObject("_id", uid),
+				new BasicDBObject("$set", updateObj));
+
+	}
+
+	public boolean addUserPrefs(long uid, String field, Collection<Long> items) {
 
 		if (!prefs_field.contains(field) || items == null) {
 			return false;
@@ -244,13 +359,8 @@ public class UserDao extends BaseDao {
 
 		BasicDBObject updateObj = new BasicDBObject();
 
-		if (items.size() == 1) {
-			updateObj.append("$addToSet",
-					new BasicDBObject(field, items.get(0)));
-		} else {
-			updateObj.append("$addToSet", new BasicDBObject(field,
-					new BasicDBObject("$each", items)));
-		}
+		updateObj.append("$addToSet", new BasicDBObject(field,
+				new BasicDBObject("$each", items)));
 
 		getDBCollection(CollectionConstants.COLL_USERS).update(
 				new BasicDBObject("_id", uid), updateObj, false, false,
@@ -260,7 +370,8 @@ public class UserDao extends BaseDao {
 
 	}
 
-	public boolean removeUserPrefs(long uid, String field, List<Long> items) {
+	public boolean removeUserPrefs(long uid, String field,
+			Collection<Long> items) {
 
 		if (!prefs_field.contains(field) || items == null) {
 			return false;
@@ -277,7 +388,8 @@ public class UserDao extends BaseDao {
 
 	}
 
-	public boolean updateUserPrefs(long uid, String field, List<Long> items) {
+	public boolean updateUserPrefs(long uid, String field,
+			Collection<Long> items) {
 
 		if (!prefs_field.contains(field) || items == null) {
 			return false;

@@ -8,6 +8,9 @@ public class Region implements Serializable {
 	private String name;
 	private int p;
 	private int level;
+	private int sts;
+	// 默认体验社区
+	private long shequ;
 
 	public int getId() {
 		return id;
@@ -39,6 +42,27 @@ public class Region implements Serializable {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+
+	public int getSts() {
+		return sts;
+	}
+
+	public void setSts(int sts) {
+		this.sts = sts;
+	}
+
+	public long getShequ() {
+		return shequ;
+	}
+
+	public void setShequ(long shequ) {
+		this.shequ = shequ;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof Region && ((Region) o).getId() == id;
 	}
 
 }

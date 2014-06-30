@@ -11,7 +11,7 @@ public class WorkshopDTO implements Serializable {
 
 	private String name;
 
-	private String owner;
+	private long owner;
 
 	private String pic;
 
@@ -43,11 +43,11 @@ public class WorkshopDTO implements Serializable {
 		this.name = name;
 	}
 
-	public String getOwner() {
+	public long getOwner() {
 		return owner;
 	}
 
-	public void setOwner(String owner) {
+	public void setOwner(long owner) {
 		this.owner = owner;
 	}
 

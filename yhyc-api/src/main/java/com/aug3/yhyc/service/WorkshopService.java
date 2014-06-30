@@ -48,7 +48,47 @@ public class WorkshopService extends BaseService {
 			@QueryParam("cat") int cat) {
 
 		List<WorkshopDTO> workshops = shopDomain.queryWorkshops(shequ, cat);
-		return buidResponseSuccess(workshops);
+		return buildResponseSuccess(workshops);
+	}
+
+	@GET
+	@Path("/my")
+	public String getMyWorkshops(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("uid") long uid) {
+
+		List<WorkshopDTO> workshops = shopDomain.findWorkshops(uid);
+		return buildResponseSuccess(workshops);
+	}
+
+	@GET
+	@Path("/some")
+	public String getSomeShop(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("uid") long uid,
+			@QueryParam("workshop") long workshop) {
+
+		WorkshopDTO result = shopDomain.getShopByID(uid, workshop);
+		return buildResponseSuccess(result);
+	}
+
+	@GET
+	@Path("/announce")
+	public String getShopAnnouncement(@Context HttpServletRequest request,
+			@QueryParam("token") String token,
+			@QueryParam("workshop") long workshop) {
+
+		String notice = shopDomain.getShopAnnouncement(workshop);
+		return buildResponseSuccess(notice);
+	}
+
+	@POST
+	@Path("/announce")
+	public String updateShopAnnouncement(@Context HttpServletRequest request,
+			@FormParam("token") String token,
+			@FormParam("workshop") long workshop,
+			@FormParam("announcement") String announcement) {
+
+		boolean boo = shopDomain.updateShopAnnouncement(workshop, announcement);
+		return buildResponseSuccess(boo);
 	}
 
 	@POST
@@ -61,12 +101,12 @@ public class WorkshopService extends BaseService {
 		RequestShop reqShop = JSONUtil.fromJson(shop, RequestShop.class);
 
 		if (shopDomain.requestShopExist(reqShop)) {
-			return buidResponseResult("duplicate mobile/mail/idcard",
+			return buildResponseResult("duplicate mobile/mail/idcard",
 					RespType.DUPLICATE_RECORD);
 		} else {
 			shopDomain.requestShop(reqShop);
 
-			return buidResponseSuccess("success!");
+			return buildResponseSuccess("success!");
 		}
 	}
 

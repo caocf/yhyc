@@ -9,10 +9,14 @@ public class User {
 	private String password;
 	private String mobi;
 	private String mail;
+	private String job;
 	private int ac;
 	private boolean hasAvatar;
 	private String avatar;
 	private List<String> industry;
+	private int type;
+	private int dist;
+	private long shequ;
 
 	public long getUid() {
 		return uid;
@@ -54,6 +58,14 @@ public class User {
 		this.mail = mail;
 	}
 
+	public String getJob() {
+		return job;
+	}
+
+	public void setJob(String job) {
+		this.job = job;
+	}
+
 	public int getAc() {
 		return ac;
 	}
@@ -84,6 +96,30 @@ public class User {
 
 	public void setIndustry(List<String> industry) {
 		this.industry = industry;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public int getDist() {
+		return dist;
+	}
+
+	public void setDist(int dist) {
+		this.dist = dist;
+	}
+
+	public long getShequ() {
+		return shequ;
+	}
+
+	public void setShequ(long shequ) {
+		this.shequ = shequ;
 	}
 
 }

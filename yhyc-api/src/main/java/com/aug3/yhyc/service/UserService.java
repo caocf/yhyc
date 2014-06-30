@@ -16,6 +16,7 @@ import com.aug3.sys.util.JSONUtil;
 import com.aug3.yhyc.base.RespType;
 import com.aug3.yhyc.domain.UserDomain;
 import com.aug3.yhyc.dto.UserPrefs;
+import com.aug3.yhyc.util.ConfigManager;
 import com.aug3.yhyc.valueobj.DeliveryContact;
 import com.aug3.yhyc.valueobj.User;
 
@@ -25,6 +26,10 @@ import com.aug3.yhyc.valueobj.User;
 public class UserService extends BaseService {
 
 	private UserDomain userDomain;
+	private static String user_not_exist = ConfigManager.getProperties()
+			.getProperty("user.notexist");
+	private static String passwd_not_correct = ConfigManager.getProperties()
+			.getProperty("user.passwd.notcorrect");
 
 	@POST
 	@Path("/login")
@@ -33,11 +38,19 @@ public class UserService extends BaseService {
 	public String login(@Context HttpServletRequest request,
 			@FormParam("token") String token, @FormParam("user") String user) {
 
-		User retUser = userDomain.login(JSONUtil.fromJson(user, User.class));
+		User u = JSONUtil.fromJson(user, User.class);
+		User retUser = userDomain.login(u);
 		if (retUser != null) {
-			return buidResponseResult(retUser, RespType.LOGIN_SUCCESS);
+			return buildResponseResult(retUser, RespType.LOGIN_SUCCESS);
 		} else {
-			return buidResponseResult("N", RespType.LOGIN_FAILED);
+			if (userDomain.isUserExist(u)) {
+				return buildResponseResult(passwd_not_correct,
+						RespType.LOGIN_FAILED);
+			} else {
+				return buildResponseResult(user_not_exist,
+						RespType.LOGIN_FAILED);
+			}
+
 		}
 	}
 
@@ -53,15 +66,46 @@ public class UserService extends BaseService {
 
 		if (ret == 0) {
 			long uid = userDomain.register(u);
-			return buidResponseSuccess(uid);
+			return buildResponseSuccess(uid);
 		} else if (ret < 20) {
-			return buidResponseResult(ret, RespType.USER_EXIST);
+			return buildResponseResult(ret, RespType.USER_EXIST);
 		} else {
 			u.setUid(ret);
 			userDomain.update(u);
-			return buidResponseSuccess(u.getUid());
+			return buildResponseSuccess(u.getUid());
 		}
 
+	}
+
+	@GET
+	@Path("/password/change")
+	public String modifyPassword(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("mobi") String mobi,
+			@QueryParam("mail") String mail, @QueryParam("passwd") String passwd) {
+
+		boolean bool = userDomain.modifyPassword(mobi, mail, passwd);
+		if (bool)
+			return buildResponseResult("activate the link sent to your mail",
+					RespType.SUCCESS);
+		else
+			return buildResponseResult("failed to modify password",
+					RespType.FAILED);
+	}
+
+	@GET
+	@Path("/password/confirm")
+	public String confirmPassword(@Context HttpServletRequest request,
+			@QueryParam("token") String token, @QueryParam("mail") String mail,
+			@QueryParam("key") String key) {
+
+		boolean bool = userDomain.confirmPassword(mail, Long.parseLong(key));
+
+		if (bool)
+			return ConfigManager.getProperties().getProperty(
+					"mail.chgpwd.success");
+		else
+			return ConfigManager.getProperties()
+					.getProperty("mail.chgpwd.fail");
 	}
 
 	@GET
@@ -70,7 +114,7 @@ public class UserService extends BaseService {
 			@QueryParam("token") String token, @QueryParam("uid") long uid) {
 
 		User user = userDomain.find(uid);
-		return buidResponseSuccess(user);
+		return buildResponseSuccess(user);
 	}
 
 	@GET
@@ -79,9 +123,30 @@ public class UserService extends BaseService {
 			@QueryParam("token") String token, @QueryParam("uid") long uid) {
 
 		UserPrefs userPrefs = userDomain.getUserPrefs(uid);
-		return buidResponseSuccess(userPrefs);
+		return buildResponseSuccess(userPrefs);
 	}
 
+	@POST
+	@Path("/point")
+	public String updateUserPoint(@Context HttpServletRequest request,
+			@FormParam("token") String token, @FormParam("uid") long uid,
+			@FormParam("dist") int district, @FormParam("shequ") long shequ) {
+
+		userDomain.updatePoint(uid, district, shequ);
+		return buildResponseSuccess("OK");
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @param token
+	 * @param uid
+	 * @param field
+	 * @param items
+	 * @param type
+	 *            1. add; 2. remove; 3. update
+	 * @return
+	 */
 	@POST
 	@Path("/prefs/update")
 	public String addUserPrefs(@Context HttpServletRequest request,
@@ -91,7 +156,7 @@ public class UserService extends BaseService {
 
 		boolean result = userDomain.updateUserPrefs(uid, field,
 				transfer2Long(items), type);
-		return buidResponseSuccess(result);
+		return buildResponseSuccess(result);
 	}
 
 	// TODO
@@ -101,7 +166,7 @@ public class UserService extends BaseService {
 			@QueryParam("token") String token, @QueryParam("uid") long uid) {
 
 		List<DeliveryContact> contacts = userDomain.fetchContacts(uid);
-		return buidResponseSuccess(contacts);
+		return buildResponseSuccess(contacts);
 	}
 
 	public UserDomain getUserDomain() {

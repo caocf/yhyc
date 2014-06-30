@@ -18,6 +18,8 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.WriteConcern;
+import com.mongodb.WriteResult;
 
 public class WorkshopDao extends BaseDao {
 
@@ -33,33 +35,81 @@ public class WorkshopDao extends BaseDao {
 				.find(qObj);
 
 		BasicDBObject dbObj;
-		Workshop shop;
-		while (dbCur.hasNext()) {
-			dbObj = (BasicDBObject) dbCur.next();
-			shop = new Workshop();
-			shop.setId(dbObj.getLong("_id"));
-			shop.setName(dbObj.getString("name"));
-			shop.setOwner(dbObj.getString("owner"));
-			String pic = dbObj.getString("pic");
-			shop.setPic(StringUtils.isBlank(pic) ? "" : Qiniu.downloadUrl(pic,
-					Qiniu.getUserDomain()));
-			shop.setCity(dbObj.getInt("city"));
-			shop.setDist(dbObj.getInt("dist"));
-			shop.setAddr(dbObj.getString("addr"));
-			shop.setTel(dbObj.getString("tel"));
-			shop.setStart(dbObj.getString("start"));
-			shop.setShequ((List<Long>) dbObj.get("shequ"));
-			shop.setCat((List<Integer>) dbObj.get("cat"));
-			shop.setNotice(dbObj.getString("notice"));
 
-			list.add(shop);
+		while (dbCur.hasNext()) {
+
+			dbObj = (BasicDBObject) dbCur.next();
+
+			list.add(newWorkshopByDBObj(dbObj));
 		}
 
 		return list;
 
 	}
 
-	public Map<Long, WorkshopDTO> findByID(Collection<Long> ids) {
+	public List<Workshop> findShopByUserID(long uid) {
+
+		List<Workshop> list = new ArrayList<Workshop>();
+
+		BasicDBList or = new BasicDBList();
+		or.add(new BasicDBObject().append("owner", uid));
+		or.add(new BasicDBObject().append("emp", new BasicDBObject("$in",
+				new Long[] { uid })));
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_WORKSHOP)
+				.find(new BasicDBObject("$or", or));
+
+		BasicDBObject dbObj;
+
+		while (dbCur.hasNext()) {
+
+			dbObj = (BasicDBObject) dbCur.next();
+
+			list.add(newWorkshopByDBObj(dbObj));
+		}
+
+		return list;
+
+	}
+
+	private Workshop newWorkshopByDBObj(BasicDBObject dbObj) {
+
+		Workshop shop = new Workshop();
+		shop.setId(dbObj.getLong("_id"));
+		shop.setName(dbObj.getString("name"));
+		shop.setOwner(dbObj.getLong("owner"));
+		shop.setEmp((List<Long>) dbObj.get("emp"));
+		String pic = dbObj.getString("pic");
+		shop.setPic(StringUtils.isBlank(pic) ? "" : Qiniu.downloadUrl(pic,
+				Qiniu.getUserDomain()));
+		shop.setCity(dbObj.getInt("city"));
+		shop.setDist(dbObj.getInt("dist"));
+		shop.setAddr(dbObj.getString("addr"));
+		shop.setTel(dbObj.getString("tel"));
+		shop.setStart(dbObj.getString("start"));
+		shop.setShequ((List<Long>) dbObj.get("shequ"));
+		shop.setCat((List<Integer>) dbObj.get("cat"));
+		shop.setNotice(dbObj.getString("notice"));
+
+		return shop;
+	}
+
+	private WorkshopDTO newWorkshopDTO(BasicDBObject dbObj) {
+
+		WorkshopDTO shop = new WorkshopDTO();
+		shop.setId(dbObj.getLong("_id"));
+		shop.setName(dbObj.getString("name"));
+		shop.setOwner(dbObj.getLong("owner"));
+		shop.setAddr(dbObj.getString("addr"));
+		shop.setTel(dbObj.getString("tel"));
+		shop.setStart(dbObj.getString("start"));
+		shop.setNotice(dbObj.getString("notice"));
+		shop.setCat((List<Integer>) dbObj.get("cat"));
+
+		return shop;
+	}
+
+	public Map<Long, WorkshopDTO> findByIDs(Collection<Long> ids) {
 
 		BasicDBObject qObj = new BasicDBObject("_id", new BasicDBObject("$in",
 				ids));
@@ -73,21 +123,60 @@ public class WorkshopDao extends BaseDao {
 		while (dbCur.hasNext()) {
 			dbObj = (BasicDBObject) dbCur.next();
 
-			shop = new WorkshopDTO();
-			shop.setId(dbObj.getLong("_id"));
-			shop.setName(dbObj.getString("name"));
-			shop.setOwner(dbObj.getString("owner"));
-			shop.setAddr(dbObj.getString("addr"));
-			shop.setTel(dbObj.getString("tel"));
-			shop.setStart(dbObj.getString("start"));
-			shop.setNotice(dbObj.getString("notice"));
-			shop.setCat((List<Integer>) dbObj.get("cat"));
+			shop = newWorkshopDTO(dbObj);
 
 			map.put(shop.getId(), shop);
 		}
 
 		return map;
 
+	}
+
+	public WorkshopDTO findByID(long uid, long workshop) {
+
+		BasicDBList or = new BasicDBList();
+		or.add(new BasicDBObject().append("owner", uid));
+		or.add(new BasicDBObject().append("emp", new BasicDBObject("$in",
+				new Long[] { uid })));
+
+		BasicDBObject qObj = new BasicDBObject("_id", workshop).append("$or",
+				or);
+
+		DBObject resultObj = getDBCollection(CollectionConstants.COLL_WORKSHOP)
+				.findOne(qObj);
+
+		if (resultObj != null) {
+			BasicDBObject dbObj = (BasicDBObject) resultObj;
+
+			return newWorkshopDTO(dbObj);
+		}
+
+		return null;
+
+	}
+
+	public boolean updateShopAnnouncement(long shop, String announcement) {
+		WriteResult wr = getDBCollection(CollectionConstants.COLL_WORKSHOP)
+				.update(new BasicDBObject("_id", shop),
+						new BasicDBObject("$set", new BasicDBObject("notice",
+								announcement)), false, false, WriteConcern.SAFE);
+
+		if (wr != null) {
+			return wr.getN() > 0;
+		}
+
+		return false;
+	}
+
+	public String getShopAnnouncement(long shop) {
+		DBObject dbObj = getDBCollection(CollectionConstants.COLL_WORKSHOP)
+				.findOne(new BasicDBObject("_id", shop));
+
+		if (dbObj != null) {
+			return ((BasicDBObject) dbObj).getString("notice");
+		} else {
+			return "";
+		}
 	}
 
 	public boolean requestShop(RequestShop shop) {

@@ -40,6 +40,27 @@ public class WorkshopDomain {
 
 		List<Workshop> list = shopDao.findByShequ(shequ, cat);
 
+		List<WorkshopDTO> result = new ArrayList<WorkshopDTO>();
+		if (list != null && !list.isEmpty()) {
+			result = mapWorkshop2DTO(list);
+		}
+
+		return result;
+	}
+
+	public List<WorkshopDTO> findWorkshops(long uid) {
+
+		List<Workshop> list = shopDao.findShopByUserID(uid);
+
+		List<WorkshopDTO> result = new ArrayList<WorkshopDTO>();
+		if (list != null && !list.isEmpty()) {
+			result = mapWorkshop2DTO(list);
+		}
+
+		return result;
+	}
+
+	private List<WorkshopDTO> mapWorkshop2DTO(List<Workshop> list) {
 		Set<Long> shequids = new HashSet<Long>();
 		for (Workshop shop : list) {
 			shequids.addAll(shop.getShequ());
@@ -76,10 +97,22 @@ public class WorkshopDomain {
 		return result;
 	}
 
+	public boolean updateShopAnnouncement(long shop, String announcement) {
+		return shopDao.updateShopAnnouncement(shop, announcement);
+	}
+
+	public WorkshopDTO getShopByID(long uid, long shop) {
+		return shopDao.findByID(uid, shop);
+	}
+
+	public String getShopAnnouncement(long shop) {
+		return shopDao.getShopAnnouncement(shop);
+	}
+
 	public boolean requestShop(RequestShop shop) {
 		return shopDao.requestShop(shop);
 	}
-	
+
 	public boolean requestShopExist(RequestShop shop) {
 
 		return shopDao.requestShopExist(shop);

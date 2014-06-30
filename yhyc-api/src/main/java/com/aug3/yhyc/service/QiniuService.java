@@ -29,13 +29,13 @@ public class QiniuService extends BaseService {
 		} else if ("user".equalsIgnoreCase(bucket)) {
 			bucket = Qiniu.getUserBucket();
 		} else {
-			return buidResponseResult("wrong parameter bucket",
+			return buildResponseResult("wrong parameter bucket",
 					RespType.INVALID_PARAMETERS);
 		}
 
 		String uptoken = Qiniu.uptoken(bucket, key);
 
-		return buidResponseSuccess(uptoken);
+		return buildResponseSuccess(uptoken);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class QiniuService extends BaseService {
 		Map<String, String> urlMap = Qiniu.downloadUrls(fn,
 				Qiniu.getItemDomain());
 
-		return buidResponseResult(urlMap, RespType.SUCCESS, true);
+		return buildResponseResult(urlMap, RespType.SUCCESS, true);
 	}
 
 }

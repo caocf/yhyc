@@ -41,7 +41,7 @@ public class WorksService extends BaseService {
 	public String newWorks(@Context HttpServletRequest request,
 			@FormParam("token") String token, @FormParam("works") String works) {
 		worksDomain.newWorks(JSONUtil.fromJson(works, Works.class));
-		return buidResponseSuccess("success!");
+		return buildResponseSuccess("success!");
 	}
 
 	@POST
@@ -52,7 +52,7 @@ public class WorksService extends BaseService {
 			@FormParam("token") String token, @FormParam("uid") long uid,
 			@FormParam("id") long id, @FormParam("") RecipeWizard wizard) {
 		worksDomain.uploadSteps(uid, id, wizard);
-		return buidResponseSuccess("success!");
+		return buildResponseSuccess("success!");
 	}
 
 	@POST
@@ -62,7 +62,7 @@ public class WorksService extends BaseService {
 	public String updateWorks(@Context HttpServletRequest request,
 			@FormParam("token") String token, @FormParam("works") String works) {
 		worksDomain.updateWorks(JSONUtil.fromJson(works, Works.class));
-		return buidResponseSuccess("success!");
+		return buildResponseSuccess("success!");
 	}
 
 	@GET
@@ -77,7 +77,7 @@ public class WorksService extends BaseService {
 		}
 		worksDomain.deleteWorks(uid, id,
 				Boolean.getBoolean(admin.toUpperCase()));
-		return buidResponseSuccess("delete success!");
+		return buildResponseSuccess("delete success!");
 	}
 
 	@GET
@@ -87,7 +87,7 @@ public class WorksService extends BaseService {
 
 		List<Works> works = worksDomain.listWorks(getPageNo(pn));
 
-		return this.buidResponseSuccess(works);
+		return this.buildResponseSuccess(works);
 	}
 
 	@GET
@@ -96,7 +96,7 @@ public class WorksService extends BaseService {
 			@QueryParam("token") String token, @QueryParam("id") long id) {
 
 		Works works = worksDomain.showWorks(id);
-		return this.buidResponseSuccess(works);
+		return this.buildResponseSuccess(works);
 	}
 
 	@GET
@@ -106,7 +106,7 @@ public class WorksService extends BaseService {
 			@QueryParam("pn") String pn) {
 
 		List<Works> works = worksDomain.listWorksByUser(uid, getPageNo(pn));
-		return this.buidResponseSuccess(works);
+		return this.buildResponseSuccess(works);
 	}
 
 	@GET
@@ -116,7 +116,7 @@ public class WorksService extends BaseService {
 			@QueryParam("pn") String pn) {
 
 		List<Works> works = worksDomain.listFavWorksByUser(uid, getPageNo(pn));
-		return this.buidResponseSuccess(works);
+		return this.buildResponseSuccess(works);
 	}
 
 }

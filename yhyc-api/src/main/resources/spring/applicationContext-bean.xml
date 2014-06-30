@@ -93,5 +93,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	</bean>
 
 	<bean id="storageService" class="com.aug3.yhyc.service.QiniuService" />
+	
+	<bean id="statService" class="com.aug3.yhyc.service.StatService" />
 </beans>
 

@@ -43,12 +43,28 @@ public class ItemService extends BaseService {
 	// TODO
 	// @AccessTrace
 	// @AccessToken
-	public boolean newItem(@Context HttpServletRequest request,
+	public String newItem(@Context HttpServletRequest request,
 			@FormParam("token") String token, @FormParam("uid") long uid,
 			@FormParam("item") String item) {
 
-		JSONUtil.fromJson(item, Item.class);
-		return false;
+		return null;// JSONUtil.fromJson(item, Item.class);
+	}
+
+	@POST
+	@Path("/update")
+	// @AccessTrace
+	// @AccessToken
+	public String updateItem(@Context HttpServletRequest request,
+			@FormParam("token") String token, @FormParam("workshop") long workshop,
+			@FormParam("item") String item) {
+
+		boolean boo = itemDomain.updateItem(workshop,
+				JSONUtil.fromJson(item, Item.class));
+		if (boo) {
+			return buildResponseSuccess("OK");
+		} else {
+			return buildResponseResult("Failed", RespType.FAILED);
+		}
 	}
 
 	@GET
@@ -58,25 +74,41 @@ public class ItemService extends BaseService {
 			@QueryParam("workshop") long workshop) {
 
 		if (workshop == 0) {
-			return buidResponseResult("invlid param workshop",
+			return buildResponseResult("invlid param workshop",
 					RespType.INVALID_PARAMETERS);
 		}
 		List<Item> items = itemDomain.findItemsByWorkshop(workshop);
-		return buidResponseSuccess(items);
+		return buildResponseSuccess(items);
 	}
 
 	@GET
 	@Path("/filter")
 	public String filterItems(@Context HttpServletRequest request,
 			@QueryParam("token") String token,
-			@QueryParam("workshop") long workshop, @QueryParam("cat") int cat, @QueryParam("type") int type) {
+			@QueryParam("workshop") long workshop, @QueryParam("cat") int cat,
+			@QueryParam("type") int type) {
 
 		if (workshop == 0) {
-			return buidResponseResult("invlid param workshop",
+			return buildResponseResult("invlid param workshop",
 					RespType.INVALID_PARAMETERS);
 		}
-		List<Item> items = itemDomain.filterItems(workshop, cat, type);
-		return buidResponseSuccess(items);
+		List<Item> items = itemDomain.filterItems(workshop, cat, type, false);
+		return buildResponseSuccess(items);
+	}
+
+	@GET
+	@Path("/manage")
+	public String manageItems(@Context HttpServletRequest request,
+			@QueryParam("token") String token,
+			@QueryParam("workshop") long workshop, @QueryParam("cat") int cat,
+			@QueryParam("type") int type) {
+
+		if (workshop == 0) {
+			return buildResponseResult("invlid param workshop",
+					RespType.INVALID_PARAMETERS);
+		}
+		List<Item> items = itemDomain.filterItems(workshop, cat, type, true);
+		return buildResponseSuccess(items);
 	}
 
 	/**
@@ -93,7 +125,7 @@ public class ItemService extends BaseService {
 			@QueryParam("token") String token, @QueryParam("item") long item) {
 
 		ProductItem result = itemDomain.findItemByID(item);
-		return buidResponseSuccess(result);
+		return buildResponseSuccess(result);
 	}
 
 	@GET
@@ -106,7 +138,7 @@ public class ItemService extends BaseService {
 			pn = 1;
 		}
 		CommentDTO comments = itemDomain.findCommentsByItem(item, pn);
-		return buidResponseSuccess(comments);
+		return buildResponseSuccess(comments);
 	}
 
 	@POST
@@ -124,13 +156,13 @@ public class ItemService extends BaseService {
 			@QueryParam("token") String token, @QueryParam("items") String items) {
 
 		if (StringUtils.isBlank(items)) {
-			return buidResponseResult("invlid param items",
+			return buildResponseResult("invlid param items",
 					RespType.INVALID_PARAMETERS);
 		}
-		
+
 		List<ShopItem> shopitems = itemDomain
 				.groupItemsByShop(transfer2Long(items));
-		return buidResponseSuccess(shopitems);
+		return buildResponseSuccess(shopitems);
 	}
 
 	@GET
@@ -139,7 +171,7 @@ public class ItemService extends BaseService {
 			@QueryParam("token") String token, @QueryParam("uid") long uid) {
 
 		List<ShopItem> fav = itemDomain.fetchFavorite(uid);
-		return buidResponseSuccess(fav);
+		return buildResponseSuccess(fav);
 	}
 
 	@GET
@@ -148,7 +180,7 @@ public class ItemService extends BaseService {
 			@QueryParam("token") String token, @QueryParam("uid") long uid) {
 
 		List<ShopItem> cart = itemDomain.fetchShoppingCart(uid);
-		return buidResponseSuccess(cart);
+		return buildResponseSuccess(cart);
 	}
 
 }

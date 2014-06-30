@@ -37,7 +37,7 @@ public class Order implements Serializable {
 	// 发货时间
 	private Date dt;
 
-	// 0:待确认/1:已确认/2:发货中/3:交易取消/4:已发货/5:交易结束
+	// 0:待确认/1:处理中/2:发货中/3:买家取消/4:卖家取消/5:交易结束/6:已评价
 	private int status;
 
 	public long getId() {

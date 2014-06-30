@@ -2,8 +2,10 @@ package com.aug3.yhyc.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.aug3.yhyc.base.CollectionConstants;
@@ -61,13 +63,14 @@ public class DictDao extends BaseDao {
 	public List<Region> findRegion() {
 
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_REGIONS)
-				.find();
+				.find().sort(new BasicDBObject("level", 1));
 
 		BasicDBObject dbObj;
 		Region region;
 
 		List<Region> list = new ArrayList<Region>();
 
+		Set<Integer> levelOne = new HashSet<Integer>();
 		while (dbCur.hasNext()) {
 			dbObj = (BasicDBObject) dbCur.next();
 			region = new Region();
@@ -75,7 +78,20 @@ public class DictDao extends BaseDao {
 			region.setName(dbObj.getString("name"));
 			region.setP(dbObj.getInt("p"));
 			region.setLevel(dbObj.getInt("level"));
-			list.add(region);
+			region.setSts(dbObj.containsField("sts") ? dbObj.getInt("sts") : 0);
+			region.setShequ(dbObj.containsField("shequ") ? dbObj
+					.getLong("shequ") : 0);
+
+			if (region.getLevel() == 0) {
+				if (region.getSts() == 1) {
+					list.add(region);
+					levelOne.add(region.getId());
+				}
+			} else {
+				if (levelOne.contains(region.getP())) {
+					list.add(region);
+				}
+			}
 		}
 
 		return list;

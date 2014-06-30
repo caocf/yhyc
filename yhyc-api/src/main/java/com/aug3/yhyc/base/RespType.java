@@ -27,6 +27,8 @@ public enum RespType {
 	INVALID_PARAMETERS("1002"),
 
 	SUCCESS("200"),
+	
+	FAILED("400"),
 
 	// REDIRECT_PERMANTENTLY("301"),
 	//

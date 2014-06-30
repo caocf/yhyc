@@ -1,12 +1,19 @@
 package com.aug3.yhyc.domain;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.aug3.sys.cache.SystemCache;
+import com.aug3.sys.util.DateUtil;
 import com.aug3.yhyc.dao.DictDao;
+import com.aug3.yhyc.dto.DeliveryTime;
+import com.aug3.yhyc.util.ConfigManager;
 import com.aug3.yhyc.valueobj.Category;
 import com.aug3.yhyc.valueobj.Region;
 
@@ -53,7 +60,46 @@ public class DictDomain {
 	}
 
 	public List<Region> listRegion() {
+		
 		return dictDao.findRegion();
+	}
+
+	public DeliveryTime deliverytime() {
+
+		Calendar c = Calendar.getInstance();
+		Date current = new Date();
+		c.setTime(current);
+
+		int hour = c.get(Calendar.HOUR_OF_DAY);
+
+		if (hour > 19) {
+			c.add(Calendar.DATE, 1);
+		}
+
+		String firstday = DateUtil.formatDate(c.getTime());
+
+		c.add(Calendar.DATE, 1);
+		String nextday = DateUtil.formatDate(c.getTime());
+		c.add(Calendar.DATE, 1);
+		String next2day = DateUtil.formatDate(c.getTime());
+
+		String[] dates = { firstday, nextday, next2day };
+
+		DeliveryTime dt = new DeliveryTime();
+
+		dt.setDate(dates);
+
+		// 任意时间|6:30-8:00|11:00-13:00|17:00-19:30|指定时间(>80元)
+		String deliverytimeStr = ConfigManager.getProperties().getProperty(
+				"deliverytime");
+
+		if (StringUtils.isBlank(deliverytimeStr)) {
+			dt.setTime(new String[] { "10:30-12:30", "17:30-19:30" });
+		} else {
+			dt.setTime(deliverytimeStr.split(";"));
+		}
+
+		return dt;
 	}
 
 }
