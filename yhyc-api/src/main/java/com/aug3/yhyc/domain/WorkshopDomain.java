@@ -105,7 +105,15 @@ public class WorkshopDomain {
 		return shopDao.findByID(uid, shop);
 	}
 
+	public WorkshopDTO getShopInfo(long shop) {
+		return shopDao.find(shop);
+	}
+
 	public String getShopAnnouncement(long shop) {
+		return shopDao.getShopAnnouncement(shop);
+	}
+
+	public String getShopStats(long shop) {
 		return shopDao.getShopAnnouncement(shop);
 	}
 

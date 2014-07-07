@@ -71,6 +71,16 @@ public class WorkshopService extends BaseService {
 	}
 
 	@GET
+	@Path("/show")
+	public String getShopInfo(@Context HttpServletRequest request,
+			@QueryParam("token") String token,
+			@QueryParam("workshop") long workshop) {
+
+		WorkshopDTO result = shopDomain.getShopInfo(workshop);
+		return buildResponseSuccess(result);
+	}
+
+	@GET
 	@Path("/announce")
 	public String getShopAnnouncement(@Context HttpServletRequest request,
 			@QueryParam("token") String token,
@@ -108,6 +118,16 @@ public class WorkshopService extends BaseService {
 
 			return buildResponseSuccess("success!");
 		}
+	}
+
+	@GET
+	@Path("/stats")
+	public String getShopStats(@Context HttpServletRequest request,
+			@QueryParam("token") String token,
+			@QueryParam("workshop") long workshop) {
+
+		String notice = shopDomain.getShopStats(workshop);
+		return buildResponseSuccess(notice);
 	}
 
 }

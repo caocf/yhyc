@@ -27,6 +27,9 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	<bean id="worksDao" class="com.aug3.yhyc.dao.WorksDao" />
 
 	<!-- domain -->
+	<bean id="appDomain" class="com.aug3.yhyc.domain.AppDomain">
+	</bean>
+	
 	<bean id="dictDomain" class="com.aug3.yhyc.domain.DictDomain">
 		<property name="dictDao" ref="dictDao" />
 	</bean>
@@ -63,6 +66,10 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	</bean>
 
 	<!-- service -->
+	<bean id="appService" class="com.aug3.yhyc.service.AppService">
+		<property name="appDomain" ref="appDomain" />
+	</bean>
+	
 	<bean id="dictService" class="com.aug3.yhyc.service.DictService">
 		<property name="dictDomain" ref="dictDomain" />
 	</bean>

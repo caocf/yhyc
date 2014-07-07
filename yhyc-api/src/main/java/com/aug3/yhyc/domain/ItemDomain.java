@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.aug3.sys.util.DateUtil;
 import com.aug3.yhyc.dao.DictDao;
 import com.aug3.yhyc.dao.ItemDao;
@@ -77,7 +79,7 @@ public class ItemDomain {
 	public boolean updateItem(long workshop, Item item) {
 		return itemDao.updateItem(workshop, item);
 	}
-	
+
 	public List<Item> findItemsByWorkshop(long workshop) {
 		return itemDao.findItemsByWorkshop(workshop);
 	}
@@ -95,12 +97,14 @@ public class ItemDomain {
 	 *            type==0 all; type==1 promotion; type==2 season;
 	 * @return
 	 */
-	public List<Item> filterItems(long workshop, int cat, int type, boolean allStat) {
+	public List<Item> filterItems(long workshop, int cat, int type,
+			boolean allStat) {
 
 		if (type == 0) {
 			return itemDao.filterItemsByWorkshop(workshop, cat, allStat);
 		} else if (type == 1) {
-			return itemDao.filterPromotionItemsByWorkshop(workshop, cat, allStat);
+			return itemDao.filterPromotionItemsByWorkshop(workshop, cat,
+					allStat);
 		}
 		return itemDao.filterItems(workshop, type, allStat);
 	}
@@ -133,15 +137,25 @@ public class ItemDomain {
 		if (comments == null)
 			return false;
 
+		int inc_ac = 0;
 		for (Long item : comments.keySet()) {
 			Comment comment = comments.get(item);
 
 			comment.setTs(DateUtil.formatCurrentDate());
 
 			itemDao.newComment(item, comment);
+
+			if (StringUtils.isNotBlank(comment.getContent())) {
+				inc_ac += 1;
+			}
 		}
 
-		orderDao.updateStatus(commentReq.getOrderid(), OrderStatus.COMMENT.getValue());
+		orderDao.updateStatus(commentReq.getOrderid(),
+				OrderStatus.COMMENT.getValue());
+
+		if (inc_ac > 0) {
+			userDao.increaseUserAc(commentReq.getUid(), inc_ac);
+		}
 
 		return true;
 	}
@@ -177,7 +191,8 @@ public class ItemDomain {
 				}
 			}
 
-			Map<Long, WorkshopDTO> shops = shopDao.findByIDs(shopitems.keySet());
+			Map<Long, WorkshopDTO> shops = shopDao
+					.findByIDs(shopitems.keySet());
 
 			for (Long sid : shopitems.keySet()) {
 				ShopItem si = new ShopItem();

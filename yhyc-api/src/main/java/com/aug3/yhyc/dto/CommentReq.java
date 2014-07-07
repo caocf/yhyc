@@ -7,9 +7,19 @@ import com.aug3.yhyc.valueobj.Comment;
 
 public class CommentReq implements Serializable {
 
+	private long uid;
+
 	private long orderid;
 
 	private Map<Long, Comment> itemsRating;
+
+	public long getUid() {
+		return uid;
+	}
+
+	public void setUid(long uid) {
+		this.uid = uid;
+	}
 
 	public long getOrderid() {
 		return orderid;

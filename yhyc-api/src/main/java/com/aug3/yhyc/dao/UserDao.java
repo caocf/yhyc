@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,10 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import com.aug3.sys.util.DateUtil;
 import com.aug3.sys.util.EncryptUtil;
 import com.aug3.yhyc.base.CollectionConstants;
-import com.aug3.yhyc.base.Constants;
 import com.aug3.yhyc.dto.UserPrefs;
 import com.aug3.yhyc.mail.MailSender;
-import com.aug3.yhyc.util.ConfigManager;
 import com.aug3.yhyc.util.IDGenerator;
 import com.aug3.yhyc.util.Qiniu;
 import com.aug3.yhyc.valueobj.User;
@@ -304,11 +300,11 @@ public class UserDao extends BaseDao {
 		return items;
 	}
 
-	public UserPrefs findPrefs(long uid) {
+	public UserPrefs findUserPrefs(long uid) {
 
 		DBCursor cur = getDBCollection(CollectionConstants.COLL_USERS).find(
 				new BasicDBObject("_id", uid),
-				new BasicDBObject("fav", 1).append("cart", 1));
+				new BasicDBObject("fav", 1).append("cart", 1).append("ac", 1));
 
 		UserPrefs userPrefs = new UserPrefs();
 
@@ -316,20 +312,7 @@ public class UserDao extends BaseDao {
 			BasicDBObject dbo = (BasicDBObject) cur.next();
 			userPrefs.setFav((List<Long>) dbo.get("fav"));
 			userPrefs.setCart((List<Long>) dbo.get("cart"));
-
-		}
-
-		String u = ConfigManager.getProperties().getProperty("urls");
-		if (StringUtils.isNotBlank(u)) {
-			String[] files = u.split(";");
-			Map<String, String> urls = new HashMap<String, String>();
-			for (String fn : files) {
-				urls.put(
-						fn,
-						Qiniu.downloadUrl(fn + Constants.PNG,
-								Qiniu.getCaipuDomain()));
-			}
-			userPrefs.setUrls(urls);
+			userPrefs.setAc(dbo.getInt("ac"));
 		}
 
 		return userPrefs;
@@ -403,6 +386,15 @@ public class UserDao extends BaseDao {
 				WriteConcern.SAFE);
 
 		return true;
+
+	}
+
+	public void increaseUserAc(long uid, int ac) {
+
+		getDBCollection(CollectionConstants.COLL_USERS).update(
+				new BasicDBObject("_id", uid),
+				new BasicDBObject("$inc", new BasicDBObject("ac", ac)), false,
+				false);
 
 	}
 

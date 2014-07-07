@@ -13,6 +13,8 @@ public class WorkshopDTO implements Serializable {
 
 	private long owner;
 
+	private String who;
+
 	private String pic;
 
 	private String addr;
@@ -26,6 +28,9 @@ public class WorkshopDTO implements Serializable {
 	private List<Integer> cat;
 
 	private List<Shequ> shequ;
+
+	// advertisement url
+	private String ad;
 
 	public long getId() {
 		return id;
@@ -105,6 +110,22 @@ public class WorkshopDTO implements Serializable {
 
 	public void setNotice(String notice) {
 		this.notice = notice;
+	}
+
+	public String getWho() {
+		return who;
+	}
+
+	public void setWho(String who) {
+		this.who = who;
+	}
+
+	public String getAd() {
+		return ad;
+	}
+
+	public void setAd(String ad) {
+		this.ad = ad;
 	}
 
 }

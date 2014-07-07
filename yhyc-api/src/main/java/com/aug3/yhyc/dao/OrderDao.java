@@ -191,6 +191,7 @@ public class OrderDao extends BaseDao {
 		List<DBObject> doclist = new ArrayList<DBObject>();
 		List<Long> orderids = new ArrayList<Long>();
 
+		int ac_total = 0;
 		for (Long shopid : orderMap.keySet()) {
 
 			BasicDBObject doc = new BasicDBObject();
@@ -203,14 +204,15 @@ public class OrderDao extends BaseDao {
 			List orders = new ArrayList();
 			List<ItemDTO> li = orderMap.get(shopid);
 			double total = 0;
+			HashMap m = null;
 			for (ItemDTO item : li) {
-				HashMap m = new HashMap();
+				m = new HashMap();
 				m.put("id", item.getId());
 				m.put("name", item.getName());
 				m.put("n", item.getNum());
 				m.put("pp", item.getPrice());
 				orders.add(m);
-				total = Arith.add(total, item.getPrice());
+				total = Arith.add(total, item.getPrice() * item.getNum());
 			}
 			doc.put("items", orders);
 
@@ -232,7 +234,9 @@ public class OrderDao extends BaseDao {
 			// calculate and compare with client total
 			doc.put("total", total);
 			// calculate
-			doc.put("ac", Math.round(total / 10));
+			int ac = (int) Math.round(total / 10);
+			doc.put("ac", ac);
+			ac_total += ac;
 
 			Date d = new Date();
 			doc.put("ts", d);
@@ -246,6 +250,10 @@ public class OrderDao extends BaseDao {
 
 		if (doclist.size() > 0) {
 			getDBCollection(CollectionConstants.COLL_ORDERS).insert(doclist);
+			getDBCollection(CollectionConstants.COLL_USERS)
+					.update(new BasicDBObject("_id", order.getUid()),
+							new BasicDBObject("$inc", new BasicDBObject("ac",
+									ac_total)), false, false);
 		}
 		return orderids;
 	}

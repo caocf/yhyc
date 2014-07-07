@@ -10,6 +10,9 @@ public class UserPrefs implements Serializable {
 
 	private List<Long> cart;
 
+	private int ac;
+
+	// urls for advertisement, version update, ...
 	private Map<String, String> urls;
 
 	public List<Long> getFav() {
@@ -26,6 +29,14 @@ public class UserPrefs implements Serializable {
 
 	public void setCart(List<Long> cart) {
 		this.cart = cart;
+	}
+
+	public int getAc() {
+		return ac;
+	}
+
+	public void setAc(int ac) {
+		this.ac = ac;
 	}
 
 	public Map<String, String> getUrls() {

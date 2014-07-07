@@ -72,43 +72,6 @@ public class WorkshopDao extends BaseDao {
 
 	}
 
-	private Workshop newWorkshopByDBObj(BasicDBObject dbObj) {
-
-		Workshop shop = new Workshop();
-		shop.setId(dbObj.getLong("_id"));
-		shop.setName(dbObj.getString("name"));
-		shop.setOwner(dbObj.getLong("owner"));
-		shop.setEmp((List<Long>) dbObj.get("emp"));
-		String pic = dbObj.getString("pic");
-		shop.setPic(StringUtils.isBlank(pic) ? "" : Qiniu.downloadUrl(pic,
-				Qiniu.getUserDomain()));
-		shop.setCity(dbObj.getInt("city"));
-		shop.setDist(dbObj.getInt("dist"));
-		shop.setAddr(dbObj.getString("addr"));
-		shop.setTel(dbObj.getString("tel"));
-		shop.setStart(dbObj.getString("start"));
-		shop.setShequ((List<Long>) dbObj.get("shequ"));
-		shop.setCat((List<Integer>) dbObj.get("cat"));
-		shop.setNotice(dbObj.getString("notice"));
-
-		return shop;
-	}
-
-	private WorkshopDTO newWorkshopDTO(BasicDBObject dbObj) {
-
-		WorkshopDTO shop = new WorkshopDTO();
-		shop.setId(dbObj.getLong("_id"));
-		shop.setName(dbObj.getString("name"));
-		shop.setOwner(dbObj.getLong("owner"));
-		shop.setAddr(dbObj.getString("addr"));
-		shop.setTel(dbObj.getString("tel"));
-		shop.setStart(dbObj.getString("start"));
-		shop.setNotice(dbObj.getString("notice"));
-		shop.setCat((List<Integer>) dbObj.get("cat"));
-
-		return shop;
-	}
-
 	public Map<Long, WorkshopDTO> findByIDs(Collection<Long> ids) {
 
 		BasicDBObject qObj = new BasicDBObject("_id", new BasicDBObject("$in",
@@ -132,6 +95,23 @@ public class WorkshopDao extends BaseDao {
 
 	}
 
+	public WorkshopDTO findByID(long workshop) {
+
+		BasicDBObject qObj = new BasicDBObject("_id", workshop);
+
+		DBObject resultObj = getDBCollection(CollectionConstants.COLL_WORKSHOP)
+				.findOne(qObj);
+
+		if (resultObj != null) {
+			BasicDBObject dbObj = (BasicDBObject) resultObj;
+
+			return newWorkshopDTO(dbObj);
+		}
+
+		return null;
+
+	}
+
 	public WorkshopDTO findByID(long uid, long workshop) {
 
 		BasicDBList or = new BasicDBList();
@@ -149,6 +129,23 @@ public class WorkshopDao extends BaseDao {
 			BasicDBObject dbObj = (BasicDBObject) resultObj;
 
 			return newWorkshopDTO(dbObj);
+		}
+
+		return null;
+
+	}
+
+	public WorkshopDTO find(long workshop) {
+
+		BasicDBObject qObj = new BasicDBObject("_id", workshop);
+
+		DBObject resultObj = getDBCollection(CollectionConstants.COLL_WORKSHOP)
+				.findOne(qObj);
+
+		if (resultObj != null) {
+			BasicDBObject dbObj = (BasicDBObject) resultObj;
+
+			return newWorkshopInfo(dbObj);
 		}
 
 		return null;
@@ -218,6 +215,74 @@ public class WorkshopDao extends BaseDao {
 
 		return true;
 
+	}
+
+	private Workshop newWorkshopByDBObj(BasicDBObject dbObj) {
+
+		Workshop shop = new Workshop();
+		shop.setId(dbObj.getLong("_id"));
+		shop.setName(dbObj.getString("name"));
+		shop.setOwner(dbObj.getLong("owner"));
+		shop.setEmp((List<Long>) dbObj.get("emp"));
+		String pic = dbObj.getString("pic");
+		shop.setPic(StringUtils.isBlank(pic) ? "" : Qiniu.downloadUrl(pic,
+				Qiniu.getUserDomain()));
+		shop.setCity(dbObj.getInt("city"));
+		shop.setDist(dbObj.getInt("dist"));
+		shop.setAddr(dbObj.getString("addr"));
+
+		String tel = dbObj.getString("mobi");
+		if (StringUtils.isBlank(tel)) {
+			if (dbObj.containsField("tel"))
+				tel = dbObj.getString("tel");
+			else
+				tel = "";
+		}
+		shop.setTel(tel);
+		shop.setStart(dbObj.getString("start"));
+		shop.setShequ((List<Long>) dbObj.get("shequ"));
+		shop.setCat((List<Integer>) dbObj.get("cat"));
+		shop.setNotice(dbObj.getString("notice"));
+
+		return shop;
+	}
+
+	private WorkshopDTO newWorkshopDTO(BasicDBObject dbObj) {
+
+		WorkshopDTO shop = getShopInfo(dbObj);
+
+		return shop;
+	}
+
+	private WorkshopDTO newWorkshopInfo(BasicDBObject dbObj) {
+
+		WorkshopDTO shop = getShopInfo(dbObj);
+
+		String fn = dbObj.containsField("ad") ? dbObj.getString("ad") : "";
+		if (StringUtils.isNotBlank(fn)) {
+			shop.setAd(Qiniu.downloadUrl(fn, Qiniu.getUserDomain()));
+		} else {
+			shop.setAd("");
+		}
+
+		return shop;
+	}
+
+	private WorkshopDTO getShopInfo(BasicDBObject dbObj) {
+
+		WorkshopDTO shop = new WorkshopDTO();
+		shop.setId(dbObj.getLong("_id"));
+		shop.setName(dbObj.getString("name"));
+		shop.setOwner(dbObj.getLong("owner"));
+		shop.setWho(dbObj.getString("who"));
+		shop.setAddr(dbObj.getString("addr"));
+		shop.setTel(dbObj.containsField("mobi") ? dbObj.getString("mobi")
+				: dbObj.getString("tel"));
+		shop.setStart(dbObj.getString("start"));
+		shop.setNotice(dbObj.getString("notice"));
+		shop.setCat((List<Integer>) dbObj.get("cat"));
+
+		return shop;
 	}
 
 }

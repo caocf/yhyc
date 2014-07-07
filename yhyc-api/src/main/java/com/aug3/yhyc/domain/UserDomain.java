@@ -1,10 +1,16 @@
 package com.aug3.yhyc.domain;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.aug3.yhyc.dao.UserDao;
 import com.aug3.yhyc.dto.UserPrefs;
+import com.aug3.yhyc.util.ConfigManager;
+import com.aug3.yhyc.util.Qiniu;
 import com.aug3.yhyc.valueobj.DeliveryContact;
 import com.aug3.yhyc.valueobj.User;
 
@@ -36,7 +42,27 @@ public class UserDomain {
 	}
 
 	public UserPrefs getUserPrefs(long uid) {
-		return userDao.findPrefs(uid);
+
+		UserPrefs userPrefs = userDao.findUserPrefs(uid);
+
+		Map<String, String> urls = new HashMap<String, String>();
+
+		String adurls = ConfigManager.getProperties().getProperty("ad.urls");
+		boolean adon = ConfigManager.getProperties().getBooleanProperty(
+				"ad.urls.on");
+		if (adon && StringUtils.isNotBlank(adurls)) {
+			String[] files = adurls.split(";");
+			for (String fn : files) {
+				urls.put(fn.substring(0, fn.length() - 4),
+						Qiniu.downloadUrl(fn, Qiniu.getCaipuDomain()));
+			}
+		}
+
+		if (!urls.isEmpty()) {
+			userPrefs.setUrls(urls);
+		}
+
+		return userPrefs;
 	}
 
 	public void updatePoint(long uid, int district, long shequ) {
