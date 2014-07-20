@@ -11,6 +11,10 @@ public class CollectionConstants {
 	public static final String COLL_CATEGORIES = "categories";
 
 	public static final String COLL_USERS = "users";
+	
+	public static final String COLL_LOGIN = "login";
+	
+	public static final String COLL_BLACKLIST = "blacklist";
 
 	public static final String COLL_ORDERS = "orders";
 

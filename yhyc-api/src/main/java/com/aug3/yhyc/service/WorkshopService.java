@@ -44,17 +44,33 @@ public class WorkshopService extends BaseService {
 	@GET
 	@Path("/list")
 	public String getWorkshops(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("shequ") long shequ,
-			@QueryParam("cat") int cat) {
+			@QueryParam("shequ") long shequ, @QueryParam("cat") int cat) {
 
 		List<WorkshopDTO> workshops = shopDomain.queryWorkshops(shequ, cat);
+		return buildResponseSuccess(workshops);
+	}
+
+	/**
+	 * 获取社区对应的云仓网点信息
+	 * 
+	 * @param request
+	 * @param token
+	 * @param shequ
+	 * @return
+	 */
+	@GET
+	@Path("/default")
+	public String getDefaultWorkshops(@Context HttpServletRequest request,
+			@QueryParam("shequ") long shequ) {
+
+		List<WorkshopDTO> workshops = shopDomain.queryDefaultWorkshops(shequ);
 		return buildResponseSuccess(workshops);
 	}
 
 	@GET
 	@Path("/my")
 	public String getMyWorkshops(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") long uid) {
+			@QueryParam("uid") long uid) {
 
 		List<WorkshopDTO> workshops = shopDomain.findWorkshops(uid);
 		return buildResponseSuccess(workshops);
@@ -63,8 +79,7 @@ public class WorkshopService extends BaseService {
 	@GET
 	@Path("/some")
 	public String getSomeShop(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") long uid,
-			@QueryParam("workshop") long workshop) {
+			@QueryParam("uid") long uid, @QueryParam("workshop") long workshop) {
 
 		WorkshopDTO result = shopDomain.getShopByID(uid, workshop);
 		return buildResponseSuccess(result);
@@ -73,7 +88,6 @@ public class WorkshopService extends BaseService {
 	@GET
 	@Path("/show")
 	public String getShopInfo(@Context HttpServletRequest request,
-			@QueryParam("token") String token,
 			@QueryParam("workshop") long workshop) {
 
 		WorkshopDTO result = shopDomain.getShopInfo(workshop);
@@ -83,7 +97,6 @@ public class WorkshopService extends BaseService {
 	@GET
 	@Path("/announce")
 	public String getShopAnnouncement(@Context HttpServletRequest request,
-			@QueryParam("token") String token,
 			@QueryParam("workshop") long workshop) {
 
 		String notice = shopDomain.getShopAnnouncement(workshop);
@@ -93,7 +106,6 @@ public class WorkshopService extends BaseService {
 	@POST
 	@Path("/announce")
 	public String updateShopAnnouncement(@Context HttpServletRequest request,
-			@FormParam("token") String token,
 			@FormParam("workshop") long workshop,
 			@FormParam("announcement") String announcement) {
 
@@ -103,10 +115,8 @@ public class WorkshopService extends BaseService {
 
 	@POST
 	@Path("/request")
-	// @AccessTrace
-	// @AccessToken
 	public String requestShop(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("shop") String shop) {
+			@FormParam("shop") String shop) {
 
 		RequestShop reqShop = JSONUtil.fromJson(shop, RequestShop.class);
 
@@ -123,7 +133,6 @@ public class WorkshopService extends BaseService {
 	@GET
 	@Path("/stats")
 	public String getShopStats(@Context HttpServletRequest request,
-			@QueryParam("token") String token,
 			@QueryParam("workshop") long workshop) {
 
 		String notice = shopDomain.getShopStats(workshop);

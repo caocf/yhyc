@@ -112,6 +112,24 @@ public class UserDao extends BaseDao {
 
 	}
 
+	public User findByMobile(String mobi) {
+
+		BasicDBObject dbObj = new BasicDBObject().append("mobi", mobi);
+
+		DBObject userObj = getDBCollection(CollectionConstants.COLL_USERS)
+				.findOne(dbObj);
+
+		if (userObj != null) {
+
+			BasicDBObject result = (BasicDBObject) userObj;
+
+			return buildUser(result, true);
+		}
+
+		return null;
+
+	}
+
 	private User buildUser(BasicDBObject dbObj, boolean userPic) {
 
 		User user = new User();
@@ -119,9 +137,11 @@ public class UserDao extends BaseDao {
 		user.setName(dbObj.getString("name"));
 		user.setMobi(dbObj.getString("mobi"));
 		user.setMail(dbObj.getString("mail"));
-		user.setAc(dbObj.containsField("ac") ? dbObj.getInt("ac") : 10);
+		user.setAc(dbObj.containsField("ac") ? dbObj.getInt("ac") : 0);
 		user.setShequ(dbObj.containsField("shequ") ? dbObj.getLong("shequ") : 0);
 		user.setDist(dbObj.containsField("dist") ? dbObj.getInt("dist") : 0);
+		user.setJob(dbObj.containsField("job") ? dbObj.getString("job") : "");
+		user.setType(dbObj.containsField("type") ? dbObj.getInt("type") : 0);
 
 		String avatar = dbObj.getString("pic");
 
@@ -184,7 +204,7 @@ public class UserDao extends BaseDao {
 		return ((BasicDBObject) result).getLong("_id");
 	}
 
-	public long create(User user) {
+	public long create(User user, String uuid) {
 
 		DBObject dbObj = new BasicDBObject();
 		long uid = IDGenerator.nextUserID(getDB());
@@ -193,6 +213,7 @@ public class UserDao extends BaseDao {
 		dbObj.put("password", user.getPassword());
 		dbObj.put("mobi", user.getMobi());
 		dbObj.put("mail", user.getMail());
+		dbObj.put("uuid", uuid);
 		dbObj.put("job", user.getJob());
 		dbObj.put("fav", new Long[] {});
 		dbObj.put("cart", new Long[] {});
@@ -264,6 +285,103 @@ public class UserDao extends BaseDao {
 				WriteConcern.SAFE);
 	}
 
+	/**
+	 * 更新登录验证码，一天仅可请求验证码3次
+	 * 
+	 * @param mobi
+	 * @param verifyCode
+	 */
+	public void updateVerifyCode(String mobi, String verifyCode, String uuid) {
+
+		BasicDBObject queryExist = new BasicDBObject();
+
+		if (StringUtils.isNotBlank(uuid)) {
+			BasicDBList or = new BasicDBList();
+			or.add(new BasicDBObject().append("mobi", mobi));
+			or.add(new BasicDBObject().append("uuid", uuid));
+			queryExist.append("$or", or);
+		} else {
+			queryExist.append("mobi", mobi);
+		}
+
+		if (getDBCollection(CollectionConstants.COLL_USERS).count(queryExist) == 0) {
+			User user = new User();
+			user.setMobi(mobi);
+			create(user, uuid);
+		}
+
+		DBObject updateObj = new BasicDBObject().append("v", verifyCode)
+				.append("ts", new Date().getTime() / 1000);
+
+		getDBCollection(CollectionConstants.COLL_LOGIN).update(
+				new BasicDBObject("_id", mobi),
+				new BasicDBObject("$set", updateObj).append("$inc",
+						new BasicDBObject("n", 1)), true, false,
+				WriteConcern.SAFE);
+
+	}
+
+	public boolean mobileInBlacklist(String mobi) {
+
+		long n = getDBCollection(CollectionConstants.COLL_BLACKLIST).count(
+				new BasicDBObject().append("_id", mobi));
+
+		if (n > 0) {
+			return true;
+		}
+		return false;
+
+	}
+
+	public boolean uuidInBlacklist(String uuid) {
+
+		long n = getDBCollection(CollectionConstants.COLL_BLACKLIST).count(
+				new BasicDBObject().append("uuid", uuid));
+
+		if (n > 0) {
+			return true;
+		}
+		return false;
+
+	}
+
+	public void bindMobile(String mobi, String verifyCode, String uuid, long uid) {
+
+		boolean boo = login(mobi, verifyCode);
+
+		if (boo) {
+
+			DBObject updateObj = new BasicDBObject().append("mobi", mobi)
+					.append("sts", 1);
+
+			getDBCollection(CollectionConstants.COLL_USERS).update(
+					new BasicDBObject("_id", uid),
+					new BasicDBObject("$set", updateObj), true, false,
+					WriteConcern.SAFE);
+		}
+
+	}
+
+	public boolean login(String mobi, String verifyCode) {
+
+		DBObject queryObj = new BasicDBObject()
+				.append("_id", mobi)
+				.append("v", verifyCode)
+				.append("ts",
+						new BasicDBObject("$gt",
+								new Date().getTime() / 1000 - 3600 * 2));
+
+		long count = getDBCollection(CollectionConstants.COLL_LOGIN).count(
+				queryObj);
+
+		if (count > 0) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
 	public long createTemp(User user) {
 
 		DBObject dbObj = new BasicDBObject();
@@ -277,6 +395,36 @@ public class UserDao extends BaseDao {
 
 		getDBCollection(CollectionConstants.COLL_USERS).insert(dbObj);
 		return uid;
+	}
+
+	public User createTemp(String uuid) {
+
+		if (StringUtils.isNotBlank(uuid)) {
+			DBCursor cur = getDBCollection(CollectionConstants.COLL_USERS)
+					.find(new BasicDBObject().append("uuid", uuid));
+			if (cur.hasNext()) {
+				DBObject result = cur.next();
+				if (result != null)
+					return buildUser((BasicDBObject) result, true);
+			}
+		}
+
+		DBObject dbObj = new BasicDBObject();
+		long uid = IDGenerator.nextUserID(getDB());
+		dbObj.put("_id", uid);
+		dbObj.put("name", "");
+		dbObj.put("mobi", "");
+		dbObj.put("ac", 0);
+		dbObj.put("sts", 0);
+		dbObj.put("uuid", uuid);
+		dbObj.put("ts", new Date());
+
+		getDBCollection(CollectionConstants.COLL_USERS).insert(dbObj);
+
+		User user = new User();
+		user.setUid(uid);
+
+		return user;
 	}
 
 	public List<Long> findFavorite(long uid) {
@@ -330,7 +478,19 @@ public class UserDao extends BaseDao {
 
 		getDBCollection(CollectionConstants.COLL_USERS).update(
 				new BasicDBObject("_id", uid),
-				new BasicDBObject("$set", updateObj));
+				new BasicDBObject("$set", updateObj), false, false,
+				WriteConcern.SAFE);
+
+	}
+
+	public void updateUserName(long uid, String name) {
+
+		BasicDBObject updateObj = new BasicDBObject().append("name", name);
+
+		getDBCollection(CollectionConstants.COLL_USERS).update(
+				new BasicDBObject("_id", uid),
+				new BasicDBObject("$set", updateObj), false, false,
+				WriteConcern.SAFE);
 
 	}
 
@@ -394,7 +554,7 @@ public class UserDao extends BaseDao {
 		getDBCollection(CollectionConstants.COLL_USERS).update(
 				new BasicDBObject("_id", uid),
 				new BasicDBObject("$inc", new BasicDBObject("ac", ac)), false,
-				false);
+				false, WriteConcern.SAFE);
 
 	}
 
@@ -436,4 +596,38 @@ public class UserDao extends BaseDao {
 
 		return items;
 	}
+
+	public List<Integer> findTags(long uid) {
+
+		DBCursor cur = getDBCollection(CollectionConstants.COLL_USERS).find(
+				new BasicDBObject("_id", uid), new BasicDBObject("tags", 1));
+
+		List<Integer> tags = new ArrayList<Integer>();
+
+		while (cur.hasNext()) {
+			BasicDBObject dbo = (BasicDBObject) cur.next();
+			BasicDBList tagList = (BasicDBList) dbo.get("tags");
+			if (tagList != null && tagList.size() > 0) {
+				for (Object t : tagList) {
+					tags.add((Integer) t);
+				}
+			}
+		}
+
+		return tags;
+	}
+
+	public boolean updateTags(long uid, Collection<Integer> tags) {
+
+		BasicDBObject updateObj = new BasicDBObject().append("$set",
+				new BasicDBObject("tags", tags));
+
+		getDBCollection(CollectionConstants.COLL_USERS).update(
+				new BasicDBObject("_id", uid), updateObj, false, false,
+				WriteConcern.SAFE);
+
+		return true;
+
+	}
+
 }

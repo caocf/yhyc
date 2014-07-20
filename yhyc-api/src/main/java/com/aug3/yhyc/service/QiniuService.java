@@ -21,7 +21,6 @@ public class QiniuService extends BaseService {
 	@GET
 	@Path("/uptoken")
 	public String uptoken(@Context HttpServletRequest request,
-			@QueryParam("token") String token,
 			@QueryParam("bucket") String bucket, @QueryParam("key") String key) {
 
 		if ("item".equalsIgnoreCase(bucket)) {
@@ -54,7 +53,7 @@ public class QiniuService extends BaseService {
 	@GET
 	@Path("/urls")
 	public String downloadUrl(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("fn") String fn) {
+			@QueryParam("fn") String fn) {
 
 		Map<String, String> urlMap = Qiniu.downloadUrls(fn,
 				Qiniu.getItemDomain());

@@ -47,6 +47,29 @@ public class WorkshopDao extends BaseDao {
 
 	}
 
+	public List<Workshop> findByShequ(long shequ) {
+
+		List<Workshop> list = new ArrayList<Workshop>();
+
+		BasicDBObject qObj = new BasicDBObject("shequ", new BasicDBObject(
+				"$in", new Long[] { shequ }));
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_WORKSHOP)
+				.find(qObj);
+
+		BasicDBObject dbObj;
+
+		while (dbCur.hasNext()) {
+
+			dbObj = (BasicDBObject) dbCur.next();
+
+			list.add(newWorkshopByDBObj(dbObj));
+		}
+
+		return list;
+
+	}
+
 	public List<Workshop> findShopByUserID(long uid) {
 
 		List<Workshop> list = new ArrayList<Workshop>();

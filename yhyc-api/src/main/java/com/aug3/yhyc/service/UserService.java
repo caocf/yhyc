@@ -12,10 +12,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.aug3.sys.util.JSONUtil;
 import com.aug3.yhyc.base.RespType;
 import com.aug3.yhyc.domain.UserDomain;
 import com.aug3.yhyc.dto.UserPrefs;
+import com.aug3.yhyc.interceptors.annotation.AccessTrace;
 import com.aug3.yhyc.util.ConfigManager;
 import com.aug3.yhyc.valueobj.DeliveryContact;
 import com.aug3.yhyc.valueobj.User;
@@ -30,13 +33,27 @@ public class UserService extends BaseService {
 			.getProperty("user.notexist");
 	private static String passwd_not_correct = ConfigManager.getProperties()
 			.getProperty("user.passwd.notcorrect");
+	private static String verifycode_not_correct = ConfigManager
+			.getProperties().getProperty("user.verifycode.notcorrect");
+	// 您今天已尝试过3次，如无法收到验证码，请联系客服
+	private static String verifycode_times_over = ConfigManager.getProperties()
+			.getProperty("user.verifycode.times.over");
+	// 验证码生成错误
+	private static String verifycode_generate_error = ConfigManager
+			.getProperties().getProperty("user.verifycode.generate.error");
 
+	/**
+	 * @deprecated use mobie verify instead
+	 * 
+	 * @param request
+	 * @param token
+	 * @param user
+	 * @return
+	 */
 	@POST
 	@Path("/login")
-	// @AccessTrace
-	// @AccessToken
 	public String login(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("user") String user) {
+			@FormParam("user") String user) {
 
 		User u = JSONUtil.fromJson(user, User.class);
 		User retUser = userDomain.login(u);
@@ -54,18 +71,30 @@ public class UserService extends BaseService {
 		}
 	}
 
+	/**
+	 * @deprecated use mobile verify instead
+	 * 
+	 * @param request
+	 * @param token
+	 * @param user
+	 * @param uuid
+	 * @return
+	 */
 	@POST
 	@Path("/register")
-	// @AccessTrace
-	// @AccessToken
 	public String register(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("user") String user) {
+			@FormParam("token") String token, @FormParam("user") String user,
+			@FormParam("uuid") String uuid) {
+
+		if (StringUtils.isBlank(uuid)) {
+			uuid = request.getHeader("uuid");
+		}
 
 		User u = JSONUtil.fromJson(user, User.class);
 		long ret = userDomain.exist(u);
 
 		if (ret == 0) {
-			long uid = userDomain.register(u);
+			long uid = userDomain.register(u, uuid);
 			return buildResponseSuccess(uid);
 		} else if (ret < 20) {
 			return buildResponseResult(ret, RespType.USER_EXIST);
@@ -78,10 +107,77 @@ public class UserService extends BaseService {
 	}
 
 	@GET
+	@Path("/new/temp")
+	public String createTempUser(@Context HttpServletRequest request,
+			@QueryParam("uuid") String uuid) {
+
+		if (StringUtils.isBlank(uuid)) {
+			uuid = request.getHeader("uuid");
+		}
+
+		User user = userDomain.registerTempUser(uuid);
+
+		return buildResponseSuccess(user);
+
+	}
+
+	@GET
+	@Path("/mobile/verification")
+	@AccessTrace
+	public String generateVerification(@Context HttpServletRequest request,
+			@QueryParam("mobi") String mobi, @QueryParam("uuid") String uuid) {
+
+		int ret = userDomain.generateVerification(mobi, uuid);
+		if (ret == 1)
+			return buildResponseSuccess("ok");
+		else if (ret == 0)
+			return buildResponseResult(verifycode_generate_error,
+					RespType.FAILED);
+		else
+			return buildResponseResult(verifycode_times_over, RespType.FAILED);
+
+	}
+
+	@GET
+	@Path("/mobile/verify")
+	public String verifyMobile(@Context HttpServletRequest request,
+			@QueryParam("mobi") String mobi,
+			@QueryParam("verifyCode") String verifyCode) {
+
+		boolean boo = userDomain.verifyMobile(mobi, verifyCode);
+		if (boo) {
+			User u = userDomain.getUserInfo(mobi);
+			return buildResponseSuccess(u);
+		} else
+			return buildResponseResult(verifycode_not_correct,
+					RespType.LOGIN_FAILED);
+	}
+
+	@GET
+	@Path("/mobile/bind")
+	@AccessTrace
+	public String bindMobile(@Context HttpServletRequest request,
+			@QueryParam("mobi") String mobi,
+			@QueryParam("verifyCode") String verifyCode,
+			@QueryParam("uuid") String uuid, @QueryParam("uid") long uid) {
+
+		if (StringUtils.isBlank(uuid)) {
+			uuid = request.getHeader("uuid");
+		}
+
+		boolean boo = userDomain.bindMobile(mobi, verifyCode, uuid, uid);
+		if (boo) {
+			User u = userDomain.getUserInfo(mobi);
+			return buildResponseSuccess(u);
+		} else
+			return buildResponseResult(verifycode_not_correct, RespType.FAILED);
+	}
+
+	@GET
 	@Path("/password/change")
 	public String modifyPassword(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("mobi") String mobi,
-			@QueryParam("mail") String mail, @QueryParam("passwd") String passwd) {
+			@QueryParam("mobi") String mobi, @QueryParam("mail") String mail,
+			@QueryParam("passwd") String passwd) {
 
 		boolean bool = userDomain.modifyPassword(mobi, mail, passwd);
 		if (bool)
@@ -95,8 +191,7 @@ public class UserService extends BaseService {
 	@GET
 	@Path("/password/confirm")
 	public String confirmPassword(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("mail") String mail,
-			@QueryParam("key") String key) {
+			@QueryParam("mail") String mail, @QueryParam("key") String key) {
 
 		boolean bool = userDomain.confirmPassword(mail, Long.parseLong(key));
 
@@ -111,7 +206,7 @@ public class UserService extends BaseService {
 	@GET
 	@Path("/avatar")
 	public String getAvatar(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") long uid) {
+			@QueryParam("uid") long uid) {
 
 		User user = userDomain.find(uid);
 		return buildResponseSuccess(user);
@@ -120,7 +215,7 @@ public class UserService extends BaseService {
 	@GET
 	@Path("/prefs")
 	public String getUserPrefs(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") long uid) {
+			@QueryParam("uid") long uid) {
 
 		UserPrefs userPrefs = userDomain.getUserPrefs(uid);
 		return buildResponseSuccess(userPrefs);
@@ -129,10 +224,37 @@ public class UserService extends BaseService {
 	@POST
 	@Path("/point")
 	public String updateUserPoint(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("uid") long uid,
-			@FormParam("dist") int district, @FormParam("shequ") long shequ) {
+			@FormParam("uid") long uid, @FormParam("dist") int district,
+			@FormParam("shequ") long shequ) {
 
 		userDomain.updatePoint(uid, district, shequ);
+		return buildResponseSuccess("OK");
+	}
+
+	@POST
+	@Path("/name")
+	public String updateUserName(@Context HttpServletRequest request,
+			@FormParam("uid") long uid, @FormParam("name") String name) {
+
+		userDomain.updateUserName(uid, name);
+		return buildResponseSuccess("OK");
+	}
+
+	@GET
+	@Path("/tags")
+	public String getUserTags(@Context HttpServletRequest request,
+			@QueryParam("uid") long uid) {
+
+		List<Integer> tags = userDomain.findTags(uid);
+		return buildResponseSuccess(tags);
+	}
+
+	@POST
+	@Path("/tags")
+	public String updateUserTags(@Context HttpServletRequest request,
+			@FormParam("uid") long uid, @FormParam("tags") String tags) {
+
+		userDomain.updateTags(uid, transfer2Integer(tags));
 		return buildResponseSuccess("OK");
 	}
 
@@ -150,9 +272,8 @@ public class UserService extends BaseService {
 	@POST
 	@Path("/prefs/update")
 	public String addUserPrefs(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("uid") long uid,
-			@FormParam("field") String field, @FormParam("items") String items,
-			@FormParam("type") int type) {
+			@FormParam("uid") long uid, @FormParam("field") String field,
+			@FormParam("items") String items, @FormParam("type") int type) {
 
 		boolean result = userDomain.updateUserPrefs(uid, field,
 				transfer2Long(items), type);
@@ -163,7 +284,7 @@ public class UserService extends BaseService {
 	@GET
 	@Path("/contacts")
 	public String fetchContactsList(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") long uid) {
+			@QueryParam("uid") long uid) {
 
 		List<DeliveryContact> contacts = userDomain.fetchContacts(uid);
 		return buildResponseSuccess(contacts);

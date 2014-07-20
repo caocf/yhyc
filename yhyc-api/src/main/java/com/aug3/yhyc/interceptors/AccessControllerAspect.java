@@ -1,6 +1,7 @@
 package com.aug3.yhyc.interceptors;
 
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,15 +21,23 @@ import com.aug3.yhyc.interceptors.annotation.AccessTrace;
 @Aspect
 public class AccessControllerAspect {
 
-	private static final Logger logger = Logger.getLogger(AccessControllerAspect.class);
+	private static final Logger logger = Logger
+			.getLogger(AccessControllerAspect.class);
 
-	@Around("within(com.aug3.yhyc.services..*) && @annotation(traceAnnotation) && args(request,..)")
-	public Object accessLog(final ProceedingJoinPoint pjp, final AccessTrace traceAnnotation, HttpServletRequest request)
+	@Around("within(com.aug3.yhyc.service..*) && @annotation(traceAnnotation) && args(request,..)")
+	public Object accessLog(final ProceedingJoinPoint pjp,
+			final AccessTrace traceAnnotation, HttpServletRequest request)
 			throws Throwable {
 
 		String ip = null;
+		String uuid = null;
+		String ver = null;
 		if (request != null) {
-			ip = request.getRemoteAddr();
+			ip = request.getHeader("X-Forwarded-For");
+			if (ip == null)
+				ip = request.getRemoteAddr();
+			uuid = request.getHeader("uuid");
+			ver = request.getHeader("ver");
 		}
 
 		long start = System.currentTimeMillis();
@@ -41,19 +50,44 @@ public class AccessControllerAspect {
 		}
 		long end = System.currentTimeMillis();
 
-		Method targetMethod = ((MethodSignature) pjp.getSignature()).getMethod();
+		Method targetMethod = ((MethodSignature) pjp.getSignature())
+				.getMethod();
 
-		logger.info("ip:[ " + ip + " ] called API:[" + targetMethod.getDeclaringClass().getName() + "."
-				+ targetMethod.getName() + "] takes:[" + (end - start) + "] ms, with param:"
-				+ request.getParameterMap().toString());
+		logger.info(new StringBuilder("ip:[").append(ip).append("][")
+				.append(uuid).append("][").append(ver).append("] called:[")
+				.append(targetMethod.getDeclaringClass().getSimpleName())
+				.append(".").append(targetMethod.getName()).append("] takes:[")
+				.append(end - start).append("]ms, params:[")
+				.append(getParameters(request)).append("]").toString());
 
 		return retVal;
 
 	}
 
-	@Around("within(com.aug3.yhyc.services..*) && @annotation(tokenAnnotation) && args(request,token,..)")
-	public Object accessToken(final ProceedingJoinPoint pjp, final AccessToken tokenAnnotation,
-			HttpServletRequest request, String token) throws Throwable {
+	private String getParameters(HttpServletRequest request) {
+		StringBuilder sb = new StringBuilder();
+		Enumeration<String> keys = request.getParameterNames();
+		if (keys != null) {
+			String key;
+			boolean first = true;
+			while (keys.hasMoreElements()) {
+				if (first) {
+					first = false;
+				} else {
+					sb.append(",");
+				}
+
+				key = keys.nextElement();
+				sb.append(key).append("=>").append(request.getParameter(key));
+			}
+		}
+		return sb.toString();
+	}
+
+	@Around("within(com.aug3.yhyc.service..*) && @annotation(tokenAnnotation) && args(request,token,..)")
+	public Object accessToken(final ProceedingJoinPoint pjp,
+			final AccessToken tokenAnnotation, HttpServletRequest request,
+			String token) throws Throwable {
 
 		boolean isValid = UserDao.isValidToken(token);
 

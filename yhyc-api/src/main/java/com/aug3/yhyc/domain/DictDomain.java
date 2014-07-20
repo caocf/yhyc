@@ -16,6 +16,7 @@ import com.aug3.yhyc.dto.DeliveryTime;
 import com.aug3.yhyc.util.ConfigManager;
 import com.aug3.yhyc.valueobj.Category;
 import com.aug3.yhyc.valueobj.Region;
+import com.aug3.yhyc.valueobj.Tag;
 
 public class DictDomain {
 
@@ -59,8 +60,13 @@ public class DictDomain {
 		return categories;
 	}
 
+	public List<Tag> listTags() {
+
+		return dictDao.findAll();
+	}
+
 	public List<Region> listRegion() {
-		
+
 		return dictDao.findRegion();
 	}
 
@@ -72,7 +78,7 @@ public class DictDomain {
 
 		int hour = c.get(Calendar.HOUR_OF_DAY);
 
-		if (hour > 19) {
+		if (hour > 18) {
 			c.add(Calendar.DATE, 1);
 		}
 
@@ -94,7 +100,7 @@ public class DictDomain {
 				"deliverytime");
 
 		if (StringUtils.isBlank(deliverytimeStr)) {
-			dt.setTime(new String[] { "10:30-12:30", "17:30-19:30" });
+			dt.setTime(new String[] { "10:00-12:30", "16:30-19:30" });
 		} else {
 			dt.setTime(deliverytimeStr.split(";"));
 		}

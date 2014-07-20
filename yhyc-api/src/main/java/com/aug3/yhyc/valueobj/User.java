@@ -1,6 +1,5 @@
 package com.aug3.yhyc.valueobj;
 
-import java.util.List;
 
 public class User {
 
@@ -13,7 +12,6 @@ public class User {
 	private int ac;
 	private boolean hasAvatar;
 	private String avatar;
-	private List<String> industry;
 	private int type;
 	private int dist;
 	private long shequ;
@@ -88,14 +86,6 @@ public class User {
 
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
-	}
-
-	public List<String> getIndustry() {
-		return industry;
-	}
-
-	public void setIndustry(List<String> industry) {
-		this.industry = industry;
 	}
 
 	public int getType() {

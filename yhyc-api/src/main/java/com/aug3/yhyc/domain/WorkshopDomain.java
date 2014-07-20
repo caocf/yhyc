@@ -48,6 +48,18 @@ public class WorkshopDomain {
 		return result;
 	}
 
+	public List<WorkshopDTO> queryDefaultWorkshops(long shequ) {
+
+		List<Workshop> list = shopDao.findByShequ(shequ);
+
+		List<WorkshopDTO> result = new ArrayList<WorkshopDTO>();
+		if (list != null && !list.isEmpty()) {
+			result = mapWorkshop2DTO(list);
+		}
+
+		return result;
+	}
+
 	public List<WorkshopDTO> findWorkshops(long uid) {
 
 		List<Workshop> list = shopDao.findShopByUserID(uid);

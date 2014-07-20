@@ -71,4 +71,16 @@ public abstract class BaseService {
 		return result;
 	}
 
+	protected List<Integer> transfer2Integer(String commaSeparated) {
+		List<Integer> result = new ArrayList<Integer>();
+		if (StringUtils.isBlank(commaSeparated)) {
+			return result;
+		}
+		String[] array = commaSeparated.split(",");
+		for (String s : array) {
+			result.add(Integer.parseInt(s));
+		}
+		return result;
+	}
+
 }

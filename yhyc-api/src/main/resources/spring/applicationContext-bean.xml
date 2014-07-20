@@ -29,7 +29,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	<!-- domain -->
 	<bean id="appDomain" class="com.aug3.yhyc.domain.AppDomain">
 	</bean>
-	
+
 	<bean id="dictDomain" class="com.aug3.yhyc.domain.DictDomain">
 		<property name="dictDao" ref="dictDao" />
 	</bean>
@@ -58,6 +58,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	<bean id="orderDomain" class="com.aug3.yhyc.domain.OrderDomain">
 		<property name="orderDao" ref="orderDao" />
 		<property name="itemDao" ref="itemDao" />
+		<property name="userDao" ref="userDao" />
 	</bean>
 
 	<bean id="worksDomain" class="com.aug3.yhyc.domain.WorksDomain">
@@ -65,11 +66,16 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 		<property name="worksDao" ref="worksDao" />
 	</bean>
 
+	<bean id="statDomain" class="com.aug3.yhyc.domain.StatDomain">
+		<property name="orderDao" ref="orderDao" />
+	</bean>
+
 	<!-- service -->
 	<bean id="appService" class="com.aug3.yhyc.service.AppService">
 		<property name="appDomain" ref="appDomain" />
+		<property name="userDomain" ref="userDomain" />
 	</bean>
-	
+
 	<bean id="dictService" class="com.aug3.yhyc.service.DictService">
 		<property name="dictDomain" ref="dictDomain" />
 	</bean>
@@ -100,7 +106,9 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 	</bean>
 
 	<bean id="storageService" class="com.aug3.yhyc.service.QiniuService" />
-	
-	<bean id="statService" class="com.aug3.yhyc.service.StatService" />
+
+	<bean id="statService" class="com.aug3.yhyc.service.StatService">
+		<property name="statDomain" ref="statDomain" />
+	</bean>
 </beans>
 

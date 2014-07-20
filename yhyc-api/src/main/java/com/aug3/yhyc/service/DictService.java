@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -16,6 +15,7 @@ import com.aug3.yhyc.dto.CategoryDTO;
 import com.aug3.yhyc.dto.DeliveryTime;
 import com.aug3.yhyc.valueobj.Category;
 import com.aug3.yhyc.valueobj.Region;
+import com.aug3.yhyc.valueobj.Tag;
 
 @Path("/dict/")
 @XmlRootElement()
@@ -34,8 +34,7 @@ public class DictService extends BaseService {
 
 	@GET
 	@Path("/category")
-	public String listCategory(@Context HttpServletRequest request,
-			@QueryParam("token") String token) {
+	public String listCategory(@Context HttpServletRequest request) {
 
 		Map<Integer, List<Category>> categories = dictDomain.mapCategory();
 		CategoryDTO dto = new CategoryDTO();
@@ -45,17 +44,23 @@ public class DictService extends BaseService {
 
 	@GET
 	@Path("/region")
-	public String listRegion(@Context HttpServletRequest request,
-			@QueryParam("token") String token) {
+	public String listRegion(@Context HttpServletRequest request) {
 
 		List<Region> result = dictDomain.listRegion();
 		return buildResponseSuccess(result);
 	}
 
 	@GET
+	@Path("/tags")
+	public String listTags(@Context HttpServletRequest request) {
+
+		List<Tag> result = dictDomain.listTags();
+		return buildResponseSuccess(result);
+	}
+
+	@GET
 	@Path("/deliverytime")
-	public String deliverytime(@Context HttpServletRequest request,
-			@QueryParam("token") String token) {
+	public String deliverytime(@Context HttpServletRequest request) {
 
 		DeliveryTime dt = dictDomain.deliverytime();
 		return buildResponseSuccess(dt);

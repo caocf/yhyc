@@ -12,6 +12,8 @@ public class AppInfo implements Serializable {
 
 	private String url;
 
+	//apple 审核时间 in_review
+	
 	public int getVerCode() {
 		return verCode;
 	}

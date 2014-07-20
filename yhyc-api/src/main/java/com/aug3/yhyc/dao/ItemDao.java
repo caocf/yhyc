@@ -367,7 +367,15 @@ public class ItemDao extends BaseDao {
 				BasicDBObject commentObj = (BasicDBObject) obj;
 				Comment comment = new Comment();
 				comment.setUid(commentObj.getLong("uid"));
-				comment.setName(commentObj.getString("name"));
+				String name = commentObj.getString("name");
+				if (StringUtils.isNotBlank(name)) {
+					if (name.length() == 11) {
+						name = name.replace(name.substring(3, 7), "****");
+					} else {
+						name = "*" + name.substring(1);
+					}
+				}
+				comment.setName(name);
 				comment.setContent(commentObj.getString("content"));
 				comment.setScore(commentObj.getInt("score"));
 				comment.setTs(commentObj.getString("ts"));

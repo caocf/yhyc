@@ -8,14 +8,17 @@ import java.util.Set;
 
 import com.aug3.yhyc.dao.ItemDao;
 import com.aug3.yhyc.dao.OrderDao;
+import com.aug3.yhyc.dao.UserDao;
 import com.aug3.yhyc.dto.ItemDTO;
 import com.aug3.yhyc.dto.Order;
 import com.aug3.yhyc.dto.Orders;
+import com.aug3.yhyc.util.AsyncJobs;
 
 public class OrderDomain {
 
 	private OrderDao orderDao;
 	private ItemDao itemDao;
+	private UserDao userDao;
 
 	public OrderDao getOrderDao() {
 		return orderDao;
@@ -33,14 +36,48 @@ public class OrderDomain {
 		this.itemDao = itemDao;
 	}
 
+	public UserDao getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
+
 	/**
 	 * 
 	 * @param order
 	 * @return
 	 */
-	public List<Long> newOrder(Orders order) {
+	public List<Long> newOrder(Orders orders) {
 
-		return orderDao.createOrder(order);
+		List<Long> orderids = orderDao.createOrder(orders);
+
+		postOrder(orders);
+
+		return orderids;
+
+	}
+
+	private void postOrder(final Orders orders) {
+
+		AsyncJobs.submit(new Runnable() {
+
+			@Override
+			public void run() {
+
+				// remove item from user cart after order created
+				Set<Long> itemids = new HashSet<Long>();
+				Set<Long> shops = orders.getItems().keySet();
+				for (Long shop : shops) {
+					List<ItemDTO> items = orders.getItems().get(shop);
+					for (ItemDTO i : items) {
+						itemids.add(i.getId());
+					}
+				}
+				userDao.removeUserPrefs(orders.getUid(), "cart", itemids);
+			}
+		});
 
 	}
 
@@ -88,7 +125,7 @@ public class OrderDomain {
 
 		List<Order> orders = orderDao.findByWorkshop(workshop, status);
 		getOrderDetails(orders);
-		
+
 		return orders;
 	}
 

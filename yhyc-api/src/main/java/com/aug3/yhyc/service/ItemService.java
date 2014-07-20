@@ -21,6 +21,7 @@ import com.aug3.yhyc.dto.CommentDTO;
 import com.aug3.yhyc.dto.CommentReq;
 import com.aug3.yhyc.dto.ProductItem;
 import com.aug3.yhyc.dto.ShopItem;
+import com.aug3.yhyc.interceptors.annotation.AccessTrace;
 import com.aug3.yhyc.valueobj.Item;
 
 @Path("/item/")
@@ -44,8 +45,7 @@ public class ItemService extends BaseService {
 	// @AccessTrace
 	// @AccessToken
 	public String newItem(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("uid") long uid,
-			@FormParam("item") String item) {
+			@FormParam("uid") long uid, @FormParam("item") String item) {
 
 		return null;// JSONUtil.fromJson(item, Item.class);
 	}
@@ -55,8 +55,7 @@ public class ItemService extends BaseService {
 	// @AccessTrace
 	// @AccessToken
 	public String updateItem(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("workshop") long workshop,
-			@FormParam("item") String item) {
+			@FormParam("workshop") long workshop, @FormParam("item") String item) {
 
 		boolean boo = itemDomain.updateItem(workshop,
 				JSONUtil.fromJson(item, Item.class));
@@ -70,7 +69,6 @@ public class ItemService extends BaseService {
 	@GET
 	@Path("/list")
 	public String listItems(@Context HttpServletRequest request,
-			@QueryParam("token") String token,
 			@QueryParam("workshop") long workshop) {
 
 		if (workshop == 0) {
@@ -83,8 +81,8 @@ public class ItemService extends BaseService {
 
 	@GET
 	@Path("/filter")
+	@AccessTrace
 	public String filterItems(@Context HttpServletRequest request,
-			@QueryParam("token") String token,
 			@QueryParam("workshop") long workshop, @QueryParam("cat") int cat,
 			@QueryParam("type") int type) {
 
@@ -99,7 +97,6 @@ public class ItemService extends BaseService {
 	@GET
 	@Path("/manage")
 	public String manageItems(@Context HttpServletRequest request,
-			@QueryParam("token") String token,
 			@QueryParam("workshop") long workshop, @QueryParam("cat") int cat,
 			@QueryParam("type") int type) {
 
@@ -121,8 +118,9 @@ public class ItemService extends BaseService {
 	 */
 	@GET
 	@Path("/show")
+	@AccessTrace
 	public String showItem(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("item") long item) {
+			@QueryParam("item") long item) {
 
 		ProductItem result = itemDomain.findItemByID(item);
 		return buildResponseSuccess(result);
@@ -131,8 +129,7 @@ public class ItemService extends BaseService {
 	@GET
 	@Path("/comments")
 	public String listComments(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("item") long item,
-			@QueryParam("pn") int pn) {
+			@QueryParam("item") long item, @QueryParam("pn") int pn) {
 
 		if (pn == 0) {
 			pn = 1;
@@ -144,7 +141,6 @@ public class ItemService extends BaseService {
 	@POST
 	@Path("/comment/new")
 	public void newComment(@Context HttpServletRequest request,
-			@FormParam("token") String token,
 			@FormParam("comments") String comments) {
 
 		itemDomain.newComments(JSONUtil.fromJson(comments, CommentReq.class));
@@ -153,7 +149,7 @@ public class ItemService extends BaseService {
 	@GET
 	@Path("/groupbyshop")
 	public String groupItemsByShop(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("items") String items) {
+			@QueryParam("items") String items) {
 
 		if (StringUtils.isBlank(items)) {
 			return buildResponseResult("invlid param items",
@@ -168,7 +164,7 @@ public class ItemService extends BaseService {
 	@GET
 	@Path("/myfav")
 	public String fetchFavorite(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") long uid) {
+			@QueryParam("uid") long uid) {
 
 		List<ShopItem> fav = itemDomain.fetchFavorite(uid);
 		return buildResponseSuccess(fav);
@@ -177,7 +173,7 @@ public class ItemService extends BaseService {
 	@GET
 	@Path("/shoppingcart")
 	public String fetchShoppingCart(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") long uid) {
+			@QueryParam("uid") long uid) {
 
 		List<ShopItem> cart = itemDomain.fetchShoppingCart(uid);
 		return buildResponseSuccess(cart);

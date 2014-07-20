@@ -1,19 +1,26 @@
 package com.aug3.yhyc.dao;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
 
 import com.aug3.storage.mongoclient.MongoAdaptor;
 import com.aug3.yhyc.base.CollectionConstants;
+import com.aug3.yhyc.base.Constants;
 import com.aug3.yhyc.domain.OrderStatus;
 import com.aug3.yhyc.dto.ItemDTO;
 import com.aug3.yhyc.dto.Order;
 import com.aug3.yhyc.dto.Orders;
 import com.aug3.yhyc.util.Arith;
+import com.aug3.yhyc.util.AsyncJobs;
 import com.aug3.yhyc.util.ConfigManager;
 import com.aug3.yhyc.util.IDGenerator;
 import com.aug3.yhyc.valueobj.DeliveryContact;
@@ -25,6 +32,8 @@ import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 
 public class OrderDao extends BaseDao {
+
+	private static final Logger log = Logger.getLogger(OrderDao.class);
 
 	private static final int delivery_fee = Integer.parseInt(ConfigManager
 			.getProperties().getProperty("delivery.fee", "2"));
@@ -40,7 +49,7 @@ public class OrderDao extends BaseDao {
 
 		DBCursor dbCur = null;
 
-		if (status == 99) {
+		if (status == Constants.ORDER_STATUS_FINISHED) {
 			dbCur = getDBCollection(CollectionConstants.COLL_ORDERS)
 					.find(query).sort(new BasicDBObject("_id", -1)).limit(30);
 		} else {
@@ -110,13 +119,65 @@ public class OrderDao extends BaseDao {
 
 		DBCursor dbCur = null;
 
-		if (status == 99) {
+		if (status == Constants.ORDER_STATUS_FINISHED) {
 			dbCur = getDBCollection(CollectionConstants.COLL_ORDERS)
 					.find(query).sort(new BasicDBObject("_id", -1)).limit(100);
 		} else {
 			dbCur = getDBCollection(CollectionConstants.COLL_ORDERS)
 					.find(query).sort(new BasicDBObject("_id", -1));
 		}
+
+		List<Order> list = new ArrayList<Order>();
+
+		while (dbCur.hasNext()) {
+			BasicDBObject dbObj = (BasicDBObject) dbCur.next();
+			Order myorder = getOrderInfo(dbObj);
+
+			list.add(myorder);
+		}
+
+		return list;
+
+	}
+
+	/**
+	 * 
+	 * @param workshop
+	 * @param status
+	 * @param freq
+	 *            -- daily, weekly, monthly
+	 * @return
+	 */
+	public List<Order> find(long workshop, int status, int freq) {
+
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+
+		if (Constants.FREQ_WEEKLY == freq) {
+			c.set(Calendar.DAY_OF_MONTH, c.getFirstDayOfWeek());
+		} else if (Constants.FREQ_MONTHLY == freq) {
+			c.set(Calendar.DAY_OF_MONTH, 1);
+		}
+
+		Date start = c.getTime();
+
+		BasicDBObject query = new BasicDBObject("sid", workshop).append("ts",
+				new BasicDBObject("$gte", start));
+
+		if (status == Constants.ORDER_STATUS_ONGOING) {
+			query.append("sts",
+					new BasicDBObject("$lt", OrderStatus.CANCELED.getValue()));
+		} else if (status == Constants.ORDER_STATUS_FINISHED) {// 结束
+			query.append("sts", new BasicDBObject("$gt",
+					OrderStatus.CANCELED_BY_SELLER.getValue()));
+		} else {
+			query.append("sts", status);
+		}
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ORDERS).find(
+				query);
 
 		List<Order> list = new ArrayList<Order>();
 
@@ -140,10 +201,10 @@ public class OrderDao extends BaseDao {
 	 * @param status
 	 */
 	private void addStatusCondition(BasicDBObject dbObj, int status) {
-		if (status == 88) {
+		if (status == Constants.ORDER_STATUS_ONGOING) {
 			dbObj.append("sts",
 					new BasicDBObject("$lt", OrderStatus.CANCELED.getValue()));
-		} else if (status == 99) {// 结束
+		} else if (status == Constants.ORDER_STATUS_FINISHED) {// 结束
 			dbObj.append("sts",
 					new BasicDBObject("$gte", OrderStatus.CANCELED.getValue()));
 		} else {
@@ -184,7 +245,7 @@ public class OrderDao extends BaseDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Long> createOrder(Orders order) {
+	public List<Long> createOrder(final Orders order) {
 
 		Map<Long, List<ItemDTO>> orderMap = order.getItems();
 
@@ -192,6 +253,9 @@ public class OrderDao extends BaseDao {
 		List<Long> orderids = new ArrayList<Long>();
 
 		int ac_total = 0;
+
+		final Map<Integer, List<Long>> statsMap = new HashMap<Integer, List<Long>>();
+
 		for (Long shopid : orderMap.keySet()) {
 
 			BasicDBObject doc = new BasicDBObject();
@@ -209,10 +273,19 @@ public class OrderDao extends BaseDao {
 				m = new HashMap();
 				m.put("id", item.getId());
 				m.put("name", item.getName());
-				m.put("n", item.getNum());
+				int num = item.getNum();
+				m.put("n", num);
 				m.put("pp", item.getPrice());
 				orders.add(m);
-				total = Arith.add(total, item.getPrice() * item.getNum());
+				total = Arith.add(total, item.getPrice() * num);
+
+				if (statsMap.containsKey(num)) {
+					statsMap.get(num).add(item.getId());
+				} else {
+					List<Long> ilist = new ArrayList<Long>();
+					ilist.add(item.getId());
+					statsMap.put(num, ilist);
+				}
 			}
 			doc.put("items", orders);
 
@@ -249,12 +322,42 @@ public class OrderDao extends BaseDao {
 		}
 
 		if (doclist.size() > 0) {
+			// insert new order info
 			getDBCollection(CollectionConstants.COLL_ORDERS).insert(doclist);
-			getDBCollection(CollectionConstants.COLL_USERS)
-					.update(new BasicDBObject("_id", order.getUid()),
-							new BasicDBObject("$inc", new BasicDBObject("ac",
-									ac_total)), false, false);
+
+			final int ac_inc = ac_total;
+			AsyncJobs.submit(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						// update user accumulative score
+						getDBCollection(CollectionConstants.COLL_USERS).update(
+								new BasicDBObject("_id", order.getUid()),
+								new BasicDBObject("$inc", new BasicDBObject(
+										"ac", ac_inc)), false, false);
+
+						// update sales amount
+						Set<Entry<Integer, List<Long>>> entries = statsMap
+								.entrySet();
+						for (Entry<Integer, List<Long>> entry : entries) {
+							getDBCollection(CollectionConstants.COLL_ITEMS)
+									.update(new BasicDBObject().append("_id",
+											new BasicDBObject().append("$in",
+													entry.getValue())),
+											new BasicDBObject().append("$inc",
+													new BasicDBObject("sale",
+															entry.getKey())),
+											false, true);
+						}
+					} catch (Throwable e) {
+						log.info(e.getMessage());
+					}
+				}
+			});
+
 		}
+
 		return orderids;
 	}
 

@@ -18,8 +18,9 @@ public class ShequDao extends BaseDao {
 
 	public List<Shequ> findShequ(int city, int dist, String q) {
 
-		BasicDBObject qObj = new BasicDBObject("city", city).append("dist",
-				dist);
+		// TODO : add dist later
+		BasicDBObject qObj = new BasicDBObject("city", city);// .append("dist",
+																// dist);
 		if (StringUtils.isNotBlank(q)) {
 			if (RegexUtils.isLetter(q)) {
 				// TODO db.shequ.ensureIndex( {py: "text"} )
@@ -31,7 +32,7 @@ public class ShequDao extends BaseDao {
 		}
 
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_SHEQU).find(
-				qObj);
+				qObj).limit(50);
 
 		BasicDBObject dbObj;
 		Shequ sq;
