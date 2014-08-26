@@ -3,8 +3,10 @@ package com.aug3.yhyc.dao;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -122,11 +124,13 @@ public class ItemDao extends BaseDao {
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
 				new BasicDBObject("_id", itemId));
 
-		BasicDBObject dbObj;
 		Item item = null;
-		while (dbCur.hasNext()) {
-			dbObj = (BasicDBObject) dbCur.next();
-			item = transferDBObj2Item(dbObj);
+		BasicDBObject dbObj;
+		if (dbCur != null) {
+			while (dbCur.hasNext()) {
+				dbObj = (BasicDBObject) dbCur.next();
+				item = transferDBObj2Item(dbObj);
+			}
 		}
 
 		return item;
@@ -162,6 +166,86 @@ public class ItemDao extends BaseDao {
 
 		return p;
 
+	}
+
+	public List<Product> findProducts(long workshop, int cat) {
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS)
+				.find(new BasicDBObject("sid", workshop),
+						new BasicDBObject("pid", 1));
+		Set<Long> pids = new HashSet<Long>();
+		while (dbCur.hasNext()) {
+			BasicDBObject dbObj = (BasicDBObject) dbCur.next();
+			pids.add(dbObj.getLong("pid"));
+		}
+
+		dbCur = getDBCollection(CollectionConstants.COLL_PRODUCTS).find(
+				new BasicDBObject().append("_id",
+						new BasicDBObject().append("$gte", cat * 100000)
+								.append("$lte", cat * 100000 + 99999)));
+
+		BasicDBObject dbObj;
+		List<Product> resultList = new ArrayList<Product>();
+		while (dbCur.hasNext()) {
+			dbObj = (BasicDBObject) dbCur.next();
+
+			long id = dbObj.getLong("_id");
+
+			if (!pids.contains(id)) {
+				Product p = new Product();
+				p.setId(id);
+				p.setName(dbObj.getString("name"));
+				p.setPic(getProductPic(dbObj.getString("pic")));
+				p.setCat(dbObj.getInt("cat"));
+				p.setSeason(dbObj.getBoolean("season", false));
+				p.setSts(dbObj.getInt("sts"));
+
+				resultList.add(p);
+			}
+		}
+
+		return resultList;
+
+	}
+
+	public long newItem(Item item) {
+
+		long id = nextItemID(item.getSid());
+
+		BasicDBObject dbObj = new BasicDBObject().append("_id", id)
+				.append("name", item.getName()).append("sid", item.getSid())
+				.append("pid", item.getPid()).append("pp", item.getPp())
+				.append("mp", item.getMp()).append("act", item.getAct())
+				.append("spec", new String[] {}).append("fav", 0L)
+				.append("inv", 100L).append("sale", 0L)
+				.append("sts", item.getSts());
+
+		getDBCollection(CollectionConstants.COLL_ITEMS).insert(dbObj);
+
+		return id;
+
+	}
+
+	private long nextItemID(long sid) {
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS)
+				.find(new BasicDBObject("sid", sid),
+						new BasicDBObject("_id", 1))
+				.sort(new BasicDBObject("_id", -1)).limit(1);
+
+		long nid = 0;
+		if (dbCur != null) {
+			while (dbCur.hasNext()) {
+				DBObject dbObj = dbCur.next();
+				nid = Long.parseLong(dbObj.get("_id").toString()) + 1;
+			}
+		}
+
+		if (nid == 0) {
+			nid = sid * 1000 + 1;
+		}
+
+		return nid;
 	}
 
 	public boolean updateItem(long workshop, Item item) {
@@ -242,7 +326,7 @@ public class ItemDao extends BaseDao {
 		}
 
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
-				queryObj);
+				queryObj).sort(new BasicDBObject("sale", -1));
 
 		BasicDBObject dbObj;
 		while (dbCur.hasNext()) {
@@ -273,7 +357,7 @@ public class ItemDao extends BaseDao {
 		}
 
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS).find(
-				queryObj);
+				queryObj).sort(new BasicDBObject("sale", -1));
 
 		BasicDBObject dbObj;
 		while (dbCur.hasNext()) {
@@ -439,8 +523,12 @@ public class ItemDao extends BaseDao {
 
 	}
 
-	public String getItemUrl(long itemid) {
-		return Qiniu.downloadUrl(itemid + Constants.PNG, Qiniu.getItemDomain());
+	public String getItemUrl(long pid) {
+		return Qiniu.downloadUrl(pid + Constants.PNG, Qiniu.getItemDomain());
+	}
+
+	public String getProductPic(String url) {
+		return Qiniu.downloadUrl(url, Qiniu.getItemDomain());
 	}
 
 	public String getCaipuUrl(String cookPic) {

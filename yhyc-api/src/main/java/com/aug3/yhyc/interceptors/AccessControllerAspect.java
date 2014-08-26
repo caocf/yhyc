@@ -32,12 +32,14 @@ public class AccessControllerAspect {
 		String ip = null;
 		String uuid = null;
 		String ver = null;
+		String os = null;
 		if (request != null) {
 			ip = request.getHeader("X-Forwarded-For");
 			if (ip == null)
 				ip = request.getRemoteAddr();
 			uuid = request.getHeader("uuid");
 			ver = request.getHeader("ver");
+			os = request.getHeader("ostype");
 		}
 
 		long start = System.currentTimeMillis();
@@ -54,7 +56,7 @@ public class AccessControllerAspect {
 				.getMethod();
 
 		logger.info(new StringBuilder("ip:[").append(ip).append("][")
-				.append(uuid).append("][").append(ver).append("] called:[")
+				.append(uuid).append("][").append(ver).append("][").append(os).append("] called:[")
 				.append(targetMethod.getDeclaringClass().getSimpleName())
 				.append(".").append(targetMethod.getName()).append("] takes:[")
 				.append(end - start).append("]ms, params:[")

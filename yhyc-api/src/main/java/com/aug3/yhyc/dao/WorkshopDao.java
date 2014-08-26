@@ -2,9 +2,12 @@ package com.aug3.yhyc.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -13,6 +16,7 @@ import com.aug3.yhyc.dto.RequestShop;
 import com.aug3.yhyc.dto.WorkshopDTO;
 import com.aug3.yhyc.util.IDGenerator;
 import com.aug3.yhyc.util.Qiniu;
+import com.aug3.yhyc.valueobj.Classification;
 import com.aug3.yhyc.valueobj.Workshop;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -64,6 +68,34 @@ public class WorkshopDao extends BaseDao {
 			dbObj = (BasicDBObject) dbCur.next();
 
 			list.add(newWorkshopByDBObj(dbObj));
+		}
+
+		return list;
+
+	}
+
+	public List<Classification> findAllClassification() {
+
+		DBCursor dbCur = getDBCollection(
+				CollectionConstants.COLL_CLASSIFICATION).find().sort(
+				new BasicDBObject("order", 1));
+
+		BasicDBObject dbObj;
+
+		List<Classification> list = new ArrayList<Classification>();
+		Classification classify = null;
+
+		while (dbCur.hasNext()) {
+
+			dbObj = (BasicDBObject) dbCur.next();
+
+			classify = new Classification();
+			classify.setCode(dbObj.getInt("code"));
+			classify.setName(dbObj.getString("name"));
+			String pic = dbObj.getString("pic");
+			classify.setPic(Qiniu.downloadUrl(pic, Qiniu.getAppDomain()));
+
+			list.add(classify);
 		}
 
 		return list;
@@ -175,6 +207,30 @@ public class WorkshopDao extends BaseDao {
 
 	}
 
+	public Set<Long> findShopKeeper(Set<Long> shops) {
+
+		BasicDBObject qObj = new BasicDBObject("_id",
+				new BasicDBObject().append("$in", shops));
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_WORKSHOP)
+				.find(qObj,
+						new BasicDBObject().append("emp", 1).append("owner", 1));
+
+		Set<Long> emps = new HashSet<Long>();
+		while (dbCur.hasNext()) {
+			BasicDBObject dbObj = (BasicDBObject) dbCur.next();
+			if (dbObj.containsField("emp")) {
+				List<Long> emplist = (List<Long>) dbObj.get("emp");
+				emps.addAll(emplist);
+			} else {
+				emps.add(dbObj.getLong("owner"));
+			}
+		}
+
+		return emps;
+
+	}
+
 	public boolean updateShopAnnouncement(long shop, String announcement) {
 		WriteResult wr = getDBCollection(CollectionConstants.COLL_WORKSHOP)
 				.update(new BasicDBObject("_id", shop),
@@ -212,6 +268,7 @@ public class WorkshopDao extends BaseDao {
 		doc.put("busi", shop.getBusi());
 		doc.put("exp", shop.getExp());
 		doc.put("desc", shop.getDesc());
+		doc.put("ts", new Date());
 
 		getDBCollection(CollectionConstants.COLL_REQSHOP).insert(doc);
 

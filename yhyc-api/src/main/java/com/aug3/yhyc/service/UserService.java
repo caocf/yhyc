@@ -89,12 +89,14 @@ public class UserService extends BaseService {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = request.getHeader("uuid");
 		}
+		
+		String ostype = request.getHeader("ostype");
 
 		User u = JSONUtil.fromJson(user, User.class);
 		long ret = userDomain.exist(u);
 
 		if (ret == 0) {
-			long uid = userDomain.register(u, uuid);
+			long uid = userDomain.register(u, uuid, ostype);
 			return buildResponseSuccess(uid);
 		} else if (ret < 20) {
 			return buildResponseResult(ret, RespType.USER_EXIST);
@@ -127,7 +129,13 @@ public class UserService extends BaseService {
 	public String generateVerification(@Context HttpServletRequest request,
 			@QueryParam("mobi") String mobi, @QueryParam("uuid") String uuid) {
 
-		int ret = userDomain.generateVerification(mobi, uuid);
+		if (StringUtils.isBlank(uuid)) {
+			uuid = request.getHeader("uuid");
+		}
+		
+		String ostype = request.getHeader("ostype");
+
+		int ret = userDomain.generateVerification(mobi, uuid, ostype);
 		if (ret == 1)
 			return buildResponseSuccess("ok");
 		else if (ret == 0)
@@ -258,6 +266,23 @@ public class UserService extends BaseService {
 		return buildResponseSuccess("OK");
 	}
 
+	@POST
+	@Path("/sugguest")
+	public String complaintAndSugguestion(@Context HttpServletRequest request,
+			@FormParam("uid") long uid, @FormParam("name") String name,
+			@FormParam("mobi") String mobi, @FormParam("mail") String mail,
+			@FormParam("content") String content) {
+
+		if (uid == 0 && StringUtils.isBlank(name) && StringUtils.isBlank(mobi)
+				&& StringUtils.isBlank(mail) && StringUtils.isBlank(content)) {
+			return buildResponseResult("empty parameters",
+					RespType.INVALID_PARAMETERS);
+		}
+		
+		userDomain.complaintAndSugguestion(uid, name, mobi, mail, content);
+		return buildResponseSuccess("OK");
+	}
+
 	/**
 	 * 
 	 * @param request
@@ -278,6 +303,30 @@ public class UserService extends BaseService {
 		boolean result = userDomain.updateUserPrefs(uid, field,
 				transfer2Long(items), type);
 		return buildResponseSuccess(result);
+	}
+
+	/**
+	 * Push service bind
+	 * 
+	 * @param request
+	 * @param uid
+	 * @param channelId
+	 * @param userId
+	 * @param type
+	 * @return
+	 */
+	@POST
+	@Path("/pushservice/bind")
+	public String bindPushServiceReceiver(@Context HttpServletRequest request,
+			@FormParam("uid") long uid,
+			@FormParam("channelId") String channelId,
+			@FormParam("userId") String userId, @FormParam("appid") String appid) {
+
+		try {
+			userDomain.bindPushReceiver(uid, channelId, userId);
+		} catch (Exception e) {
+		}
+		return buildResponseSuccess("OK");
 	}
 
 	// TODO

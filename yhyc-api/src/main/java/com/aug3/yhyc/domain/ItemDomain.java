@@ -110,7 +110,12 @@ public class ItemDomain {
 	}
 
 	public ProductItem findItemByID(long itemID) {
+
 		Item item = itemDao.findItemByID(itemID);
+
+		if (item == null) {
+			return null;
+		}
 
 		Product p = itemDao.findProductByID(item.getPid());
 		ProductDTO prod = transferMap(p);
@@ -124,6 +129,12 @@ public class ItemDomain {
 		prodItem.setPromotion(promotions);
 
 		return prodItem;
+	}
+
+	public long newItem(Item item) {
+
+		return itemDao.newItem(item);
+
 	}
 
 	public CommentDTO findCommentsByItem(long itemId, int pn) {
@@ -171,6 +182,11 @@ public class ItemDomain {
 		List<Long> items = userDao.findShoppingCart(uid);
 
 		return groupItemsByShop(items);
+	}
+
+	public List<Product> listProducts(long workshop, int cat) {
+
+		return itemDao.findProducts(workshop, cat);
 	}
 
 	public List<ShopItem> groupItemsByShop(List<Long> itemids) {

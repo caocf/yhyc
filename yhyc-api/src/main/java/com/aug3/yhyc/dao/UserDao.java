@@ -16,6 +16,7 @@ import com.aug3.yhyc.dto.UserPrefs;
 import com.aug3.yhyc.mail.MailSender;
 import com.aug3.yhyc.util.IDGenerator;
 import com.aug3.yhyc.util.Qiniu;
+import com.aug3.yhyc.valueobj.PushReceiver;
 import com.aug3.yhyc.valueobj.User;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -204,7 +205,7 @@ public class UserDao extends BaseDao {
 		return ((BasicDBObject) result).getLong("_id");
 	}
 
-	public long create(User user, String uuid) {
+	public long create(User user, String uuid, String ostype) {
 
 		DBObject dbObj = new BasicDBObject();
 		long uid = IDGenerator.nextUserID(getDB());
@@ -214,6 +215,7 @@ public class UserDao extends BaseDao {
 		dbObj.put("mobi", user.getMobi());
 		dbObj.put("mail", user.getMail());
 		dbObj.put("uuid", uuid);
+		dbObj.put("os", ostype);
 		dbObj.put("job", user.getJob());
 		dbObj.put("fav", new Long[] {});
 		dbObj.put("cart", new Long[] {});
@@ -291,7 +293,8 @@ public class UserDao extends BaseDao {
 	 * @param mobi
 	 * @param verifyCode
 	 */
-	public void updateVerifyCode(String mobi, String verifyCode, String uuid) {
+	public void updateVerifyCode(String mobi, String verifyCode, String uuid,
+			String ostype) {
 
 		BasicDBObject queryExist = new BasicDBObject();
 
@@ -307,7 +310,7 @@ public class UserDao extends BaseDao {
 		if (getDBCollection(CollectionConstants.COLL_USERS).count(queryExist) == 0) {
 			User user = new User();
 			user.setMobi(mobi);
-			create(user, uuid);
+			create(user, uuid, ostype);
 		}
 
 		DBObject updateObj = new BasicDBObject().append("v", verifyCode)
@@ -549,6 +552,50 @@ public class UserDao extends BaseDao {
 
 	}
 
+	/**
+	 * TODO Use cache instead
+	 * 
+	 * @param uid
+	 * @param channelId
+	 * @param userId
+	 */
+	public void bindPushReceiver(long uid, String channelId, String userId) {
+		getDBCollection(CollectionConstants.COLL_PUSH_SERVICE).update(
+				new BasicDBObject("_id", uid),
+				new BasicDBObject().append(
+						"$set",
+						new BasicDBObject()
+								.append("ch", Long.parseLong(channelId))
+								.append("u", userId)
+								.append("ts", new Date().getTime() / 1000)),
+				true, false);
+	}
+
+	public List<PushReceiver> filterPushReceiver(Collection<Long> uid) {
+
+		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_PUSH_SERVICE)
+				.find(new BasicDBObject().append("_id", new BasicDBObject(
+						"$in", uid)));
+		// .append(
+		// "ts",
+		// new BasicDBObject("$gt",
+		// new Date().getTime() / 1000 - 3600 * 12)));
+
+		List<PushReceiver> receivers = new ArrayList<PushReceiver>();
+		while (dbCur.hasNext()) {
+			BasicDBObject dbObj = (BasicDBObject) dbCur.next();
+			PushReceiver receiver = new PushReceiver();
+			receiver.setUid(dbObj.getLong("_id"));
+			receiver.setChannelId(dbObj.getLong("ch"));
+			receiver.setUserId(dbObj.getString("u"));
+
+			receivers.add(receiver);
+		}
+
+		return receivers;
+
+	}
+
 	public void increaseUserAc(long uid, int ac) {
 
 		getDBCollection(CollectionConstants.COLL_USERS).update(
@@ -625,6 +672,19 @@ public class UserDao extends BaseDao {
 		getDBCollection(CollectionConstants.COLL_USERS).update(
 				new BasicDBObject("_id", uid), updateObj, false, false,
 				WriteConcern.SAFE);
+
+		return true;
+
+	}
+
+	public boolean addComplaintAndSugguestion(long uid, String name,
+			String mobi, String mail, String content) {
+
+		BasicDBObject newObj = new BasicDBObject().append("uid", uid)
+				.append("name", name).append("mobi", mobi).append("mail", mail)
+				.append("content", content);
+
+		getDBCollection(CollectionConstants.COLL_SUGGUESTION).insert(newObj);
 
 		return true;
 

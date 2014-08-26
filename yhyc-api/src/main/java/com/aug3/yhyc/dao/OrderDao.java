@@ -156,7 +156,7 @@ public class OrderDao extends BaseDao {
 		c.set(Calendar.SECOND, 0);
 
 		if (Constants.FREQ_WEEKLY == freq) {
-			c.set(Calendar.DAY_OF_MONTH, c.getFirstDayOfWeek());
+			c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
 		} else if (Constants.FREQ_MONTHLY == freq) {
 			c.set(Calendar.DAY_OF_MONTH, 1);
 		}

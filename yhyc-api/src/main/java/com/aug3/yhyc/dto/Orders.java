@@ -10,7 +10,7 @@ public class Orders implements Serializable {
 
 	private long uid;
 
-	// 商品
+	// 商品: 商家-->商品列表
 	private Map<Long, List<ItemDTO>> items;
 
 	// 订单递送

@@ -50,10 +50,31 @@ public class IDGenerator {
 		return value;
 	}
 
+	public static synchronized long nextval(DB db, String name, String period,
+			String key) {
+		long value = 0;
+		try {
+			BasicDBObject query = new BasicDBObject().append("name", name)
+					.append("p", period);
+			BasicDBObject update = new BasicDBObject("$inc", new BasicDBObject(
+					key, 1l));
+			return Long
+					.valueOf(db
+							.getCollection("ids")
+							.findAndModify(query, null, null, false, update,
+									true, true).get(key).toString()
+							.replace(".0", ""));
+		} catch (MongoException e) {
+			e.printStackTrace();
+		}
+		return value;
+	}
+
 	public static long nextOrderID(DB db) {
-		String today = DateUtil.formatCurrentDate();
-		return Long.parseLong(today.substring(2).replaceAll("-", "")
-				+ df.format(IDGenerator.nextval(db, today, "orderid")));
+		String today = DateUtil.formatCurrentDate().replaceAll("-", "");
+		return Long.parseLong(today.substring(2)
+				+ df.format(IDGenerator.nextval(db, "orderid",
+						today.substring(0, 6), today.substring(6))));
 	}
 
 	public static long nextUserID(DB db) {

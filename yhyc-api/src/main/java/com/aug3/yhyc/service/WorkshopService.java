@@ -17,6 +17,8 @@ import com.aug3.yhyc.base.RespType;
 import com.aug3.yhyc.domain.WorkshopDomain;
 import com.aug3.yhyc.dto.RequestShop;
 import com.aug3.yhyc.dto.WorkshopDTO;
+import com.aug3.yhyc.interceptors.annotation.AccessTrace;
+import com.aug3.yhyc.valueobj.Classification;
 
 @Path("/shop/")
 @XmlRootElement()
@@ -68,6 +70,14 @@ public class WorkshopService extends BaseService {
 	}
 
 	@GET
+	@Path("/goods/classification")
+	public String getDefaultWorkshops(@Context HttpServletRequest request) {
+
+		List<Classification> workshops = shopDomain.classification();
+		return buildResponseSuccess(workshops);
+	}
+
+	@GET
 	@Path("/my")
 	public String getMyWorkshops(@Context HttpServletRequest request,
 			@QueryParam("uid") long uid) {
@@ -115,6 +125,7 @@ public class WorkshopService extends BaseService {
 
 	@POST
 	@Path("/request")
+	@AccessTrace
 	public String requestShop(@Context HttpServletRequest request,
 			@FormParam("shop") String shop) {
 

@@ -26,6 +26,8 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
 	<bean id="worksDao" class="com.aug3.yhyc.dao.WorksDao" />
 
+	<bean id="webstoreDao" class="com.aug3.yhyc.dao.WebStoreDao" />
+
 	<!-- domain -->
 	<bean id="appDomain" class="com.aug3.yhyc.domain.AppDomain">
 	</bean>
@@ -59,6 +61,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 		<property name="orderDao" ref="orderDao" />
 		<property name="itemDao" ref="itemDao" />
 		<property name="userDao" ref="userDao" />
+		<property name="shopDao" ref="shopDao" />
 	</bean>
 
 	<bean id="worksDomain" class="com.aug3.yhyc.domain.WorksDomain">
@@ -68,6 +71,10 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
 	<bean id="statDomain" class="com.aug3.yhyc.domain.StatDomain">
 		<property name="orderDao" ref="orderDao" />
+	</bean>
+
+	<bean id="webstoreDomain" class="com.aug3.yhyc.domain.WebStoreDomain">
+		<property name="webstoreDao" ref="webstoreDao" />
 	</bean>
 
 	<!-- service -->
@@ -109,6 +116,10 @@ http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
 	<bean id="statService" class="com.aug3.yhyc.service.StatService">
 		<property name="statDomain" ref="statDomain" />
+	</bean>
+
+	<bean id="webstoreService" class="com.aug3.yhyc.service.WebStoreService">
+		<property name="webstoreDomain" ref="webstoreDomain" />
 	</bean>
 </beans>
 

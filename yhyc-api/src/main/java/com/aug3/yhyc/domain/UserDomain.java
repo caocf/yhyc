@@ -1,5 +1,6 @@
 package com.aug3.yhyc.domain;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -12,12 +13,15 @@ import com.aug3.sys.util.DateUtil;
 import com.aug3.yhyc.dao.UserDao;
 import com.aug3.yhyc.dto.UserPrefs;
 import com.aug3.yhyc.util.ConfigManager;
-import com.aug3.yhyc.util.Qiniu;
 import com.aug3.yhyc.util.NotificationService;
+import com.aug3.yhyc.util.Qiniu;
 import com.aug3.yhyc.valueobj.DeliveryContact;
 import com.aug3.yhyc.valueobj.User;
 
 public class UserDomain {
+
+	private List<String> whitelist = Arrays.asList(ConfigManager
+			.getProperties().getProperty("user.whitelist").split(","));
 
 	private UserDao userDao;
 
@@ -56,8 +60,11 @@ public class UserDomain {
 		if (adon && StringUtils.isNotBlank(adurls)) {
 			String[] files = adurls.split(";");
 			for (String fn : files) {
-				urls.put(fn.substring(0, fn.length() - 4),
-						Qiniu.downloadUrl(fn, Qiniu.getCaipuDomain()));
+				String[] kv = fn.split("#");
+				if (kv.length == 2 && StringUtils.isNotBlank(kv[1])) {
+					urls.put(kv[0],
+							Qiniu.downloadUrl(kv[1], Qiniu.getAppDomain()));
+				}
 			}
 		}
 
@@ -88,6 +95,10 @@ public class UserDomain {
 
 	}
 
+	public void bindPushReceiver(long uid, String channelId, String userId) {
+		userDao.bindPushReceiver(uid, channelId, userId);
+	}
+
 	public boolean uuidInBlackList(String uuid) {
 		return userDao.uuidInBlacklist(uuid);
 	}
@@ -96,8 +107,8 @@ public class UserDomain {
 		return userDao.exist(user);
 	}
 
-	public long register(User user, String uuid) {
-		return userDao.create(user, uuid);
+	public long register(User user, String uuid, String ostype) {
+		return userDao.create(user, uuid, ostype);
 	}
 
 	public boolean modifyPassword(String mobi, String mail, String passwd) {
@@ -114,49 +125,50 @@ public class UserDomain {
 	 * @param mobi
 	 * @return 0: 失败 1：成功 2：超过次数
 	 */
-	public int generateVerification(String mobi, String uuid) {
+	public int generateVerification(String mobi, String uuid, String ostype) {
 
 		if (userDao.mobileInBlacklist(mobi)) {
 			return 0;
 		}
 
-		SystemCache sc = new SystemCache();
-		String cacheKey = mobi + DateUtil.getCurrentDate();
-		if (sc.containsKey(cacheKey)) {
-			int c = (Integer) sc.get(cacheKey);
-			if (c > 3) {
-				return 2;
+		if (whitelist.contains(mobi)) {
+			// used for testing
+			// verifyCode = mobi.substring(0, 4);
+		} else {
+
+			SystemCache sc = new SystemCache();
+			String cacheKey = mobi + DateUtil.getCurrentDate();
+			if (sc.containsKey(cacheKey)) {
+				int c = (Integer) sc.get(cacheKey);
+				if (c > 3) {
+					return 2;
+				}
+			} else {
+				sc.put(cacheKey, 0);
 			}
-		} else {
-			sc.put(cacheKey, 0);
+
+			String verifyCode = NotificationService.sendSMS(mobi);
+
+			if (verifyCode != null) {
+				userDao.updateVerifyCode(mobi, verifyCode, uuid, ostype);
+
+				int c = (Integer) sc.get(cacheKey);
+				sc.put(cacheKey, c + 1, 3600 * 6);
+			} else {
+				return 0;
+			}
 		}
 
-		String verifyCode = "";
-		if ("23764583598".equals(mobi)) {
-			// used for testing
-			verifyCode = "2376";
-		} else if ("13764583598".equals(mobi)) {
-			// used for testing
-			verifyCode = "1376";
-		} else if ("18221883770".equals(mobi)) {
-			// used for testing
-			verifyCode = "1822";
-		} else {
-			verifyCode = NotificationService.sendSMS(mobi);
-		}
-
-		if (verifyCode != null) {
-			userDao.updateVerifyCode(mobi, verifyCode, uuid);
-
-			int c = (Integer) sc.get(cacheKey);
-			sc.put(cacheKey, c + 1, 3600 * 6);
-		} else {
-			return 0;
-		}
 		return 1;
 	}
 
 	public boolean verifyMobile(String mobi, String verifyCode) {
+		if (whitelist.contains(mobi)) {
+			if (mobi.substring(0, 4).equals(verifyCode))
+				return true;
+			else
+				return false;
+		}
 		return userDao.login(mobi, verifyCode);
 	}
 
@@ -201,6 +213,14 @@ public class UserDomain {
 	public boolean updateTags(long uid, Collection<Integer> tags) {
 
 		return userDao.updateTags(uid, tags);
+
+	}
+
+	public boolean complaintAndSugguestion(long uid, String name, String mobi,
+			String mail, String content) {
+
+		return userDao.addComplaintAndSugguestion(uid, name, mobi, mail,
+				content);
 
 	}
 

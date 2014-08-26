@@ -23,6 +23,7 @@ import com.aug3.yhyc.dto.ProductItem;
 import com.aug3.yhyc.dto.ShopItem;
 import com.aug3.yhyc.interceptors.annotation.AccessTrace;
 import com.aug3.yhyc.valueobj.Item;
+import com.aug3.yhyc.valueobj.Product;
 
 @Path("/item/")
 @XmlRootElement()
@@ -41,13 +42,21 @@ public class ItemService extends BaseService {
 
 	@POST
 	@Path("/new")
-	// TODO
-	// @AccessTrace
+	@AccessTrace
 	// @AccessToken
 	public String newItem(@Context HttpServletRequest request,
-			@FormParam("uid") long uid, @FormParam("item") String item) {
+			@FormParam("item") String item) {
 
-		return null;// JSONUtil.fromJson(item, Item.class);
+		if (StringUtils.isBlank(item)) {
+			return buildResponseResult("invlid param items",
+					RespType.INVALID_PARAMETERS);
+		}
+
+		Item i = JSONUtil.fromJson(item, Item.class);
+
+		long itemid = itemDomain.newItem(i);
+
+		return buildResponseSuccess(itemid);
 	}
 
 	@POST
@@ -122,8 +131,12 @@ public class ItemService extends BaseService {
 	public String showItem(@Context HttpServletRequest request,
 			@QueryParam("item") long item) {
 
-		ProductItem result = itemDomain.findItemByID(item);
-		return buildResponseSuccess(result);
+		try {
+			ProductItem result = itemDomain.findItemByID(item);
+			return buildResponseSuccess(result);
+		} catch (Exception e) {
+			return buildResponseResult(e.getMessage(), RespType.FAILED);
+		}
 	}
 
 	@GET
@@ -177,6 +190,20 @@ public class ItemService extends BaseService {
 
 		List<ShopItem> cart = itemDomain.fetchShoppingCart(uid);
 		return buildResponseSuccess(cart);
+	}
+
+	@GET
+	@Path("/products")
+	public String listProducts(@Context HttpServletRequest request,
+			@QueryParam("workshop") long workshop, @QueryParam("cat") int cat) {
+
+		if (workshop == 0) {
+			return buildResponseResult("invlid param workshop",
+					RespType.INVALID_PARAMETERS);
+		}
+		List<Product> items = itemDomain.listProducts(workshop, cat);
+
+		return buildResponseSuccess(items);
 	}
 
 }

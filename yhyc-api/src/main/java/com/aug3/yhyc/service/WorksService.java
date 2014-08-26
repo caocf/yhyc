@@ -39,7 +39,7 @@ public class WorksService extends BaseService {
 	// @AccessTrace
 	// @AccessToken
 	public String newWorks(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("works") String works) {
+			@FormParam("works") String works) {
 		worksDomain.newWorks(JSONUtil.fromJson(works, Works.class));
 		return buildResponseSuccess("success!");
 	}
@@ -49,8 +49,8 @@ public class WorksService extends BaseService {
 	// @AccessTrace
 	// @AccessToken
 	public String uploadSteps(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("uid") long uid,
-			@FormParam("id") long id, @FormParam("") RecipeWizard wizard) {
+			@FormParam("uid") long uid, @FormParam("id") long id,
+			@FormParam("") RecipeWizard wizard) {
 		worksDomain.uploadSteps(uid, id, wizard);
 		return buildResponseSuccess("success!");
 	}
@@ -60,7 +60,7 @@ public class WorksService extends BaseService {
 	// @AccessTrace
 	// @AccessToken
 	public String updateWorks(@Context HttpServletRequest request,
-			@FormParam("token") String token, @FormParam("works") String works) {
+			@FormParam("works") String works) {
 		worksDomain.updateWorks(JSONUtil.fromJson(works, Works.class));
 		return buildResponseSuccess("success!");
 	}
@@ -70,8 +70,8 @@ public class WorksService extends BaseService {
 	// @AccessTrace
 	// @AccessToken
 	public String deleteWorks(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") long uid,
-			@QueryParam("id") long id, @QueryParam("admin") String admin) {
+			@QueryParam("uid") long uid, @QueryParam("id") long id,
+			@QueryParam("admin") String admin) {
 		if (StringUtils.isBlank("admin")) {
 			admin = "FALSE";
 		}
@@ -83,7 +83,7 @@ public class WorksService extends BaseService {
 	@GET
 	@Path("/list")
 	public String listWorks(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("pn") String pn) {
+			@QueryParam("pn") String pn) {
 
 		List<Works> works = worksDomain.listWorks(getPageNo(pn));
 
@@ -93,7 +93,7 @@ public class WorksService extends BaseService {
 	@GET
 	@Path("/show")
 	public String showOrder(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("id") long id) {
+			@QueryParam("id") long id) {
 
 		Works works = worksDomain.showWorks(id);
 		return this.buildResponseSuccess(works);
@@ -102,8 +102,7 @@ public class WorksService extends BaseService {
 	@GET
 	@Path("/my")
 	public String myWorks(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") long uid,
-			@QueryParam("pn") String pn) {
+			@QueryParam("uid") long uid, @QueryParam("pn") String pn) {
 
 		List<Works> works = worksDomain.listWorksByUser(uid, getPageNo(pn));
 		return this.buildResponseSuccess(works);
@@ -112,8 +111,7 @@ public class WorksService extends BaseService {
 	@GET
 	@Path("/myfav")
 	public String myFavWorks(@Context HttpServletRequest request,
-			@QueryParam("token") String token, @QueryParam("uid") long uid,
-			@QueryParam("pn") String pn) {
+			@QueryParam("uid") long uid, @QueryParam("pn") String pn) {
 
 		List<Works> works = worksDomain.listFavWorksByUser(uid, getPageNo(pn));
 		return this.buildResponseSuccess(works);

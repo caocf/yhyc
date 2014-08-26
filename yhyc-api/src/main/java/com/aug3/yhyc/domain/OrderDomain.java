@@ -9,16 +9,26 @@ import java.util.Set;
 import com.aug3.yhyc.dao.ItemDao;
 import com.aug3.yhyc.dao.OrderDao;
 import com.aug3.yhyc.dao.UserDao;
+import com.aug3.yhyc.dao.WorkshopDao;
 import com.aug3.yhyc.dto.ItemDTO;
 import com.aug3.yhyc.dto.Order;
 import com.aug3.yhyc.dto.Orders;
+import com.aug3.yhyc.util.AndroidPushService;
 import com.aug3.yhyc.util.AsyncJobs;
+import com.aug3.yhyc.util.ConfigManager;
+import com.aug3.yhyc.valueobj.PushReceiver;
 
 public class OrderDomain {
+
+	private final static String notify_title = ConfigManager.getProperties()
+			.getProperty("pushservice.notify.title");
+	private final static String notify_desc = ConfigManager.getProperties()
+			.getProperty("pushservice.notify.desc");
 
 	private OrderDao orderDao;
 	private ItemDao itemDao;
 	private UserDao userDao;
+	private WorkshopDao shopDao;
 
 	public OrderDao getOrderDao() {
 		return orderDao;
@@ -42,6 +52,14 @@ public class OrderDomain {
 
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
+	}
+
+	public WorkshopDao getShopDao() {
+		return shopDao;
+	}
+
+	public void setShopDao(WorkshopDao shopDao) {
+		this.shopDao = shopDao;
 	}
 
 	/**
@@ -76,6 +94,23 @@ public class OrderDomain {
 					}
 				}
 				userDao.removeUserPrefs(orders.getUid(), "cart", itemids);
+
+				// push notification to mobile
+				Set<Long> emps = shopDao.findShopKeeper(shops);
+
+				List<PushReceiver> receivers = userDao.filterPushReceiver(emps);
+
+				String desc_content = notify_desc + " "
+						+ orders.getDelivery().getAddr().replace("\n", "");
+				Set<String> pushed = new HashSet<String>();
+				for (PushReceiver rec : receivers) {
+					String id = rec.getChannelId() + ":" + rec.getUserId();
+					if (!pushed.contains(id)) {
+						pushed.add(id);
+						AndroidPushService.sendNotification(rec.getChannelId(),
+								rec.getUserId(), notify_title, desc_content);
+					}
+				}
 			}
 		});
 

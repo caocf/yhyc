@@ -83,28 +83,43 @@ public class AppDomain {
 
 		if (ver > 0) {
 
-			int verCode = ConfigManager.getProperties().getIntProperty(
-					"ios.app.ver.code");
-
-			if (verCode > ver) {
-
-				app.setVerCode(verCode);
+			int currentVer = ConfigManager.getProperties().getIntProperty(
+					"ios.now.app.ver.code");
+			String downloadUrl = ConfigManager.getProperties().getProperty(
+					"ios.app.download.url");
+			
+			app.setUrl(downloadUrl);
+			
+			if (ver <= currentVer) {
+				app.setVerCode(currentVer);
 				app.setVerName(ConfigManager.getProperties().getProperty(
-						"ios.app.ver.name"));
+						"ios.now.app.ver.name"));
 
 				String changelog = ConfigManager.getProperties().getProperty(
-						"ios.app.ver.changelog");
+						"ios.now.app.ver.changelog");
 				if (StringUtils.isNotBlank(changelog))
 					app.setChangelog(changelog);
 
-				String downloadUrl = ConfigManager.getProperties().getProperty(
-						"ios.app.download.url");
-				app.setUrl(downloadUrl);
+				
 
 				boolean in_review = ConfigManager.getProperties()
-						.getBooleanProperty("ios.app.ver.inreview");
+						.getBooleanProperty("ios.now.app.ver.inreview");
 				app.setIn_review(in_review);
+			} else {
+				int reviewVer = ConfigManager.getProperties().getIntProperty(
+						"ios.rev.app.ver.code");
+				app.setVerCode(reviewVer);
+				app.setVerName(ConfigManager.getProperties().getProperty(
+						"ios.rev.app.ver.name"));
 
+				String changelog = ConfigManager.getProperties().getProperty(
+						"ios.rev.app.ver.changelog");
+				if (StringUtils.isNotBlank(changelog))
+					app.setChangelog(changelog);
+
+				boolean in_review = ConfigManager.getProperties()
+						.getBooleanProperty("ios.rev.app.ver.inreview");
+				app.setIn_review(in_review);
 			}
 
 		}

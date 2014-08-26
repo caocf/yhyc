@@ -11,6 +11,7 @@ import com.aug3.yhyc.dao.ShequDao;
 import com.aug3.yhyc.dao.WorkshopDao;
 import com.aug3.yhyc.dto.RequestShop;
 import com.aug3.yhyc.dto.WorkshopDTO;
+import com.aug3.yhyc.valueobj.Classification;
 import com.aug3.yhyc.valueobj.Shequ;
 import com.aug3.yhyc.valueobj.Workshop;
 
@@ -58,6 +59,13 @@ public class WorkshopDomain {
 		}
 
 		return result;
+	}
+
+	public List<Classification> classification() {
+
+		List<Classification> list = shopDao.findAllClassification();
+
+		return list;
 	}
 
 	public List<WorkshopDTO> findWorkshops(long uid) {

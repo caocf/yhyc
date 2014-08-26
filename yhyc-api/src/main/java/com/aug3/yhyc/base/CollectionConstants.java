@@ -8,7 +8,11 @@ public class CollectionConstants {
 
 	public static final String COLL_TAGS = "tags";
 
+	public static final String COLL_CLASSIFICATION = "classification";
+	
 	public static final String COLL_CATEGORIES = "categories";
+	
+	public static final String COLL_SUGGUESTION = "sugguestion";
 
 	public static final String COLL_USERS = "users";
 	
@@ -34,6 +38,12 @@ public class CollectionConstants {
 
 	public static final String COLL_WORKS = "works";
 
+	public static final String COLL_PUSH_SERVICE = "pushservice";
+	
+	public static final String COLL_WEBSTORE = "webstore";
+	
+	public static final String COLL_EXCHGRECORDS = "exchgrecords";
+	
 	// id
 	public static final String IDS_WORKS = "works";
 }

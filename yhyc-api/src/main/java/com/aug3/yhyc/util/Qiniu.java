@@ -30,6 +30,8 @@ public class Qiniu {
 			.getProperty("storage.bucket.user");
 	private static final String caipu_bucket = ConfigManager.getProperties()
 			.getProperty("storage.bucket.caipu");
+	private static final String app_bucket = ConfigManager.getProperties()
+			.getProperty("storage.bucket.app");
 	private static final String domain = ConfigManager.getProperties()
 			.getProperty("storage.domain");
 
@@ -38,6 +40,8 @@ public class Qiniu {
 			user_bucket);
 	private static final String caipuDomain = domain.replace("{bucket}",
 			caipu_bucket);
+	private static final String appDomain = domain.replace("{bucket}",
+			app_bucket);
 
 	private static Mac mac = null;
 
@@ -63,6 +67,10 @@ public class Qiniu {
 		return caipu_bucket;
 	}
 
+	public static String getAppBucket() {
+		return app_bucket;
+	}
+
 	public static String getItemDomain() {
 		return itemDomain;
 	}
@@ -73,6 +81,10 @@ public class Qiniu {
 
 	public static String getCaipuDomain() {
 		return caipuDomain;
+	}
+
+	public static String getAppDomain() {
+		return appDomain;
 	}
 
 	public static String uptoken(String bucket, String key) {

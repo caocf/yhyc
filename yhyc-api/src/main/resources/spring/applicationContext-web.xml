@@ -31,6 +31,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 			<ref bean="orderService" />
 			<ref bean="worksService" />
 			<ref bean="statService" />
+			<ref bean="webstoreService" />
 		</jaxrs:serviceBeans>
 
 	</jaxrs:server>

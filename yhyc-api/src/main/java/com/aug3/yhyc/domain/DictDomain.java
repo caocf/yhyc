@@ -77,8 +77,11 @@ public class DictDomain {
 		c.setTime(current);
 
 		int hour = c.get(Calendar.HOUR_OF_DAY);
+		int min = c.get(Calendar.MINUTE);
 
-		if (hour > 18) {
+		if (hour > 17) {
+			c.add(Calendar.DATE, 1);
+		} else if (hour == 17 && min > 15) {
 			c.add(Calendar.DATE, 1);
 		}
 
@@ -100,7 +103,7 @@ public class DictDomain {
 				"deliverytime");
 
 		if (StringUtils.isBlank(deliverytimeStr)) {
-			dt.setTime(new String[] { "10:00-12:30", "16:30-19:30" });
+			dt.setTime(new String[] { "10:00-12:00", "16:30-19:30" });
 		} else {
 			dt.setTime(deliverytimeStr.split(";"));
 		}
