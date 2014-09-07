@@ -298,14 +298,14 @@ public class UserDao extends BaseDao {
 
 		BasicDBObject queryExist = new BasicDBObject();
 
-		if (StringUtils.isNotBlank(uuid)) {
-			BasicDBList or = new BasicDBList();
-			or.add(new BasicDBObject().append("mobi", mobi));
-			or.add(new BasicDBObject().append("uuid", uuid));
-			queryExist.append("$or", or);
-		} else {
+//		if (StringUtils.isNotBlank(uuid)) {
+//			BasicDBList or = new BasicDBList();
+//			or.add(new BasicDBObject().append("mobi", mobi));
+//			or.add(new BasicDBObject().append("uuid", uuid));
+//			queryExist.append("$or", or);
+//		} else {
 			queryExist.append("mobi", mobi);
-		}
+//		}
 
 		if (getDBCollection(CollectionConstants.COLL_USERS).count(queryExist) == 0) {
 			User user = new User();

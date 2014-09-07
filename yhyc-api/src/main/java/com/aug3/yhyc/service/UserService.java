@@ -296,6 +296,7 @@ public class UserService extends BaseService {
 	 */
 	@POST
 	@Path("/prefs/update")
+	@AccessTrace
 	public String addUserPrefs(@Context HttpServletRequest request,
 			@FormParam("uid") long uid, @FormParam("field") String field,
 			@FormParam("items") String items, @FormParam("type") int type) {

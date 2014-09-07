@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.aug3.yhyc.base.CollectionConstants;
 import com.aug3.yhyc.base.Constants;
@@ -26,6 +27,8 @@ import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 
 public class ItemDao extends BaseDao {
+
+	private final static Logger logger = Logger.getLogger(ItemDao.class);
 
 	public List<ItemDTO> findItems(List<Long> itemIds) {
 
@@ -195,7 +198,12 @@ public class ItemDao extends BaseDao {
 				Product p = new Product();
 				p.setId(id);
 				p.setName(dbObj.getString("name"));
-				p.setPic(getProductPic(dbObj.getString("pic")));
+				String pic = dbObj.getString("pic");
+				if (pic == null) {
+					logger.error("missing pic for product " + id);
+				} else {
+					p.setPic(getProductPic(pic));
+				}
 				p.setCat(dbObj.getInt("cat"));
 				p.setSeason(dbObj.getBoolean("season", false));
 				p.setSts(dbObj.getInt("sts"));

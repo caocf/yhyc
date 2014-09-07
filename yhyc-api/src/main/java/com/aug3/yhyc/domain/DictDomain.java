@@ -76,14 +76,23 @@ public class DictDomain {
 		Date current = new Date();
 		c.setTime(current);
 
-		int hour = c.get(Calendar.HOUR_OF_DAY);
-		int min = c.get(Calendar.MINUTE);
-
-		if (hour > 17) {
-			c.add(Calendar.DATE, 1);
-		} else if (hour == 17 && min > 15) {
-			c.add(Calendar.DATE, 1);
+		int daysafter = ConfigManager.getProperties().getIntProperty(
+				"deliveryafter", 0);
+		if (daysafter > 0) {
+			int hour = c.get(Calendar.HOUR_OF_DAY);
+			if (hour > 4) {
+				c.add(Calendar.DATE, daysafter);
+			}
 		}
+
+		// int hour = c.get(Calendar.HOUR_OF_DAY);
+		// int min = c.get(Calendar.MINUTE);
+		//
+		// if (hour > 17) {
+		// c.add(Calendar.DATE, 1);
+		// } else if (hour == 17 && min > 15) {
+		// c.add(Calendar.DATE, 1);
+		// }
 
 		String firstday = DateUtil.formatDate(c.getTime());
 
@@ -91,8 +100,12 @@ public class DictDomain {
 		String nextday = DateUtil.formatDate(c.getTime());
 		c.add(Calendar.DATE, 1);
 		String next2day = DateUtil.formatDate(c.getTime());
+		c.add(Calendar.DATE, 1);
+		String next3day = DateUtil.formatDate(c.getTime());
+		c.add(Calendar.DATE, 1);
+		String next4day = DateUtil.formatDate(c.getTime());
 
-		String[] dates = { firstday, nextday, next2day };
+		String[] dates = { firstday, nextday, next2day, next3day, next4day };
 
 		DeliveryTime dt = new DeliveryTime();
 

@@ -212,23 +212,107 @@ public class OrderDao extends BaseDao {
 		}
 	}
 
-	public int updateStatus(long orderid, int status) {
+	public int updateStatus(final long orderid, int status) {
 
 		WriteResult wr = null;
 
 		BasicDBObject updateObj = new BasicDBObject("$set", new BasicDBObject(
 				"sts", status));
+
 		if (status == OrderStatus.CANCELED.getValue()
 				|| status == OrderStatus.CANCELED_BY_SELLER.getValue()) {
+
 			wr = getDBCollection(CollectionConstants.COLL_ORDERS).update(
 					new BasicDBObject("_id", orderid).append("sts",
 							OrderStatus.NEW.getValue()), updateObj, false,
 					false, WriteConcern.SAFE);
 
+			// 订单取消，商品返回购物车
+			AsyncJobs.submit(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+
+						DBCursor dbCur = getDBCollection(
+								CollectionConstants.COLL_ORDERS).find(
+								new BasicDBObject("_id", orderid),
+								new BasicDBObject().append("uid", 1).append(
+										"items.id", 1));
+
+						if (dbCur.hasNext()) {
+							BasicDBObject lastOrder = (BasicDBObject) dbCur
+									.next();
+							long uid = lastOrder.getLong("uid");
+							BasicDBList dblist = (BasicDBList) lastOrder
+									.get("items");
+							List<Long> itemids = new ArrayList<Long>();
+							int n = dblist.size();
+							for (int i = 0; i < n; i++) {
+								BasicDBObject dbObj = (BasicDBObject) dblist
+										.get(i);
+								itemids.add(dbObj.getLong("id"));
+							}
+
+							// update user accumulative score
+							getDBCollection(CollectionConstants.COLL_USERS)
+									.update(new BasicDBObject("_id", uid),
+											new BasicDBObject("$addToSet",
+													new BasicDBObject().append(
+															"cart",
+															new BasicDBObject(
+																	"$each",
+																	itemids))),
+											false, false);
+						}
+
+					} catch (Throwable e) {
+						log.error("cancel order error: " + e.getMessage());
+					}
+				}
+			});
+
 		} else {
+
 			wr = getDBCollection(CollectionConstants.COLL_ORDERS).update(
 					new BasicDBObject("_id", orderid), updateObj, false, false,
 					WriteConcern.SAFE);
+
+			if (status == OrderStatus.SUCCEED.getValue()) {
+
+				AsyncJobs.submit(new Runnable() {
+
+					@Override
+					public void run() {
+						try {
+
+							DBCursor dbCur = getDBCollection(
+									CollectionConstants.COLL_ORDERS).find(
+									new BasicDBObject("_id", orderid),
+									new BasicDBObject().append("uid", 1)
+											.append("ac", 1));
+
+							if (dbCur.hasNext()) {
+								BasicDBObject lastOrder = (BasicDBObject) dbCur
+										.next();
+								long uid = lastOrder.getLong("uid");
+								int ac = lastOrder.getInt("ac");
+
+								// update user accumulative score
+								getDBCollection(CollectionConstants.COLL_USERS)
+										.update(new BasicDBObject("_id", uid),
+												new BasicDBObject("$inc",
+														new BasicDBObject("ac",
+																ac)), false,
+												false);
+							}
+
+						} catch (Throwable e) {
+							log.error("success order error: " + e.getMessage());
+						}
+					}
+				});
+			}
 		}
 
 		if (wr != null) {
@@ -251,8 +335,6 @@ public class OrderDao extends BaseDao {
 
 		List<DBObject> doclist = new ArrayList<DBObject>();
 		List<Long> orderids = new ArrayList<Long>();
-
-		int ac_total = 0;
 
 		final Map<Integer, List<Long>> statsMap = new HashMap<Integer, List<Long>>();
 
@@ -309,7 +391,6 @@ public class OrderDao extends BaseDao {
 			// calculate
 			int ac = (int) Math.round(total / 10);
 			doc.put("ac", ac);
-			ac_total += ac;
 
 			Date d = new Date();
 			doc.put("ts", d);
@@ -325,17 +406,11 @@ public class OrderDao extends BaseDao {
 			// insert new order info
 			getDBCollection(CollectionConstants.COLL_ORDERS).insert(doclist);
 
-			final int ac_inc = ac_total;
 			AsyncJobs.submit(new Runnable() {
 
 				@Override
 				public void run() {
 					try {
-						// update user accumulative score
-						getDBCollection(CollectionConstants.COLL_USERS).update(
-								new BasicDBObject("_id", order.getUid()),
-								new BasicDBObject("$inc", new BasicDBObject(
-										"ac", ac_inc)), false, false);
 
 						// update sales amount
 						Set<Entry<Integer, List<Long>>> entries = statsMap
