@@ -280,7 +280,6 @@ public class WorkshopDao extends BaseDao {
 
 		BasicDBList or = new BasicDBList();
 		or.add(new BasicDBObject().append("idcard", shop.getIdcard()));
-		or.add(new BasicDBObject().append("mail", shop.getMail()));
 		or.add(new BasicDBObject().append("tel", shop.getTel()));
 		if (shop.getUid() != 0) {
 			or.add(new BasicDBObject().append("uid", shop.getUid()));

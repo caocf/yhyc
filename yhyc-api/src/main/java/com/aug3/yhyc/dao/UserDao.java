@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import com.aug3.sys.util.DateUtil;
 import com.aug3.sys.util.EncryptUtil;
 import com.aug3.yhyc.base.CollectionConstants;
+import com.aug3.yhyc.base.Constants;
 import com.aug3.yhyc.dto.UserPrefs;
 import com.aug3.yhyc.mail.MailSender;
 import com.aug3.yhyc.util.IDGenerator;
@@ -298,14 +299,14 @@ public class UserDao extends BaseDao {
 
 		BasicDBObject queryExist = new BasicDBObject();
 
-//		if (StringUtils.isNotBlank(uuid)) {
-//			BasicDBList or = new BasicDBList();
-//			or.add(new BasicDBObject().append("mobi", mobi));
-//			or.add(new BasicDBObject().append("uuid", uuid));
-//			queryExist.append("$or", or);
-//		} else {
-			queryExist.append("mobi", mobi);
-//		}
+		// if (StringUtils.isNotBlank(uuid)) {
+		// BasicDBList or = new BasicDBList();
+		// or.add(new BasicDBObject().append("mobi", mobi));
+		// or.add(new BasicDBObject().append("uuid", uuid));
+		// queryExist.append("$or", or);
+		// } else {
+		queryExist.append("mobi", mobi);
+		// }
 
 		if (getDBCollection(CollectionConstants.COLL_USERS).count(queryExist) == 0) {
 			User user = new User();
@@ -467,6 +468,14 @@ public class UserDao extends BaseDao {
 		}
 
 		return userPrefs;
+	}
+
+	public void loginStats(long uid) {
+		getDBCollection(CollectionConstants.COLL_USER_STATS).update(
+				new BasicDBObject("_id", uid),
+				new BasicDBObject().append("$inc", new BasicDBObject("n", 1)
+						.append("d", 1).append("m", 1)), true, false,
+				WriteConcern.SAFE);
 	}
 
 	public void updatePoint(long uid, int district, long shequ) {
@@ -680,9 +689,14 @@ public class UserDao extends BaseDao {
 	public boolean addComplaintAndSugguestion(long uid, String name,
 			String mobi, String mail, String content) {
 
-		BasicDBObject newObj = new BasicDBObject().append("uid", uid)
-				.append("name", name).append("mobi", mobi).append("mail", mail)
-				.append("content", content);
+		BasicDBObject newObj = new BasicDBObject()
+				.append("uid", uid)
+				.append("name", name)
+				.append("mobi", mobi)
+				.append("mail", mail)
+				.append("content", content)
+				.append("ts",
+						Constants.iso_timestamp_formatter.format(new Date()));
 
 		getDBCollection(CollectionConstants.COLL_SUGGUESTION).insert(newObj);
 

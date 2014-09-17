@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.aug3.yhyc.domain.DictDomain;
 import com.aug3.yhyc.dto.CategoryDTO;
 import com.aug3.yhyc.dto.DeliveryTime;
+import com.aug3.yhyc.dto.SystemSettings;
 import com.aug3.yhyc.valueobj.Category;
 import com.aug3.yhyc.valueobj.Region;
 import com.aug3.yhyc.valueobj.Tag;
@@ -64,6 +65,14 @@ public class DictService extends BaseService {
 
 		DeliveryTime dt = dictDomain.deliverytime();
 		return buildResponseSuccess(dt);
+	}
+
+	@GET
+	@Path("/systemsettings")
+	public String getSystemSettings(@Context HttpServletRequest request) {
+
+		SystemSettings ss = dictDomain.getSystemSettings();
+		return buildResponseSuccess(ss);
 	}
 
 }

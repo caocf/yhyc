@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.aug3.sys.util.DateUtil;
+import com.aug3.yhyc.base.Constants;
 import com.aug3.yhyc.dao.DictDao;
 import com.aug3.yhyc.dao.ItemDao;
 import com.aug3.yhyc.dao.OrderDao;
@@ -194,10 +195,12 @@ public class ItemDomain {
 		List<ShopItem> result = new ArrayList<ShopItem>();
 
 		if (itemids != null && itemids.size() > 0) {
-			List<ItemDTO> items = itemDao.findItems(itemids);
+			List<ItemDTO> items = itemDao.findItems(itemids,
+					Constants.ITEM_STATUS_ONSALE);
 
 			Map<Long, List<ItemDTO>> shopitems = new HashMap<Long, List<ItemDTO>>();
 			for (ItemDTO each : items) {
+
 				if (shopitems.containsKey(each.getSid())) {
 					shopitems.get(each.getSid()).add(each);
 				} else {

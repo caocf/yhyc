@@ -9,11 +9,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.aug3.yhyc.base.CollectionConstants;
+import com.aug3.yhyc.dto.SystemSettings;
 import com.aug3.yhyc.valueobj.Category;
 import com.aug3.yhyc.valueobj.Region;
 import com.aug3.yhyc.valueobj.Tag;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 
 public class DictDao extends BaseDao {
 
@@ -38,7 +40,7 @@ public class DictDao extends BaseDao {
 		return tags;
 	}
 
-	public List<Tag> findAll() {
+	public List<Tag> findAllTags() {
 
 		DBCursor dbCur = getDBCollection(CollectionConstants.COLL_TAGS).find();
 
@@ -52,9 +54,9 @@ public class DictDao extends BaseDao {
 			Tag tag = new Tag();
 			tag.setCode(dbObj.getInt("code"));
 			tag.setName(dbObj.getString("name"));
-			
+
 			list.add(tag);
-			
+
 		}
 
 		return list;
@@ -118,6 +120,22 @@ public class DictDao extends BaseDao {
 		}
 
 		return list;
+
+	}
+
+	public SystemSettings findSystemSettings() {
+
+		DBObject dbObj = getDBCollection(CollectionConstants.COLL_SETTINGS)
+				.findOne(new BasicDBObject("_id", 101));
+
+		SystemSettings settings = new SystemSettings();
+
+		if (dbObj != null) {
+			BasicDBObject obj = (BasicDBObject) dbObj;
+			settings.setShipnote(obj.getString("shipnote"));
+		}
+
+		return settings;
 
 	}
 }

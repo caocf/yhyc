@@ -30,6 +30,31 @@ public class ItemDao extends BaseDao {
 
 	private final static Logger logger = Logger.getLogger(ItemDao.class);
 
+	public List<ItemDTO> findItems(List<Long> itemIds, int sts) {
+
+		List<ItemDTO> list = new ArrayList<ItemDTO>();
+
+		if (itemIds != null && itemIds.size() > 0) {
+			DBCursor dbCur = getDBCollection(CollectionConstants.COLL_ITEMS)
+					.find(new BasicDBObject("_id", new BasicDBObject("$in",
+							itemIds)).append("sts", sts),
+							new BasicDBObject("name", 1).append("pp", 1)
+									.append("mp", 1).append("pid", 1)
+									.append("sid", 1).append("act", 1)).sort(
+							new BasicDBObject("sid", 1));
+
+			BasicDBObject dbObj;
+			while (dbCur.hasNext()) {
+				dbObj = (BasicDBObject) dbCur.next();
+
+				list.add(transferDBObj2ItemDTO(dbObj));
+			}
+		}
+
+		return list;
+
+	}
+
 	public List<ItemDTO> findItems(List<Long> itemIds) {
 
 		List<ItemDTO> list = new ArrayList<ItemDTO>();

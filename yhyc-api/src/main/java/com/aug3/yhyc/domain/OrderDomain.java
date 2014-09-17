@@ -1,6 +1,8 @@
 package com.aug3.yhyc.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,9 @@ import com.aug3.yhyc.util.AndroidPushService;
 import com.aug3.yhyc.util.AsyncJobs;
 import com.aug3.yhyc.util.ConfigManager;
 import com.aug3.yhyc.valueobj.PushReceiver;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 public class OrderDomain {
 
@@ -164,6 +169,52 @@ public class OrderDomain {
 		return orders;
 	}
 
+	public List<ItemDTO> newOrderItemsStats(long workshop) {
+
+		List<DBObject> orders = orderDao.findNewOrders(workshop);
+
+		List<ItemDTO> list = new ArrayList<ItemDTO>();
+
+		if (orders == null || orders.isEmpty()) {
+			return list;
+		}
+
+		Map<Long, ItemDTO> itemMap = new HashMap<Long, ItemDTO>();
+
+		ItemDTO orderItem;
+		BasicDBObject item;
+
+		for (DBObject order : orders) {
+
+			BasicDBList items = (BasicDBList) order.get("items");
+
+			for (Object eachitem : items) {
+				item = (BasicDBObject) eachitem;
+				orderItem = new ItemDTO();
+				long itemid = item.getLong("id");
+				orderItem.setId(itemid);
+				orderItem.setName(item.getString("name"));
+				orderItem.setNum(item.getInt("n"));
+				orderItem.setPrice(item.getDouble("pp"));
+				if (itemMap.containsKey(itemid)) {
+					itemMap.get(itemid).setNum(
+							itemMap.get(itemid).getNum() + orderItem.getNum());
+				} else {
+					itemMap.put(itemid, orderItem);
+				}
+			}
+		}
+
+		Map<Long, ItemDTO> map = itemDao.findItemsMap(itemMap.keySet());
+
+		for (ItemDTO i : itemMap.values()) {
+			i.setPic(map.get(i.getId()).getPic());
+			list.add(i);
+		}
+
+		return list;
+	}
+
 	public Order showOrder(long orderid) {
 
 		Order order = orderDao.findByID(orderid);
@@ -173,6 +224,21 @@ public class OrderDomain {
 
 	public int editOrderStatus(long orderid, int status) {
 		return orderDao.updateStatus(orderid, status);
+	}
+
+	public void addOrderItems2Cart(long uid, long orderid) {
+
+		Order order = orderDao.findByID(orderid);
+		if (order != null) {
+			List<ItemDTO> items = order.getItems();
+			List<Long> ids = new ArrayList<Long>();
+			for (ItemDTO dto : items) {
+				ids.add(dto.getId());
+			}
+
+			userDao.addUserPrefs(uid, "cart", ids);
+		}
+
 	}
 
 }

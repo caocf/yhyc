@@ -89,7 +89,7 @@ public class UserService extends BaseService {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = request.getHeader("uuid");
 		}
-		
+
 		String ostype = request.getHeader("ostype");
 
 		User u = JSONUtil.fromJson(user, User.class);
@@ -132,7 +132,7 @@ public class UserService extends BaseService {
 		if (StringUtils.isBlank(uuid)) {
 			uuid = request.getHeader("uuid");
 		}
-		
+
 		String ostype = request.getHeader("ostype");
 
 		int ret = userDomain.generateVerification(mobi, uuid, ostype);
@@ -226,6 +226,12 @@ public class UserService extends BaseService {
 			@QueryParam("uid") long uid) {
 
 		UserPrefs userPrefs = userDomain.getUserPrefs(uid);
+
+		try {
+			userDomain.loginStats(uid);
+		} catch (Throwable t) {
+		}
+
 		return buildResponseSuccess(userPrefs);
 	}
 
@@ -278,7 +284,7 @@ public class UserService extends BaseService {
 			return buildResponseResult("empty parameters",
 					RespType.INVALID_PARAMETERS);
 		}
-		
+
 		userDomain.complaintAndSugguestion(uid, name, mobi, mail, content);
 		return buildResponseSuccess("OK");
 	}

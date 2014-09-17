@@ -19,6 +19,7 @@ import com.aug3.yhyc.base.RespType;
 import com.aug3.yhyc.domain.OrderDomain;
 import com.aug3.yhyc.domain.OrderStatus;
 import com.aug3.yhyc.domain.UserDomain;
+import com.aug3.yhyc.dto.ItemDTO;
 import com.aug3.yhyc.dto.Order;
 import com.aug3.yhyc.dto.Orders;
 import com.aug3.yhyc.interceptors.annotation.AccessTrace;
@@ -105,7 +106,6 @@ public class OrderService extends BaseService {
 	}
 
 	/**
-	 * 获取销售订单列表
 	 * 
 	 * @param request
 	 * @param token
@@ -123,6 +123,15 @@ public class OrderService extends BaseService {
 	}
 
 	@GET
+	@Path("/sales/stats")
+	public String newOrderItemsStats(@Context HttpServletRequest request,
+			@QueryParam("workshop") long workshop) {
+
+		List<ItemDTO> sales = orderDomain.newOrderItemsStats(workshop);
+		return buildResponseSuccess(sales);
+	}
+
+	@GET
 	@Path("/deliver")
 	public String deliverOrder(@Context HttpServletRequest request,
 			@QueryParam("order") long order) {
@@ -132,7 +141,7 @@ public class OrderService extends BaseService {
 
 		return buildResponseSuccess(n);
 	}
-	
+
 	/**
 	 * change status, e.g. cancel, delivering, finished
 	 * 
@@ -150,6 +159,29 @@ public class OrderService extends BaseService {
 		int n = orderDomain.editOrderStatus(order, status);
 
 		return buildResponseSuccess(n);
+	}
+
+	/**
+	 * not used for now, do it on client
+	 * 
+	 * @param request
+	 * @param uid
+	 * @param orderid
+	 * @return
+	 */
+	@GET
+	@Path("/addtocart")
+	public String addOrderItems2Cart(@Context HttpServletRequest request,
+			@QueryParam("uid") long uid, @QueryParam("orderid") long orderid) {
+
+		if (uid == 0 || orderid == 0) {
+			return buildResponseResult("invlid param uid/orderid",
+					RespType.INVALID_PARAMETERS);
+		}
+
+		orderDomain.addOrderItems2Cart(uid, orderid);
+
+		return buildResponseSuccess(RespType.SUCCESS);
 	}
 
 }

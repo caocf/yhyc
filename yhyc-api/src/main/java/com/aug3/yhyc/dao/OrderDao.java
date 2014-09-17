@@ -140,6 +140,18 @@ public class OrderDao extends BaseDao {
 
 	}
 
+	public List<DBObject> findNewOrders(long workshop) {
+
+		BasicDBObject query = new BasicDBObject("sid", workshop).append("sts",
+				OrderStatus.PROCESSING.getValue());
+
+		List<DBObject> list = getDBCollection(CollectionConstants.COLL_ORDERS)
+				.find(query).toArray();
+
+		return list;
+
+	}
+
 	/**
 	 * 
 	 * @param workshop

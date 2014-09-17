@@ -4,13 +4,14 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import com.aug3.sys.util.DateUtil;
+import com.aug3.sys.util.RandomUtil;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoException;
 
 public class IDGenerator {
 
-	private static final DecimalFormat df = new DecimalFormat("000000");
+	private static final DecimalFormat orderdf = new DecimalFormat("00000");
 
 	private static final DecimalFormat udf = new DecimalFormat("00000000");
 
@@ -73,8 +74,10 @@ public class IDGenerator {
 	public static long nextOrderID(DB db) {
 		String today = DateUtil.formatCurrentDate().replaceAll("-", "");
 		return Long.parseLong(today.substring(2)
-				+ df.format(IDGenerator.nextval(db, "orderid",
-						today.substring(0, 6), today.substring(6))));
+				+ orderdf.format(IDGenerator.nextval(db, "orderid",
+						today.substring(0, 6), today.substring(6)))
+				+ RandomUtil.getRandom(0, 9));
+		// remove random and increase orderdf in the future
 	}
 
 	public static long nextUserID(DB db) {

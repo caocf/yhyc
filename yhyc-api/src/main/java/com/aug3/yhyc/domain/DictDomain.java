@@ -13,6 +13,7 @@ import com.aug3.sys.cache.SystemCache;
 import com.aug3.sys.util.DateUtil;
 import com.aug3.yhyc.dao.DictDao;
 import com.aug3.yhyc.dto.DeliveryTime;
+import com.aug3.yhyc.dto.SystemSettings;
 import com.aug3.yhyc.util.ConfigManager;
 import com.aug3.yhyc.valueobj.Category;
 import com.aug3.yhyc.valueobj.Region;
@@ -62,7 +63,7 @@ public class DictDomain {
 
 	public List<Tag> listTags() {
 
-		return dictDao.findAll();
+		return dictDao.findAllTags();
 	}
 
 	public List<Region> listRegion() {
@@ -122,6 +123,10 @@ public class DictDomain {
 		}
 
 		return dt;
+	}
+
+	public SystemSettings getSystemSettings() {
+		return dictDao.findSystemSettings();
 	}
 
 }

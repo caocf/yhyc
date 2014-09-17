@@ -72,15 +72,22 @@ public class AppService extends BaseService {
 		}
 
 		String uuid = request.getHeader("uuid");
+		String ostype = request.getHeader("ostype");
+
+		boolean ios = "ios".equalsIgnoreCase(ostype);
+
 		if (StringUtils.isNotBlank(uuid)) {
 			if (userDomain.uuidInBlackList(uuid)) {
-				return null;
+				if (ios)
+					return buildResponseResult("NO_PERMISSION",
+							RespType.NO_PERMISSION);
+				else
+					return null;
 			}
 		}
 
-		String ostype = request.getHeader("ostype");
 		AppInfoExt app = null;
-		if ("ios".equalsIgnoreCase(ostype)) {
+		if (ios) {
 			app = appDomain.getAppInfoIOS(Integer.parseInt(ver));
 		} else {
 			app = appDomain.getAppInfoAndroid(Integer.parseInt(ver));

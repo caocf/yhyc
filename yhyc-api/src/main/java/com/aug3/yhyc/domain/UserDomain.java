@@ -75,6 +75,10 @@ public class UserDomain {
 		return userPrefs;
 	}
 
+	public void loginStats(long uid) {
+		userDao.loginStats(uid);
+	}
+
 	public void updatePoint(long uid, int district, long shequ) {
 		userDao.updatePoint(uid, district, shequ);
 	}

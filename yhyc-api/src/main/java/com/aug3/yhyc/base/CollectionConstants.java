@@ -16,6 +16,8 @@ public class CollectionConstants {
 
 	public static final String COLL_USERS = "users";
 	
+	public static final String COLL_USER_STATS = "userstats";
+	
 	public static final String COLL_LOGIN = "login";
 	
 	public static final String COLL_BLACKLIST = "blacklist";
@@ -31,6 +33,8 @@ public class CollectionConstants {
 	public static final String COLL_SHEQU = "shequ";
 	
 	public static final String COLL_REGIONS = "regions";
+	
+	public static final String COLL_SETTINGS = "settings";
 
 	public static final String COLL_WORKSHOP = "workshops";
 	
