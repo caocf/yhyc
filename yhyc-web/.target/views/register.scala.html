@@ -1,0 +1,38 @@
+@(regform: Form[UserService.Register]) 
+
+
+@main("Welcome to Wanda.com") {
+
+<div class="container" id="registerModal">
+	<div class="modal-header">
+		<h3>@Messages("label.register.new.account")</h3>
+	</div>
+	<div class="modal-body">
+		<div class="well">
+				
+			@helper.form(routes.UserService.createuser(), 'class -> "form-horizontal") {
+			
+			<fieldset>
+				@if(regform.hasGlobalErrors) {
+					<p class="alert alert-warning">@regform.globalError.message</p>
+				}
+				@if(flash.contains("success")) {
+					<p class="success alert-success">@flash.get("success")</p>
+				}
+				
+				@helper.inputText(regform("name"), 'class->"input-xlarge", '_label -> Messages("label.user.name"))
+				@helper.inputText(regform("email"), 'type -> "email", 'class->"input-xlarge", '_label -> Messages("label.user.email"))
+				@helper.inputPassword(regform("password"), 'class->"input-xlarge", '_label -> Messages("label.user.passwd"))
+
+				<button class="btn btn-primary" type="submit">@Messages("label.register.create")</button>
+				
+			</fieldset>
+			}
+		</div>
+	</div>
+</div>
+
+</div>
+<!-- /container -->
+
+}

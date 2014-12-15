@@ -1,0 +1,76 @@
+@(articles: List[models.Article], queryStr : String, activeSort: String)
+
+@main("Welcome to wanda.com") {
+
+<div class="container">
+  	<ol class="breadcrumb">
+  	<li><a href="@routes.Application.index">Home</a></li>
+  	<li><a href="@routes.UserService.show">Admin Console</a></li>
+  	<li class="active">Articles</li>
+	</ol>
+    <div>
+
+	    <!-- Split button -->
+	    <div class="row well">
+			<input type="text" id="q" value="@queryStr" class="input-xlarge" placeholder="Filter by Title...">
+			<a class="btn btn-primary" id="searchsubmit" href="javascript:list('@routes.Articles.list')"><i class="icon-search icon-white"></i>Search</a>
+			<a class="btn btn-success pull-right" id="add" href="@routes.Articles.showCreationForm"><i class="icon-plus-sign icon-white"></i>Add a new article</a>
+		</div>
+		    
+      	<div id="sort">
+        	<span>@Messages("label.sort") <i class="icon-sort icon-white"></i> </span>
+	        <ul class="nav nav-pills">
+	          <li @if(activeSort == "title"){class="active"}><a href="javascript:list('@routes.Articles.list', 'title')"><i class="icon-sort-up icon-white"></i>title</a></li>
+	          <li @if(activeSort == "-title"){class="active"}><a href="javascript:list('@routes.Articles.list', '-title')"><i class="icon-sort-down icon-white"></i>title</a></li>
+	          <li @if(activeSort == "pub"){class="active"}><a href="javascript:list('@routes.Articles.list', 'pub')"><i class="icon-sort-up icon-white"></i>publisher</a></li>
+	          <li @if(activeSort == "-pub"){class="active"}><a href="javascript:list('@routes.Articles.list', '-pub')"><i class="icon-sort-down icon-white"></i>publisher</a></li>
+	          <li @if(activeSort == "crt"){class="active"}><a href="javascript:list('@routes.Articles.list', 'crt')"><i class="icon-sort-up icon-white"></i>pubdate</a></li>
+	          <li @if(activeSort == "-crt"){class="active"}><a href="javascript:list('@routes.Articles.list', '-crt')"><i class="icon-sort-down icon-white"></i>pubdate</a></li>
+	          <li @if(activeSort == "none"){class="active"}><a href="javascript:list('@routes.Articles.list', 'none')">none</a></li>
+	        </ul>
+      	</div>
+      	
+      	<script>
+      		function list(url, orderby){
+      			s = document.getElementById("q").value;
+      			boo = false;
+      			if(s!=""){
+      				url = url + "?q="+s;
+      				boo = true;
+      			}
+      			if(orderby!=null && orderby!="none"){
+      				if(boo){
+      					url = url + "&sort=" + orderby;
+      				}else{
+      					url = url + "?sort=" + orderby;
+      				}
+      			}
+      			window.location.href=url;
+      		}
+      	</script>
+      	
+      	<br>
+      	<div>
+		    @if(articles.isEmpty) {
+		        <p>No articles available yet.</p>
+		    } else {
+		     	<ul>
+				     @articles.map { article =>
+				       <li><a href="@routes.Articles.showEditForm(article.id)">@article.title</a> <em> by @article.pub </em> (last modified : @article.pdt) - <a href="@routes.Articles.delete(article.id)" class="delete">delete</a></li>
+				     }
+		     	</ul>
+		     	
+		     	<ul class="pagination">
+				<li class="disabled"><a href="#">&laquo;</a></li>
+				<li class="active"><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">&raquo;</a></li>
+				</ul>
+		    }
+			
+		</div>
+    </div>
+
+</div>
+}

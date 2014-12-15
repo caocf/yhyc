@@ -1,0 +1,50 @@
+@(id: String, form: Form[Article])
+@import helper.twitterBootstrap._
+
+
+@main("Welcome to Play 2.0") {
+<div class="container">
+	<ol class="breadcrumb">
+  	<li><a href="@routes.Application.index">Home</a></li>
+  	<li><a href="@routes.UserService.show">Admin Console</a></li>
+  	<li><a href="@routes.Articles.index">Articles</a></li>
+ 	<li class="active">
+ 				@if(id==null) {
+      				@Messages("action.create")
+    			} else {
+      				@Messages("action.edit")
+    			}
+    </li>
+	</ol>
+  <div class="span8">
+    @if(form.hasGlobalErrors) {
+		<p class="alert alert-warning">@form.globalError.message</p>
+	}
+	@if(flash.contains("success")) {
+		<p class="alert alert-success">@flash.get("success")</p>
+	}
+  @helper.form(action = (if(id==null) routes.Articles.create else routes.Articles.edit(id)), 'class -> "form-horizontal") {
+  	<fieldset>
+	    @helper.inputText(form("title"), '_label -> Messages("article.title"), 'class->"input-xlarge")
+	    @helper.inputText(form("pub"), '_label -> Messages("article.publisher"), 'class->"input-xlarge")
+	    @helper.inputText(form("pdt"), '_label -> Messages("article.publishtime"), 'class->"input-xlarge")
+	    <!-- @helper.textarea(form("content"), '_label -> Messages("article.content"), 'cols->50, 'rows->10) -->
+	    <div class="clearfix  " id="content_field">
+		    <label for="content">@Messages("article.content")</label>
+		    @wysiwyg(form("content").value)
+		</div>
+	    
+	    <br>
+		<button class="btn btn-primary" type="submit" onclick="setContentValue()">@Messages("action.submit")</button>
+		<input type="hidden" id="content" name="content" value=""></input>
+	</fieldset>
+	<script type="text/javascript">
+		function setContentValue(){
+			document.getElementById("content").value = document.getElementById("editor").innerHTML;
+		}
+	
+	</script>
+  }
+  </div>
+</div>
+}

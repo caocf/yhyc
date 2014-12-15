@@ -1,0 +1,43 @@
+@(loginform: Form[Application.Login]) 
+
+@import helper.twitterBootstrap._
+
+@main("Welcome to Wanda.com") {
+
+<div class="container" id="loginModal">
+	<div class="modal-header">
+		<h3>@Messages("label.login.welcome")</h3>
+	</div>
+	<div class="modal-body">
+		<div class="well">
+			<div id="myTabContent" class="tab-content">
+						
+				@helper.form(action = routes.Application.authenticate, 'class -> "form-horizontal") {
+					<fieldset>
+						
+						@if(loginform.hasGlobalErrors) {
+							<p class="alert alert-warning">@loginform.globalError.message</p>
+						}
+						@if(flash.contains("success")) {
+							<p class="alert-success">@flash.get("success")</p>
+						}
+						
+						<!-- Username -->
+						@helper.inputText(loginform("email"), 'type -> "email", 'class->"input-xlarge", '_label -> Messages("label.user.email"))
+
+						<!-- Password-->
+						@helper.inputPassword(loginform("password"), 'class->"input-xlarge", '_label -> Messages("label.user.passwd"))
+						
+						<!-- Button -->
+						<button class="btn btn-success" type="submit">@Messages("label.login")</button>&nbsp; &nbsp;
+								<a href="@routes.UserService.register">@Messages("label.register.new.account")</a>
+					</fieldset>
+				}
+			</div>
+		</div>
+	</div>
+
+</div>
+<!-- /container -->
+
+}

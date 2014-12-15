@@ -1,0 +1,30 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+
+GET     /login                      controllers.Application.login
+POST    /login                      controllers.Application.authenticate
+GET     /logout                     controllers.Application.logout
+GET     /register	                controllers.UserService.register
+POST    /register	                controllers.UserService.createuser
+GET		/users						controllers.UserService.show
+
+GET		/articles					controllers.Articles.index
+GET		/articles/list				controllers.Articles.list
+GET     /articles/new               controllers.Articles.showCreationForm
+POST    /articles/new               controllers.Articles.create
+GET     /articles/:id               controllers.Articles.showEditForm(id)
+POST    /articles/:id               controllers.Articles.edit(id)
+DELETE  /articles/:id               controllers.Articles.delete(id)
+
+GET		/stats						controllers.Stats.index
+
+GET     /room                            controllers.WeChat.chatRoom(username: String ?= null)
+GET     /room/chat                       controllers.WeChat.chat(username)
+GET     /assets/javascripts/chatroom.js  controllers.WeChat.chatRoomJs(username)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
