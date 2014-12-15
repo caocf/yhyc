@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.aug3.yhyc.view.ActionBarTitleView
+        android:id="@+id/actionbar_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarTitleView>
+
+    <ImageView
+        android:id="@+id/order_success_info"
+        android:layout_width="match_parent"
+        android:layout_height="180dip"
+        android:layout_below="@+id/actionbar_title"
+        android:layout_marginTop="10dip"
+        android:src="@drawable/bg_ddcg" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_layout_height"
+        android:layout_above="@+id/orderinfo_ad"
+        android:layout_below="@+id/order_success_info"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dip"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/orderinfo_goback_home_btn"
+            android:layout_width="0dip"
+            android:layout_height="@dimen/button_submit_height"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_gray_shape"
+            android:text="@string/btn_goback_home"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <Button
+            android:id="@+id/orderinfo_goto_myorders_btn"
+            android:layout_width="0dip"
+            android:layout_height="@dimen/button_submit_height"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_submit_shape"
+            android:text="@string/btn_view_my_orders"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+    </LinearLayout>
+
+    <!-- more ad div for bread , activities, and children education -->
+
+    <ImageView
+        android:id="@+id/orderinfo_ad"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/ad003" />
+
+</RelativeLayout>

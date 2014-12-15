@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/actionbar_layout_height"
+    android:background="@color/actionbar_bg" >
+
+    <ImageView
+        android:id="@+id/actionbar_item_back"
+        style="@style/layout_back_btn"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/actionbar_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/title_product_detail"
+        android:textColor="#fff"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/actionbar_item_fav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dip"
+        android:layout_toLeftOf="@+id/actionbar_shoppingcart"
+        android:contentDescription="@null"
+        android:src="@drawable/favorite_btn_bg" />
+
+    <ImageView
+        android:id="@+id/actionbar_shoppingcart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dip"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_shoppingcart" />
+
+    <TextView
+        android:id="@+id/actionbar_shoppingcart_number"
+        android:layout_width="15dip"
+        android:layout_height="15dip"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="5dip"
+        android:background="@drawable/icon_red"
+        android:focusable="false"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <!--
+    <ImageView
+        android:id="@+id/actionbar_item_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="2dp"
+        android:layout_toLeftOf="@+id/actionbar_item_fav"
+        android:contentDescription="@null"
+        android:src="@drawable/share_icon" />
+    -->
+
+</RelativeLayout>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.aug3.yhyc"
+    android:versionCode="3"
+    android:versionName="1.2" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <application
+        android:name="com.aug3.yhyc.YhycApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/yhyc_icon"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Light.NoTitleBar" >
+        <activity
+            android:name="com.aug3.yhyc.SplashActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.UserLoginActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.SearchShequActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.SettingsActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.UserTagsActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.ItemListActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.ItemDetailActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.ShoppingCartActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.OrderConfirmActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.OrderSuccessActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.MyOrdersActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.OrderDetailActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.MyFavoriateActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.AboutusActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.ExperienceActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.WeeklyCouponActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.WorkshopActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.WorkshopListActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.DailyPromotionActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.UploadWorksActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.GrouponShowActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.JoinusActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.GuideActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.WebViewActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.WebStoreActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.IExchgActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.MessageListActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.aug3.yhyc.MessageShowActivity"
+            android:label="@string/app_name" >
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/actionbar_layout_height"
+    android:background="@color/actionbar_bg" >
+
+    <TextView
+        android:id="@+id/myacc_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/label_myacc"
+        android:textColor="#fff"
+        android:textSize="20sp" />
+
+    <RelativeLayout
+        android:id="@+id/myacc_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dip"
+        android:layout_toLeftOf="@+id/myacc_setting_btn" >
+
+        <ImageView
+            android:id="@+id/myacc_msg_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:focusable="false"
+            android:src="@drawable/ic_action_message" />
+
+        <TextView
+            android:id="@+id/myacc_msg_new"
+            android:layout_width="15dip"
+            android:layout_height="15dip"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="3dip"
+            android:layout_marginTop="3dip"
+            android:background="@drawable/icon_red"
+            android:focusable="false"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/myacc_setting_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dip"
+        android:background="@drawable/center_settings" />
+
+</RelativeLayout>

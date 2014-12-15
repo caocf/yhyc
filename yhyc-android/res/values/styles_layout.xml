@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 全屏幕拉伸 -->
+    <style name="layout_fillparent">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
+
+    <!-- 固定自身大小 -->
+    <style name="layout_wrap">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- 横向分布 -->
+    <style name="layout_horizontal" parent="layout_fillparent">
+        <item name="android:layout_width">0px</item>
+    </style>
+
+    <!-- 纵向分布 -->
+    <style name="layout_vertical" parent="layout_fillparent">
+        <item name="android:layout_height">0dip</item>
+    </style>
+
+    <style name="layout_comment_topview_face_img">
+        <item name="android:layout_width">38dip</item>
+        <item name="android:layout_height">51dip</item>
+    </style>
+    
+    <style name="layout_back_btn">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">30dip</item>
+        <item name="android:layout_marginLeft">3dip</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:src">@drawable/goback_arrow</item>
+    </style>
+
+    <style name="layout_comment_topview_appraisal_img">
+        <item name="android:layout_width">42dip</item>
+        <item name="android:layout_height">0.0dip</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginBottom">5dip</item>
+    </style>
+
+    <style name="store_textview_style">
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="comment_view_tv_style" parent="@style/store_textview_style">
+        <item name="android:textSize">@dimen/tv_size_normal</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+</resources>

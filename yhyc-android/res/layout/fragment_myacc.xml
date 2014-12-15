@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include
+        android:id="@+id/actionbar_myacc"
+        layout="@layout/actionbar_myacc" />
+
+    <RelativeLayout
+        android:id="@+id/myacc_userinfo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actionbar_myacc"
+        android:layout_margin="5dip" >
+
+        <ImageView
+            android:id="@+id/myacc_avatar"
+            android:layout_width="70dip"
+            android:layout_height="70dip"
+            android:layout_margin="5dip"
+            android:background="@drawable/user_default" />
+
+        <LinearLayout
+            android:id="@+id/myacc_user_info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_toRightOf="@+id/myacc_avatar"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/myacc_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_acculative_score"
+                    android:textSize="@dimen/tv_size_normal" />
+
+                <TextView
+                    android:id="@+id/myacc_user_ac"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@null"
+                    android:textSize="@dimen/tv_size_normal" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/myacc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/myacc_userinfo"
+        android:orientation="vertical" >
+
+        <include layout="@layout/horizontal_line" />
+
+        <ListView
+            android:id="@+id/listViewMy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:listSelector="#00000000" >
+        </ListView>
+    </LinearLayout>
+
+</RelativeLayout>

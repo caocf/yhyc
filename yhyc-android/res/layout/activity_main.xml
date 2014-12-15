@@ -1,0 +1,72 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <FrameLayout
+        android:id="@+id/realtabcontent"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <include layout="@layout/horizontal_line_footer" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="55dip"
+            android:background="@drawable/bottom_bg"
+            android:orientation="horizontal" >
+
+            <android.support.v4.app.FragmentTabHost
+                android:id="@android:id/tabhost"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="4" >
+
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0" />
+            </android.support.v4.app.FragmentTabHost>
+
+            <RelativeLayout
+                android:id="@+id/main_shoppingcart_layout"
+                android:layout_width="45dip"
+                android:layout_height="45dip"
+                android:layout_marginTop="5dip"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/main_shoppingcart"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    android:focusable="false"
+                    android:src="@drawable/icon_cart_nor" />
+
+                <TextView
+                    android:id="@+id/main_shoppingcart_notice"
+                    android:layout_width="15dip"
+                    android:layout_height="15dip"
+                    android:layout_alignRight="@+id/main_shoppingcart"
+                    android:layout_alignTop="@+id/main_shoppingcart"
+                    android:layout_marginRight="-5dip"
+                    android:background="@drawable/icon_red"
+                    android:focusable="false"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

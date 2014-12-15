@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="3dip"
+    android:paddingLeft="8dip"
+    android:paddingRight="8dip"
+    android:paddingTop="3dip" >
+
+    <TextView
+        android:id="@+id/reply_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="6.0dip"
+        android:text="请问不能线上支付吗?"
+        android:textColor="@color/gray_444444"
+        android:textSize="@dimen/tv_size_small" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="20dip" >
+
+        <TextView
+            android:id="@+id/reply_author"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="一号云仓"
+            android:textSize="@dimen/tv_size_tiny_small" />
+
+        <TextView
+            android:id="@+id/reply_ts"
+            android:layout_width="wrap_content"
+            android:layout_height="18.0dip"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:layout_toLeftOf="@+id/reply_author"
+            android:text="2014-05-09"
+            android:textSize="@dimen/tv_size_tiny_small" />
+    </RelativeLayout>
+
+</LinearLayout>

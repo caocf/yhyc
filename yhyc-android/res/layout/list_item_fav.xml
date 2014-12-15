@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants" >
+
+    <ImageView
+        android:id="@+id/fav_item_image"
+        android:layout_width="60dip"
+        android:layout_height="60dip"
+        android:layout_margin="5dip"
+        android:layout_marginLeft="5dip"
+        android:adjustViewBounds="true"
+        android:background="@color/image_background"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/fav_item_image"
+        android:layout_marginLeft="3dip"
+        android:layout_toLeftOf="@+id/fav_item_selected"
+        android:layout_toRightOf="@+id/fav_item_image" >
+
+        <TextView
+            android:id="@+id/fav_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="新疆库尔勒一级香梨 3kg（单果100g以上）"
+            android:textSize="@dimen/tv_size_small" />
+
+        <TextView
+            android:id="@+id/fav_item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fav_item_title"
+            android:layout_gravity="left"
+            android:layout_marginTop="5dip"
+            android:text="￥3.80"
+            android:textColor="@color/price_red"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <TextView
+            android:id="@+id/fav_item_origin_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fav_item_title"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="5dip"
+            android:layout_toRightOf="@+id/fav_item_price"
+            android:text="￥5.50"
+            android:textSize="@dimen/tv_size_small" />
+    </RelativeLayout>
+
+    <CheckBox
+        android:id="@+id/fav_item_selected"
+        android:layout_width="@dimen/cb_size"
+        android:layout_height="@dimen/cb_size"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dip"
+        android:background="@drawable/check_box_selector"
+        android:button="@null" />
+
+</RelativeLayout>

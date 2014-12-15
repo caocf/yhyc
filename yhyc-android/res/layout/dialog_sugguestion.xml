@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dip"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:background="@color/actionbar"
+        android:gravity="center"
+        android:text="@string/title_sugguestion_complaint"
+        android:textColor="#000000"
+        android:textSize="@dimen/tv_size_20sp" />
+
+    <LinearLayout
+        android:id="@+id/newitem_layout"
+        android:layout_width="300dip"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_title"
+        android:layout_margin="10dip"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:focusable="true"
+            android:focusableInTouchMode="true" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dip"
+                android:text="@string/title_label_sugguestion"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_gray" >
+
+                <EditText
+                    android:id="@+id/user_sugguestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:lineSpacingExtra="6dip"
+                    android:lines="4"
+                    android:paddingLeft="5dip"
+                    android:textSize="@dimen/tv_size_small" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dip"
+                android:text="@string/label_name"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_gray" >
+
+                <EditText
+                    android:id="@+id/user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:background="@null"
+                    android:paddingLeft="5dip"
+                    android:textSize="@dimen/tv_size_normal" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dip"
+                android:text="@string/label_delivery_mobile"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_gray" >
+
+                <EditText
+                    android:id="@+id/user_mobi"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:background="@null"
+                    android:paddingLeft="5dip"
+                    android:textSize="@dimen/tv_size_normal" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/newitem_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dip"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/sugguestion_cancel_btn"
+            android:layout_width="0dip"
+            android:layout_height="40dip"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_gray_default"
+            android:text="@string/btn_cancel"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <Button
+            android:id="@+id/sugguestion_ok_btn"
+            android:layout_width="0dip"
+            android:layout_height="40dip"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_green_default"
+            android:text="@string/btn_OK"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+    </LinearLayout>
+
+</RelativeLayout>

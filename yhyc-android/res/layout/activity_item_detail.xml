@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ItemDetailActivity" >
+
+    <include
+        android:id="@+id/productdetail_actionbar"
+        layout="@layout/actionbar_item_detail" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="35dip"
+        android:layout_margin="10dip" >
+
+        <TextView
+            android:id="@+id/tv_tab_product_info"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_left_tab_sel_shape"
+            android:gravity="center"
+            android:text="@string/pager_product_info"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <TextView
+            android:id="@+id/tv_tab_product_comment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_right_tab_nor_shape"
+            android:gravity="center"
+            android:text="@string/pager_product_comment"
+            android:textColor="@color/font_head"
+            android:textSize="@dimen/tv_size_normal" />
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/productdetail_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:flipInterval="30"
+        android:persistentDrawingCache="animation" />
+
+</LinearLayout>

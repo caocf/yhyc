@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dip"
+    android:layout_marginBottom="5dip"
+    android:background="@color/white"
+    android:paddingBottom="8dp"
+    android:paddingLeft="3dip"
+    android:paddingRight="3dip"
+    android:paddingTop="8dip" >
+
+    <ImageView
+        android:id="@+id/msg_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ic_action_notify" />
+
+    <TextView
+        android:id="@+id/msg_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="3dip"
+        android:layout_toLeftOf="@+id/msg_ts"
+        android:layout_toRightOf="@+id/msg_type"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="Title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/font_default"
+        android:textSize="@dimen/tv_size_normal" />
+
+    <TextView
+        android:id="@+id/msg_ts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="09:28"
+        android:textColor="@color/font_note"
+        android:textSize="@dimen/tv_size_small" />
+
+</RelativeLayout>

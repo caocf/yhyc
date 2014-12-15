@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/groupon_item_image"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dip" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/groupon_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/tv_size_normal" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/groupon_item_pp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/red"
+        android:textSize="@dimen/tv_size_small" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/groupon_item_mp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/tv_size_small" >
+    </TextView>
+
+    <Button
+        android:id="@+id/groupon_item_order"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dip"
+        android:background="@drawable/btn_big_default"
+        android:text="@string/btn_goto_pay"
+        android:textColor="@color/white"
+        android:textSize="@dimen/tv_size_normal" />
+
+</LinearLayout>

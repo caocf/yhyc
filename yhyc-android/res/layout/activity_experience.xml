@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <com.aug3.yhyc.view.ActionBarNormalView
+        android:id="@+id/actionbar_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarNormalView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dip" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/default_layout_height"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_comment_tips_for_items"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <CheckBox
+                android:id="@+id/experience_comment_all_cb"
+                android:layout_width="@dimen/cb_size"
+                android:layout_height="@dimen/cb_size"
+                android:layout_marginLeft="20.0dip"
+                android:background="@drawable/check_box_selector"
+                android:button="@null"
+                android:checked="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:layout_marginLeft="5.0dip"
+                android:gravity="center_vertical"
+                android:text="@string/label_comment_all"
+                android:textColor="@color/font_default"
+                android:textSize="@dimen/tv_size_normal" />
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/experience_rating_obj"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/border_gray"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:textColor="#6bbd42"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/label_degree_of_satisfication"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <ImageView
+                android:id="@+id/experience_rating_iv1"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:padding="5dip"
+                android:src="@drawable/item_star_yellow" />
+
+            <ImageView
+                android:id="@+id/experience_rating_iv2"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:padding="5dip"
+                android:src="@drawable/item_star_yellow" />
+
+            <ImageView
+                android:id="@+id/experience_rating_iv3"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:padding="5dip"
+                android:src="@drawable/item_star_yellow" />
+
+            <ImageView
+                android:id="@+id/experience_rating_iv4"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:padding="5dip"
+                android:src="@drawable/item_star_yellow" />
+
+            <ImageView
+                android:id="@+id/experience_rating_iv5"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:padding="5dip"
+                android:src="@drawable/item_star_yellow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/border_gray"
+            android:focusable="true"
+            android:focusableInTouchMode="true" >
+
+            <EditText
+                android:id="@+id/experience_comment_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="@string/label_comment_star_5"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:textSize="@dimen/tv_size_small" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/experience_submit_btn"
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:layout_marginTop="20dip"
+            android:background="@drawable/btn_submit_shape"
+            android:text="@string/btn_submit"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+    </LinearLayout>
+
+</LinearLayout>

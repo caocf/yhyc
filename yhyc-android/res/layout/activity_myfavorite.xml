@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.aug3.yhyc.view.ActionBarCheckedView
+        android:id="@+id/actionbar_checked_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarCheckedView>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:descendantFocusability="afterDescendants"
+        android:listSelector="#00000000" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dip" >
+
+        <Button
+            android:id="@+id/fav_delete_selected"
+            android:layout_width="120.0dip"
+            android:layout_height="40dip"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dip"
+            android:background="@drawable/btn_gray_shape"
+            android:text="@string/btn_delete"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/fav_add_to_cart"
+            android:layout_width="120.0dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dip"
+            android:background="@drawable/btn_submit_shape"
+            android:text="@string/btn_add_to_cart"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+    </RelativeLayout>
+
+</LinearLayout>

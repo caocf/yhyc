@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.aug3.yhyc.view.ActionBarView
+        android:id="@+id/actionbar_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarView>
+
+    <TableLayout
+        android:id="@+id/weekly_coupon_table"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:paddingBottom="5dip"
+        android:paddingTop="5dip"
+        android:shrinkColumns="3"
+        android:stretchColumns="1" >
+    </TableLayout>
+
+    <include layout="@layout/horizontal_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/weekly_totalprice"
+            android:text="总计 ￥"
+            android:textSize="@dimen/tv_size_small" />
+
+        <TextView
+            android:id="@+id/weekly_totalprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/weekly_confirmbuy"
+            android:text="150.20"
+            android:textSize="@dimen/tv_size_small" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/weekly_totalprice"
+            android:layout_toLeftOf="@+id/weekly_marketprice"
+            android:text="市场价 ￥"
+            android:textSize="@dimen/tv_size_small" />
+
+        <TextView
+            android:id="@+id/weekly_marketprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/weekly_totalprice"
+            android:layout_toLeftOf="@+id/weekly_confirmbuy"
+            android:text="170.0"
+            android:textSize="@dimen/tv_size_small" />
+
+        <Button
+            android:id="@+id/weekly_confirmbuy"
+            android:layout_width="100.0dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:background="@drawable/btn_big_default"
+            android:text="@string/btn_goto_pay"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+    </RelativeLayout>
+
+</LinearLayout>

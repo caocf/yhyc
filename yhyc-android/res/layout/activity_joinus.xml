@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.aug3.yhyc.view.ActionBarView
+        android:id="@+id/actionbar_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarView>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actionbar_back"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/join_steps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/joinus" />
+
+            <TableLayout
+                android:id="@+id/upload_cook_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="1"
+                android:stretchColumns="1" >
+
+                <!-- name -->
+
+                <TableRow
+                    android:background="@drawable/border_gray"
+                    android:padding="5dip" >
+
+                    <TextView
+                        android:text="@string/label_join_contact"
+                        android:textColor="@color/font_head"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <EditText
+                        android:id="@+id/join_name"
+                        android:layout_height="40dip"
+                        android:background="@null"
+                        android:maxLength="20"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <Button
+                        android:id="@+id/join_name_clear"
+                        android:layout_width="@dimen/btn_del_x_size"
+                        android:layout_height="@dimen/btn_del_x_size"
+                        android:layout_marginRight="10.0dip"
+                        android:background="@drawable/edit_text_clear"
+                        android:visibility="invisible" />
+                </TableRow>
+
+                <!-- idcard -->
+
+                <TableRow
+                    android:background="@drawable/border_gray"
+                    android:padding="5dip" >
+
+                    <TextView
+                        android:text="@string/label_join_idcard"
+                        android:textColor="@color/font_head"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <EditText
+                        android:id="@+id/join_idcard"
+                        android:layout_height="40dip"
+                        android:background="@null"
+                        android:maxLength="18"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <Button
+                        android:id="@+id/join_idcard_clear"
+                        android:layout_width="@dimen/btn_del_x_size"
+                        android:layout_height="@dimen/btn_del_x_size"
+                        android:layout_marginRight="10.0dip"
+                        android:background="@drawable/edit_text_clear"
+                        android:visibility="invisible" />
+                </TableRow>
+
+                <!-- mobile -->
+
+                <TableRow
+                    android:background="@drawable/border_gray"
+                    android:padding="5dip" >
+
+                    <TextView
+                        android:text="@string/label_join_tel"
+                        android:textColor="@color/font_head"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <EditText
+                        android:id="@+id/join_mobi"
+                        android:layout_height="40dip"
+                        android:background="@null"
+                        android:inputType="phone"
+                        android:maxLength="20"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <Button
+                        android:id="@+id/join_mobi_clear"
+                        android:layout_width="@dimen/btn_del_x_size"
+                        android:layout_height="@dimen/btn_del_x_size"
+                        android:layout_marginRight="10.0dip"
+                        android:background="@drawable/edit_text_clear"
+                        android:visibility="invisible" />
+                </TableRow>
+
+                <TableRow
+                    android:background="@drawable/border_gray"
+                    android:padding="5dip" >
+
+                    <TextView
+                        android:text="@string/label_join_area"
+                        android:textColor="@color/font_head"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <EditText
+                        android:id="@+id/join_city_dist"
+                        android:layout_height="40dip"
+                        android:background="@null"
+                        android:focusable="true"
+                        android:hint="上海 浦东 世纪公园"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <Button
+                        android:id="@+id/join_city_dist_clear"
+                        android:layout_width="@dimen/btn_del_x_size"
+                        android:layout_height="@dimen/btn_del_x_size"
+                        android:layout_marginRight="10.0dip"
+                        android:background="@drawable/edit_text_clear"
+                        android:visibility="invisible" />
+                </TableRow>
+
+                <TableRow
+                    android:background="@drawable/border_gray"
+                    android:padding="5dip" >
+
+                    <TextView
+                        android:text="@string/label_join_business"
+                        android:textColor="@color/font_head"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <EditText
+                        android:id="@+id/join_range"
+                        android:layout_height="40dip"
+                        android:background="@null"
+                        android:focusable="true"
+                        android:hint="水果/蔬菜/肉类"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <Button
+                        android:id="@+id/join_range_clear"
+                        android:layout_width="@dimen/btn_del_x_size"
+                        android:layout_height="@dimen/btn_del_x_size"
+                        android:layout_marginRight="10.0dip"
+                        android:background="@drawable/edit_text_clear"
+                        android:visibility="invisible" />
+                </TableRow>
+
+                <TableRow
+                    android:background="@drawable/border_gray"
+                    android:padding="5dip" >
+
+                    <TextView
+                        android:text="@string/label_join_experience"
+                        android:textColor="@color/font_head"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <EditText
+                        android:id="@+id/join_experience"
+                        android:layout_height="40dip"
+                        android:background="@null"
+                        android:focusable="true"
+                        android:hint="3年"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <Button
+                        android:id="@+id/join_experience_clear"
+                        android:layout_width="@dimen/btn_del_x_size"
+                        android:layout_height="@dimen/btn_del_x_size"
+                        android:layout_marginRight="10.0dip"
+                        android:background="@drawable/edit_text_clear"
+                        android:visibility="invisible" />
+                </TableRow>
+
+                <TableRow
+                    android:background="@drawable/border_gray"
+                    android:padding="5dip" >
+
+                    <TextView
+                        android:text="@string/label_join_email"
+                        android:textColor="@color/font_head"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <EditText
+                        android:id="@+id/join_mail"
+                        android:layout_height="40dip"
+                        android:background="@null"
+                        android:completionThreshold="2"
+                        android:focusable="true"
+                        android:hint="@string/mail_hint"
+                        android:inputType="textEmailAddress"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <Button
+                        android:id="@+id/join_mail_clear"
+                        android:layout_width="@dimen/btn_del_x_size"
+                        android:layout_height="@dimen/btn_del_x_size"
+                        android:layout_marginRight="10.0dip"
+                        android:background="@drawable/edit_text_clear"
+                        android:visibility="invisible" />
+                </TableRow>
+
+                <!--
+                <TableRow
+                    android:background="@drawable/border_gray"
+                    android:padding="5dip" >
+
+                    <TextView
+                        android:text="@string/label_join_store_pic"
+                        android:textColor="@color/font_head"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <ImageView
+                        android:id="@+id/join_shop_iv"
+                        android:layout_width="100dip"
+                        android:layout_height="100dip"
+                        android:background="@drawable/empty_photo" />
+                </TableRow>
+                -->
+
+                <TableRow
+                    android:background="@drawable/border_gray"
+                    android:padding="5dip" >
+
+                    <TextView
+                        android:text="@string/label_join_desc"
+                        android:textColor="@color/font_head"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <EditText
+                        android:id="@+id/join_desc"
+                        android:layout_height="40dip"
+                        android:background="@null"
+                        android:focusable="true"
+                        android:textSize="@dimen/tv_size_normal" />
+
+                    <Button
+                        android:id="@+id/join_desc_clear"
+                        android:layout_width="@dimen/btn_del_x_size"
+                        android:layout_height="@dimen/btn_del_x_size"
+                        android:layout_marginRight="10.0dip"
+                        android:background="@drawable/edit_text_clear"
+                        android:visibility="invisible" />
+                </TableRow>
+                <!-- agreement -->
+
+                <TableRow
+                    android:background="@drawable/border_gray"
+                    android:padding="5dip" >
+
+                    <CheckBox
+                        android:id="@+id/cb_agreement"
+                        android:layout_width="@dimen/cb_size"
+                        android:layout_height="@dimen/cb_size"
+                        android:layout_marginLeft="30dip"
+                        android:layout_marginRight="30dip"
+                        android:background="@drawable/check_box_selector"
+                        android:button="@null"
+                        android:checked="true" />
+
+                    <TextView
+                        android:id="@+id/agreement"
+                        android:layout_height="50dip"
+                        android:text="@string/agreement_show"
+                        android:textColor="@color/font_head"
+                        android:textSize="@dimen/tv_size_normal" />
+                </TableRow>
+            </TableLayout>
+
+            <Button
+                android:id="@+id/join_sumbit"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/button_submit_height"
+                android:layout_margin="10dip"
+                android:background="@drawable/btn_submit_shape"
+                android:text="@string/btn_submit"
+                android:textColor="@color/white"
+                android:textSize="@dimen/tv_size_normal" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".WorkshopListActivity" >
+
+    <com.aug3.yhyc.view.ActionBarView
+        android:id="@+id/actionbar_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/workshop_ad"
+        android:layout_below="@+id/actionbar_back"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/workshop_notice"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:gravity="center"
+            android:text="@string/label_workshop_coming_soon"
+            android:textSize="@dimen/tv_size_normal"
+            android:visibility="gone" />
+
+        <!-- TODO: add a banner for category ads -->
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:listSelector="#00000000" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/workshop_ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ad002"
+        android:scaleType="fitXY" />
+
+</RelativeLayout>

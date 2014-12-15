@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/popupwindow"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/shequ_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/shequ_search_btn"
+        android:fadingEdge="none"
+        android:listSelector="#00000000"
+        android:scrollingCache="false" />
+
+    <Button
+        android:id="@+id/shequ_search_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_submit_height"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="40dip"
+        android:background="@drawable/btn_submit_shape"
+        android:text="@string/btn_select_point"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/tv_size_normal" />
+
+</RelativeLayout>

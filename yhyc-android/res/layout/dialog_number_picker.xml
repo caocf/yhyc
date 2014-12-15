@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dip"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dip"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/numberpicker_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dip"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/numberpicker_sub"
+            android:layout_width="35dip"
+            android:layout_height="35dip"
+            android:background="@drawable/quantity_sub_btn_selector" />
+
+        <EditText
+            android:id="@+id/numberpicker_number"
+            android:layout_width="50dip"
+            android:layout_height="35dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/common_border_no_corner"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="3"
+            android:singleLine="true"
+            android:text="1"
+            android:textColor="@color/gray_666666"
+            android:textSize="@dimen/tv_size_normal"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/numberpicker_add"
+            android:layout_width="35dip"
+            android:layout_height="35dip"
+            android:background="@drawable/quantity_add_btn_selector" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/numberpicker_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dip"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/numberpicker_cancel_btn"
+            android:layout_width="0dip"
+            android:layout_height="40dip"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_gray_default"
+            android:text="@string/btn_cancel"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <Button
+            android:id="@+id/numberpicker_ok_btn"
+            android:layout_width="0dip"
+            android:layout_height="40dip"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_green_default"
+            android:text="@string/btn_OK"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+    </LinearLayout>
+
+</RelativeLayout>

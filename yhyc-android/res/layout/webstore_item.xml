@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="3dip"
+        android:layout_marginTop="10dip" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="3dip"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="@dimen/tv_size_tiny_small" >
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="3dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="积分:"
+            android:textSize="@dimen/tv_size_tiny_small" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/item_ac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/tv_size_tiny_small" >
+        </TextView>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/item_exchg"
+        android:layout_width="60dip"
+        android:layout_height="25dip"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dip"
+        android:background="@drawable/btn_green_default"
+        android:text="@string/label_web_store_exchg"
+        android:textColor="@color/white"
+        android:textSize="@dimen/tv_size_tiny_small" />
+
+</LinearLayout>

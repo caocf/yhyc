@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="font_default">#333333</color>
+    <color name="font_note">#868686</color>
+    <color name="actionbar_bg">#6bbd42</color>
+    <color name="footer_line">#65ad44</color>
+    <color name="price_red">#d6000f</color>
+    <color name="image_background">#fafafa</color>
+    <color name="font_head">#010101</color>
+    <color name="font_content">#999999</color>
+    <color name="seashell">#FFF5EE</color>
+    <color name="background">#ffefefef</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="orange">#F7C709</color>
+    <color name="blue">#D5D52B</color>
+    <color name="th">#F1F1DA</color>
+    
+    <color name="big_gray_button_normal">#999999</color>
+    <color name="big_gray_button_pressed">#7c7c7c</color>
+    <color name="big_orange_button_normal">#F7C709</color>
+    <color name="big_orange_button_pressed">#D5D52B</color>
+    <color name="big_submit_button_normal">#6dbb44</color>
+    <color name="big_submit_button_pressed">#499324</color>
+    <color name="red">#ffff0000</color>
+    <color name="lightwhite">#ddd</color>
+    <color name="gray">#808080</color>
+    <color name="titleBgColor">#9EB34D</color>
+    <color name="titleTextColor">#fff</color>
+    <color name="singNameColor">#10808E</color>
+    <color name="btnClick">#EEE5DE</color>
+    <color name="listViewDivider">#30A1A5</color>
+    <color name="actionbar">#ffefefef</color>
+    <color name="pressed_light">#ff3db7a3</color>
+    <color name="big_red_button_normal">#ffff2323</color>
+    <color name="big_red_button_pressed">#ffdc1212</color>
+    <color name="address_child">#f4f4f4</color>
+    <color name="gray_dedede">#ffdedede</color>
+    <color name="gray_444444">#ff444444</color>
+    <color name="gray_666666">#ff666666</color>
+    <color name="gray_f5f5f5">#f5f5f5</color>
+
+</resources>

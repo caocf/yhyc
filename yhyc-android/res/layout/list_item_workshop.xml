@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp" >
+
+    <ImageView
+        android:id="@+id/listitem_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/listitem_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/listitem_img"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/listitem_img"
+        android:text="Title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/font_default"
+        android:textSize="@dimen/tv_size_normal" />
+
+    <TextView
+        android:id="@+id/listitem_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/listitem_img"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/listitem_img"
+        android:text="Sub Title"
+        android:textColor="@color/font_note"
+        android:textSize="@dimen/tv_size_small" />
+
+    <ImageView
+        android:layout_width="20dip"
+        android:layout_height="20dip"
+        android:layout_above="@+id/listitem_subtitle"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_next" />
+
+</RelativeLayout>

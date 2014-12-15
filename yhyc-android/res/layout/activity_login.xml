@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/login_actionbar"
+        layout="@layout/actionbar_login" />
+
+    <LinearLayout
+        android:id="@+id/login_layout_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_actionbar"
+        android:layout_margin="20.0dip"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:text="手机验证"
+            android:textSize="@dimen/tv_size_small" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/default_layout_height"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:layout_marginTop="10.0dip"
+            android:background="@drawable/border_gray"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/login_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:background="@null"
+                android:focusable="true"
+                android:hint="@string/label_input_mobile"
+                android:inputType="phone"
+                android:paddingLeft="10.0dip"
+                android:textSize="@dimen/tv_size_small" >
+            </EditText>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_submit_height"
+            android:layout_margin="10dip" >
+
+            <Button
+                android:id="@+id/login_get_verification"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_submit_shape"
+                android:text="@string/label_login_fetch_verification"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <TextView
+                android:id="@+id/login_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dip"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/tv_size_normal"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/login_input_verification"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/default_layout_height"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:background="@drawable/border_gray"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <EditText
+                android:id="@+id/login_verify"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:background="@null"
+                android:hint="@string/label_input_verification"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:paddingLeft="10.0dip"
+                android:textSize="@dimen/tv_size_small" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_submit_height"
+            android:layout_margin="10dip"
+            android:background="@drawable/btn_submit_shape"
+            android:text="@string/label_login"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/tv_size_normal"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/login_ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/ad002" />
+
+</RelativeLayout>

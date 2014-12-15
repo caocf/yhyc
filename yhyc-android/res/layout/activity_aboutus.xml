@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SettingsActivity" >
+
+    <com.aug3.yhyc.view.ActionBarView
+        android:id="@+id/actionbar_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <TextView
+                android:id="@+id/aboutus_yhyc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:background="@color/white"
+                android:text="@string/label_about_yhyc"
+                android:textSize="@dimen/tv_size_normal" />
+            
+            <TextView
+                android:id="@+id/aboutus_service_protocol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:background="@color/white"
+                android:text="@string/label_service_protocol"
+                android:textSize="@dimen/tv_size_normal" />
+            
+            <TextView
+                android:id="@+id/aboutus_service_after_sales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:background="@color/white"
+                android:text="@string/label_service_after_sales"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <TextView
+                android:id="@+id/aboutus_complaints_proposals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:background="@color/white"
+                android:text="@string/label_service_proposals"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_app_ver"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <TextView
+                android:id="@+id/aboutus_ver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:background="@color/white"
+                android:text="1.0"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <ImageView
+                android:id="@+id/aboutus_catchword"
+                android:layout_width="200dip"
+                android:layout_height="200dip"
+                android:layout_marginTop="40dip" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

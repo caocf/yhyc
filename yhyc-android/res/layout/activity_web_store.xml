@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".WebStoreActivity" >
+
+    <com.aug3.yhyc.view.ActionBarView
+        android:id="@+id/title_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarView>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/ad_scroll_view" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:layout_gravity="center"
+        android:background="@color/th" >
+
+        <TextView
+            android:id="@+id/label_my_ac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:text="@string/label_my_ac"
+            android:textSize="@dimen/tv_size_small" />
+
+        <TextView
+            android:id="@+id/webstore_my_ac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_toRightOf="@+id/label_my_ac"
+            android:textSize="@dimen/tv_size_small" />
+
+        <TextView
+            android:id="@+id/webstore_view_ac_rule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:text="@string/label_view_ac_rule"
+            android:textSize="@dimen/tv_size_small" />
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="3dip"
+        android:background="#DCDCDC"
+        android:cacheColorHint="#00000000"
+        android:clickable="false"
+        android:focusable="false"
+        android:gravity="center"
+        android:horizontalSpacing="1dip"
+        android:listSelector="#00000000"
+        android:numColumns="3"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="1dip" >
+    </GridView>
+
+</LinearLayout>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10.0dip"
+    android:layout_marginRight="10.0dip"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="20.0dip"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginTop="10.0dip" >
+
+        <TextView
+            android:id="@+id/comment_item_rating_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/label_comment_rating"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <RatingBar
+            android:id="@+id/comment_item_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="18.0dip"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/comment_item_rating_tv"
+            android:indeterminateDrawable="@drawable/item_ratingbar_star"
+            android:isIndicator="true"
+            android:max="5"
+            android:maxHeight="18.0dip"
+            android:minHeight="18.0dip"
+            android:numStars="5"
+            android:progressDrawable="@drawable/item_ratingbar_star"
+            android:stepSize="1.0" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/comment_detail_item_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginTop="10.0dip"
+        android:ellipsize="end"
+        android:maxLines="6"
+        android:textColor="@color/gray_444444"
+        android:textSize="@dimen/tv_size_normal" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="20.0dip"
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginTop="10.0dip" >
+
+        <TextView
+            android:id="@+id/comment_name_item_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:ellipsize="end"
+            android:gravity="right|center"
+            android:maxWidth="200.0dip"
+            android:singleLine="true"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <TextView
+            android:id="@+id/comment_date_item_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5.0dip"
+            android:layout_toRightOf="@+id/comment_name_item_tv"
+            android:ellipsize="end"
+            android:maxWidth="100.0dip"
+            android:singleLine="true"
+            android:textSize="@dimen/tv_size_normal" />
+    </RelativeLayout>
+
+</LinearLayout>

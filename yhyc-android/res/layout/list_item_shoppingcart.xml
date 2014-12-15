@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants" >
+
+    <RelativeLayout
+        android:id="@+id/cart_item_image_layout"
+        android:layout_width="61dip"
+        android:layout_height="61dip"
+        android:layout_margin="5dip" >
+
+        <ImageView
+            android:id="@+id/cart_item_image"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:adjustViewBounds="true"
+            android:background="@color/image_background"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/cart_item_act"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/cart_item_desc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cart_item_image_layout"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="3dip"
+        android:layout_toLeftOf="@+id/cart_item_selected"
+        android:layout_toRightOf="@+id/cart_item_image_layout" >
+
+        <TextView
+            android:id="@+id/cart_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="新疆库尔勒一级香梨 3kg（单果100g以上）"
+            android:textSize="@dimen/tv_size_small" />
+
+        <TextView
+            android:id="@+id/cart_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cart_item_title"
+            android:layout_marginTop="10dip"
+            android:text="￥300.80"
+            android:textColor="@color/price_red"
+            android:textSize="@dimen/tv_size_small" />
+
+        <TextView
+            android:id="@+id/cart_origin_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cart_item_title"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
+            android:layout_toRightOf="@+id/cart_price"
+            android:text="￥4.5"
+            android:textSize="@dimen/tv_size_small" />
+
+        <EditText
+            android:id="@+id/cart_quantity"
+            android:layout_width="50dip"
+            android:layout_height="35dip"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/cart_item_title"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/input"
+            android:focusable="true"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="3"
+            android:singleLine="true"
+            android:text="100"
+            android:textColor="@color/gray_666666"
+            android:textSize="@dimen/tv_size_small" />
+    </RelativeLayout>
+
+    <CheckBox
+        android:id="@+id/cart_item_selected"
+        android:layout_width="@dimen/cb_size"
+        android:layout_height="@dimen/cb_size"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dip"
+        android:background="@drawable/check_box_selector"
+        android:button="@null" />
+
+</RelativeLayout>

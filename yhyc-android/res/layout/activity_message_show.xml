@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MessageShowActivity" >
+
+    <include
+        android:id="@+id/actionbar_msg_show"
+        layout="@layout/actionbar_message_show" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/msg_comment"
+        android:layout_below="@+id/actionbar_msg_show"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:background="@color/actionbar"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/msg_topic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6.0dip"
+                    android:padding="8dip"
+                    android:textSize="@dimen/tv_size_small" />
+
+                <TextView
+                    android:id="@+id/msg_ts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:paddingBottom="5dip"
+                    android:paddingRight="10dip"
+                    android:textSize="@dimen/tv_size_small" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:listSelector="#00000000" />
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/msg_comment"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/border_gray"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/msg_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dip"
+            android:layout_toLeftOf="@+id/msg_send"
+            android:background="@drawable/textfield_normal"
+            android:hint="回复..."
+            android:maxLength="100"
+            android:paddingLeft="10dip"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <ImageView
+            android:id="@+id/msg_send"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dip"
+            android:background="@drawable/btn_send_disable" />
+    </RelativeLayout>
+
+</RelativeLayout>

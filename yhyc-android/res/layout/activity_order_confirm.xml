@@ -1,0 +1,368 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrderConfirmActivity" >
+
+    <com.aug3.yhyc.view.ActionBarNormalView
+        android:id="@+id/actionbar_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarNormalView>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/co_actionstack"
+        android:layout_below="@+id/actionbar_normal"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:paddingLeft="5dip" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dip" >
+
+                <TextView
+                    android:id="@+id/co_address_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dip"
+                    android:gravity="center"
+                    android:lineSpacingExtra="6.0dip"
+                    android:text="@string/label_delivery_address"
+                    android:textColor="@color/font_head"
+                    android:textSize="@dimen/tv_size_normal" />
+
+                <Button
+                    android:id="@+id/co_address_edit_btn"
+                    android:layout_width="80dip"
+                    android:layout_height="30dip"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginTop="5dip"
+                    android:layout_toRightOf="@+id/co_address_label"
+                    android:background="@drawable/btn_default_shape"
+                    android:text="@string/btn_save"
+                    android:textColor="@color/font_default"
+                    android:textSize="@dimen/tv_size_small" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/co_address_view_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/co_user_name_et"
+                    android:layout_width="120dip"
+                    android:layout_height="35dip"
+                    android:hint="@string/label_delivery_contact"
+                    android:inputType="textPersonName"
+                    android:textSize="@dimen/tv_size_small" />
+
+                <TextView
+                    android:id="@+id/co_shequ_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6.0dip"
+                    android:textColor="@color/font_note"
+                    android:textSize="@dimen/tv_size_small" />
+
+                <EditText
+                    android:id="@+id/co_address_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dip"
+                    android:hint="@string/label_delivery_address_in_detail"
+                    android:inputType="textMultiLine"
+                    android:lineSpacingExtra="6.0dip"
+                    android:textColor="@color/font_default"
+                    android:textSize="@dimen/tv_size_small" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <EditText
+                        android:id="@+id/co_user_mobile_et"
+                        android:layout_width="120dip"
+                        android:layout_height="35dip"
+                        android:ems="11"
+                        android:hint="@string/label_delivery_mobile"
+                        android:inputType="phone"
+                        android:textColor="@color/font_default"
+                        android:textSize="@dimen/tv_size_small" />
+
+                    <Button
+                        android:id="@+id/co_fetch_contact_btn"
+                        android:layout_width="80dip"
+                        android:layout_height="30dip"
+                        android:layout_marginLeft="10dip"
+                        android:layout_toRightOf="@+id/co_user_mobile_et"
+                        android:background="@drawable/btn_default_shape"
+                        android:text="@string/label_phone_contact"
+                        android:textColor="@color/font_default"
+                        android:textSize="@dimen/tv_size_small" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/co_address_view_show"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dip"
+                android:background="@drawable/border_gray"
+                android:orientation="vertical"
+                android:padding="5dip"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/co_user_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6.0dip"
+                    android:textColor="@color/font_note"
+                    android:textSize="@dimen/tv_size_small" />
+
+                <TextView
+                    android:id="@+id/co_shequ_show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6.0dip"
+                    android:textColor="@color/font_note"
+                    android:textSize="@dimen/tv_size_small" />
+
+                <TextView
+                    android:id="@+id/co_address_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6.0dip"
+                    android:textColor="@color/font_note"
+                    android:textSize="@dimen/tv_size_small" />
+
+                <TextView
+                    android:id="@+id/co_user_mobile_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6.0dip"
+                    android:textColor="@color/font_note"
+                    android:textSize="@dimen/tv_size_small" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:lineSpacingExtra="6.0dip"
+                android:text="@string/label_delivery_time"
+                android:textColor="@color/font_head"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="20dip"
+                android:orientation="horizontal" >
+
+                <Spinner
+                    android:id="@+id/co_deliver_date_spinner"
+                    android:layout_width="0dip"
+                    android:layout_height="35dip"
+                    android:layout_weight="1"
+                    android:background="@drawable/select_d"
+                    android:paddingLeft="5dip"
+                    android:textColor="#6bbd42"
+                    android:textSize="@dimen/tv_size_normal" />
+
+                <Spinner
+                    android:id="@+id/co_deliver_time_spinner"
+                    android:layout_width="0dip"
+                    android:layout_height="35dip"
+                    android:layout_marginLeft="10dip"
+                    android:layout_weight="1"
+                    android:background="@drawable/select_d"
+                    android:paddingLeft="5dip"
+                    android:textSize="@dimen/tv_size_normal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_marginRight="20dip"
+                android:layout_marginTop="10dip"
+                android:background="@drawable/border_gray" >
+
+                <EditText
+                    android:id="@+id/co_leave_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:hint="@string/label_delivery_notes"
+                    android:padding="5dip"
+                    android:textSize="@dimen/tv_size_small" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.0dip"
+                android:lineSpacingExtra="6.0dip"
+                android:text="@string/label_delivery_items"
+                android:textColor="@color/font_head"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <TextView
+                android:id="@+id/co_order_split_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/th"
+                android:lineSpacingExtra="6.0dip"
+                android:text="@string/info_order_split"
+                android:textColor="@color/font_content"
+                android:textSize="@dimen/tv_size_small"
+                android:visibility="gone" />
+
+            <com.aug3.yhyc.view.MyListView
+                android:id="@+id/co_order_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:listSelector="#00000000" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:lineSpacingExtra="6.0dip"
+                android:text="@string/label_delivery_pay"
+                android:textColor="@color/font_head"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <!-- 积分、抵用券、礼品卡、现金账户、货到付款、支付宝 -->
+
+            <TextView
+                android:id="@+id/co_howto_pay_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="6.0dip"
+                android:text="@string/label_cash_on_delivery"
+                android:textColor="@color/font_content"
+                android:textSize="@dimen/tv_size_small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:lineSpacingExtra="6.0dip"
+                android:text="@string/label_delivery_notice"
+                android:textColor="@color/font_head"
+                android:textSize="@dimen/tv_size_normal" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dip"
+                android:background="@drawable/border_gray"
+                android:orientation="vertical"
+                android:padding="5dip" >
+
+                <TextView
+                    android:id="@+id/co_ship_agreement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6.0dip"
+                    android:text="@string/label_shipping_notice"
+                    android:textColor="@color/font_content"
+                    android:textSize="@dimen/tv_size_small" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/co_actionstack"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_bg" >
+
+        <Button
+            android:id="@+id/co_goback_shoppingcart"
+            android:layout_width="100.0dip"
+            android:layout_height="40dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dip"
+            android:background="@drawable/btn_gray_shape"
+            android:focusable="true"
+            android:text="@string/btn_goback_shoppingcart"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/co_submit_order_btn" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/co_total_price_tv"
+                android:text="@string/label_order_total_price"
+                android:textColor="@color/font_default"
+                android:textSize="@dimen/tv_size_small" />
+
+            <TextView
+                android:id="@+id/co_total_price_tv"
+                android:layout_width="70dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:ellipsize="end"
+                android:text="￥0.0"
+                android:textColor="@color/price_red"
+                android:textSize="@dimen/tv_size_small" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/co_total_price_tv"
+                android:layout_toLeftOf="@+id/co_total_price_tv"
+                android:text="@string/label_order_delivery_fee"
+                android:textColor="@color/font_default"
+                android:textSize="@dimen/tv_size_small" />
+
+            <TextView
+                android:id="@+id/co_shipping_fee_tv"
+                android:layout_width="70dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/co_total_price_tv"
+                android:text="￥0.0"
+                android:textSize="@dimen/tv_size_small" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/co_submit_order_btn"
+            android:layout_width="100.0dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dip"
+            android:background="@drawable/btn_submit_shape"
+            android:focusable="true"
+            android:text="@string/btn_submit_order"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+    </RelativeLayout>
+
+</RelativeLayout>

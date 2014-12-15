@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.aug3.yhyc.view.ActionBarNormalView
+        android:id="@+id/actionbar_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarNormalView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dip"
+        android:layout_gravity="center"
+        android:layout_margin="10dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/orders_tab_ongoing"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_left_tab_sel_shape"
+            android:gravity="center"
+            android:text="@string/label_orders_ongoing"
+            android:textColor="@color/white"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <TextView
+            android:id="@+id/orders_tab_finished"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.0"
+            android:background="@drawable/btn_right_tab_nor_shape"
+            android:gravity="center"
+            android:text="@string/label_orders_finished"
+            android:textColor="@color/font_head"
+            android:textSize="@dimen/tv_size_normal" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:descendantFocusability="afterDescendants"
+        android:listSelector="#00000000" />
+
+</LinearLayout>

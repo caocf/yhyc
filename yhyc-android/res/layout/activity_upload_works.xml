@@ -1,0 +1,138 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".UploadWorksActivity" >
+
+    <com.aug3.yhyc.view.ActionBarView
+        android:id="@+id/actionbar_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.aug3.yhyc.view.ActionBarView>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/works_upload_btn"
+        android:layout_below="@+id/actionbar_back"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+        <TableLayout
+            android:id="@+id/upload_cook_table"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:stretchColumns="1" >
+
+            <TableRow
+                android:background="@drawable/border_gray"
+                android:padding="5dip" >
+
+                <TextView
+                    android:text="标题 : "
+                    android:textColor="#ff666666"
+                    android:textSize="@dimen/tv_size_normal" />
+
+                <EditText
+                    android:id="@+id/works_title"
+                    android:layout_height="30dip"
+                    android:background="@null"
+                    android:hint="西兰花干锅豆腐烧对虾"
+                    android:maxLength="20"
+                    android:textSize="@dimen/tv_size_small" />
+            </TableRow>
+
+            <TableRow
+                android:background="@drawable/border_gray"
+                android:padding="5dip" >
+
+                <TextView
+                    android:text="食材 : "
+                    android:textColor="#ff666666"
+                    android:textSize="@dimen/tv_size_normal" />
+
+                <EditText
+                    android:id="@+id/works_ingredients"
+                    android:background="@null"
+                    android:hint="老豆腐 对虾 红辣椒 洋葱 西兰花 老抽 葱 蒜"
+                    android:inputType="textMultiLine"
+                    android:lineSpacingExtra="6.0dip"
+                    android:maxLength="100"
+                    android:minLines="3"
+                    android:textSize="@dimen/tv_size_small" />
+            </TableRow>
+
+            <TableRow
+                android:background="@drawable/border_gray"
+                android:padding="5dip" >
+
+                <TextView
+                    android:text="原图 : "
+                    android:textColor="#ff666666"
+                    android:textSize="@dimen/tv_size_normal" />
+
+                <ImageView
+                    android:id="@+id/works_iv"
+                    android:layout_height="150dip"
+                    android:background="@drawable/empty_photo" />
+            </TableRow>
+
+            <TableRow
+                android:background="@drawable/border_gray"
+                android:padding="5dip" >
+
+                <TextView
+                    android:text="步骤 : "
+                    android:textColor="#ff666666"
+                    android:textSize="@dimen/tv_size_normal" />
+
+                <EditText
+                    android:id="@+id/works_steps"
+                    android:background="@null"
+                    android:inputType="textMultiLine"
+                    android:lineSpacingExtra="6.0dip"
+                    android:maxLength="200"
+                    android:minLines="5"
+                    android:textSize="@dimen/tv_size_small" />
+            </TableRow>
+
+            <TableRow
+                android:background="@drawable/border_gray"
+                android:padding="5dip" >
+
+                <TextView
+                    android:text="签名 : "
+                    android:textColor="#ff666666"
+                    android:textSize="@dimen/tv_size_normal" />
+
+                <TextView
+                    android:id="@+id/works_author_tv"
+                    android:text="王美丽"
+                    android:textSize="@dimen/tv_size_small"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/works_author_edit"
+                    android:layout_width="200dip"
+                    android:background="@null"
+                    android:hint="王美丽"
+                    android:lineSpacingExtra="6.0dip"
+                    android:maxLength="10"
+                    android:textSize="@dimen/tv_size_small" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/works_upload_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/button_submit_height"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dip"
+        android:background="@drawable/btn_submit_shape"
+        android:text="上传作品"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/tv_size_small" />
+
+</RelativeLayout>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="100dip"
+    android:background="@color/white"
+    android:baselineAligned="false"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/all_comment_relayout"
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="5dip"
+        android:layout_weight="1.0" >
+
+        <TextView
+            android:id="@+id/good_score_rating_tv"
+            style="@style/comment_view_tv_style"
+            android:layout_width="fill_parent"
+            android:layout_height="30dip"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10.0dip"
+            android:textColor="@color/red"
+            android:textSize="@dimen/tv_size_normal" />
+
+        <TextView
+            android:id="@+id/all_comment_count_tv"
+            style="@style/comment_view_tv_style"
+            android:layout_width="fill_parent"
+            android:layout_height="20dip"
+            android:layout_alignParentBottom="true" />
+
+        <TextView
+            android:id="@+id/all_comment_tv"
+            style="@style/comment_view_tv_style"
+            android:layout_width="fill_parent"
+            android:layout_height="20dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20.0dip"
+            android:text="@string/comment_all_expierence_text" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/good_comment_relayout"
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10.0dip"
+        android:layout_weight="1.0" >
+
+        <TextView
+            android:id="@+id/good_comment_tv"
+            style="@style/comment_view_tv_style"
+            android:layout_width="fill_parent"
+            android:layout_height="20dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20.0dip"
+            android:text="@string/comment_good_expierence_text" />
+
+        <TextView
+            android:id="@+id/good_comment_count_tv"
+            style="@style/comment_view_tv_style"
+            android:layout_width="fill_parent"
+            android:layout_height="20dip"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true" />
+
+        <!--
+        <ImageView
+            android:id="@+id/appraisal_good_block_img"
+            style="@style/layout_comment_topview_appraisal_img"
+            android:layout_above="@+id/good_comment_tv"
+            android:background="#ffff7878" />
+        -->
+
+        <ImageView
+            android:id="@+id/good_smile_img"
+            style="@style/layout_comment_topview_face_img"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/appraisal_good" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/midlle_comment_relayout"
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10.0dip"
+        android:layout_weight="1.0" >
+
+        <TextView
+            android:id="@+id/midlle_comment_tv"
+            style="@style/comment_view_tv_style"
+            android:layout_width="fill_parent"
+            android:layout_height="20dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20.0dip"
+            android:text="@string/comment_middle_expierence_text" />
+
+        <TextView
+            android:id="@+id/midlle_comment_count_tv"
+            style="@style/comment_view_tv_style"
+            android:layout_width="fill_parent"
+            android:layout_height="20dip"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true" />
+
+        <!--
+        <ImageView
+            android:id="@+id/appraisal_midlle_block_img"
+            style="@style/layout_comment_topview_appraisal_img"
+            android:layout_above="@+id/midlle_comment_tv"
+            android:background="#ffffc800" />
+        -->
+
+        <ImageView
+            android:id="@+id/midlle_smile_img"
+            style="@style/layout_comment_topview_face_img"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/appraisal_middle" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bad_comment_relayout"
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10.0dip"
+        android:layout_weight="1.0" >
+
+        <TextView
+            android:id="@+id/bad_comment_tv"
+            style="@style/comment_view_tv_style"
+            android:layout_width="fill_parent"
+            android:layout_height="20dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20.0dip"
+            android:text="@string/comment_bad_expierence_text" />
+
+        <TextView
+            android:id="@+id/bad_comment_count_tv"
+            style="@style/comment_view_tv_style"
+            android:layout_width="fill_parent"
+            android:layout_height="20dip"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true" />
+
+        <!--
+        <ImageView
+            android:id="@+id/appraisal_bad_block_img"
+            style="@style/layout_comment_topview_appraisal_img"
+            android:layout_above="@+id/bad_comment_tv"
+            android:background="#ff5aa5ff" />
+        -->
+
+        <ImageView
+            android:id="@+id/bad_smile_img"
+            style="@style/layout_comment_topview_face_img"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/appraisal_bad" />
+    </RelativeLayout>
+
+</LinearLayout>
